@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { BookItem, EmptyBookItem, InitialValidItem } from "../types/book";
-import { onChangeType } from "../types/createBook";
+import { onChangeType, PreviewUrlType } from "../types/createBook";
 import { supabase } from "./useBookFetch";
+import { uploadFileToStorage } from "../utils/storage";
 
 export const useBookForm = (bookToEdit?: BookItem) => {
   const [form, setForm] = useState<BookItem>(bookToEdit ?? EmptyBookItem);
   const [formValid, setFormValid] = useState(InitialValidItem);
+  const [previewUrl, setPreviewUrl] = useState<PreviewUrlType>(null);
 
   const handleTextChange = useCallback((event: onChangeType) => {
     const { value, name } = event.target;
@@ -19,10 +21,15 @@ export const useBookForm = (bookToEdit?: BookItem) => {
       if (file) {
         setForm((prev) => ({ ...prev, image_url: file }));
         setFormValid((prev) => ({ ...prev, image_url: true }));
+        const objectUrl = URL.createObjectURL(file);
+        setPreviewUrl(objectUrl);
       }
     },
     []
   );
+  const clearFileUploader = useCallback(() => {
+    setPreviewUrl(null);
+  }, []);
 
   const handleValidation = () => {
     const newFormValid = { ...formValid };
@@ -64,31 +71,11 @@ export const useBookForm = (bookToEdit?: BookItem) => {
     return Object.values(newFormValid).every(Boolean);
   };
   // Upload file to Supabase Storage and return public URL or path
-  const uploadFileToStorage = async (file: File): Promise<string | null> => {
-    if (!file) return null;
 
-    const fileExt = file.name.split(".").pop(); // eg. png, jpeg
-    const fileName = `${Date.now()}.${fileExt}`;
-    const filePath = `books/${fileName}`;
-
-    const { error } = await supabase.storage
-      .from("book-covers")
-      .upload(filePath, file);
-
-    if (error) {
-      console.error("Upload error:", error.message);
-      return null;
-    }
-
-    const { data } = supabase.storage
-      .from("book-covers")
-      .getPublicUrl(filePath);
-    const publicURL = data.publicUrl;
-    return publicURL;
-  };
   const clearForm = () => {
     setForm(EmptyBookItem);
     setFormValid(InitialValidItem);
+    setPreviewUrl(null);
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,5 +110,7 @@ export const useBookForm = (bookToEdit?: BookItem) => {
     form,
     formValid,
     clearForm,
+    previewUrl,
+    clearFileUploader,
   };
 };

@@ -10,10 +10,7 @@ function App() {
   return (
     <ThemeProvider>
       <BookProvider>
-        <main
-          className="w-full min-h-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center gap-4 relative"
-          style={{ backgroundImage: "var(--main-bg)" }}
-        >
+        <main className="w-full min-h-screen bg-[var(--neutral-400)] flex flex-col items-center justify-center gap-4 relative">
           <CreateBook />
           <BookCard />
           <ThemeButton />

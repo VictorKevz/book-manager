@@ -1,6 +1,6 @@
-import React from "react";
 import { formItem, InputFieldProps, onChangeType } from "../types/createBook";
 import { useBookForm } from "../hooks/useBookForm";
+import { FileUpload } from "./FileUpload";
 
 export const CreateBook = () => {
   const {
@@ -10,6 +10,7 @@ export const CreateBook = () => {
     clearForm,
     form,
     formValid,
+    previewUrl,
   } = useBookForm();
   const formData: formItem[] = [
     {
@@ -98,6 +99,7 @@ export const CreateBook = () => {
             field={field}
             onTextChange={handleTextChange}
             onFileChange={handleFileChange}
+            previewUrl={previewUrl}
           />
         ))}
       </fieldset>
@@ -120,7 +122,7 @@ export const CreateBook = () => {
   );
 };
 
-const InputField = ({ field, onTextChange, onFileChange }: InputFieldProps) => {
+const InputField = ({ field, onTextChange }: InputFieldProps) => {
   const isFullWidth = field.type === "textarea" || field.type === "file";
   const isTitle = field.name === "title";
   return (
@@ -142,7 +144,11 @@ const InputField = ({ field, onTextChange, onFileChange }: InputFieldProps) => {
             placeholder={field.placeholder}
             id={field.name}
             onChange={(event: onChangeType) => onTextChange(event)}
-            className="w-full h-12 border border-[var(--neutral-100)] rounded-lg pl-5"
+            className={`w-full h-12 border bg-[var(--neutral-50)] rounded-lg pl-5 ${
+              !field.isValid
+                ? "border-[var(--error)]"
+                : "border-[var(--neutral-100)]"
+            }`}
           />
           {!field.isValid && (
             <span className="text-xs pl-4 text-[var(--error)]">
@@ -160,7 +166,11 @@ const InputField = ({ field, onTextChange, onFileChange }: InputFieldProps) => {
           {field.label}
           <textarea
             rows={4}
-            className="w-full border border-[var(--neutral-100)] rounded-lg p-5"
+            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border ${
+              !field.isValid
+                ? "border-[var(--error)]"
+                : "border-[var(--neutral-100)]"
+            }`}
             placeholder={field.placeholder}
             value={typeof field.value === "string" ? field.value : ""}
             name={field.name}
@@ -174,28 +184,7 @@ const InputField = ({ field, onTextChange, onFileChange }: InputFieldProps) => {
         </label>
       )}
 
-      {field.type === "file" && (
-        <label
-          className="w-full flex flex-col items-start"
-          htmlFor={field.name}
-        >
-          <input
-            type="file"
-            name={field.name}
-            id={field.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              onFileChange(event)
-            }
-            accept=".jpg,.png,.jpeg"
-            className="w-full h-16 border border-[var(--neutral-800)] rounded-lg"
-          />
-          {!field.isValid && (
-            <span className="text-xs pl-4 text-[var(--error)]">
-              {field.errorMessage}
-            </span>
-          )}
-        </label>
-      )}
+      {field.type === "file" && <FileUpload field={field} />}
     </div>
   );
 };
