@@ -11,6 +11,7 @@ export const CreateBook = () => {
     form,
     formValid,
     previewUrl,
+    clearFileUploader,
   } = useBookForm();
   const formData: formItem[] = [
     {
@@ -100,6 +101,7 @@ export const CreateBook = () => {
             onTextChange={handleTextChange}
             onFileChange={handleFileChange}
             previewUrl={previewUrl}
+            onFileRemove={clearFileUploader}
           />
         ))}
       </fieldset>
@@ -122,7 +124,13 @@ export const CreateBook = () => {
   );
 };
 
-const InputField = ({ field, onTextChange }: InputFieldProps) => {
+const InputField = ({
+  field,
+  onTextChange,
+  onFileChange,
+  previewUrl,
+  onFileRemove,
+}: InputFieldProps) => {
   const isFullWidth = field.type === "textarea" || field.type === "file";
   const isTitle = field.name === "title";
   return (
@@ -184,7 +192,14 @@ const InputField = ({ field, onTextChange }: InputFieldProps) => {
         </label>
       )}
 
-      {field.type === "file" && <FileUpload field={field} />}
+      {field.type === "file" && (
+        <FileUpload
+          field={field}
+          onFileChange={onFileChange}
+          onFileRemove={onFileRemove}
+          previewUrl={previewUrl}
+        />
+      )}
     </div>
   );
 };

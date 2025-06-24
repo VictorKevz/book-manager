@@ -1,10 +1,13 @@
 import React from "react";
-import { useBookForm } from "../hooks/useBookForm";
 import { Close } from "@mui/icons-material";
 import { FileUploadProps } from "../types/createBook";
 
-export const FileUpload = ({ field }: FileUploadProps) => {
-  const { handleFileChange, previewUrl, clearFileUploader } = useBookForm();
+export const FileUpload = ({
+  field,
+  onFileChange,
+  onFileRemove,
+  previewUrl,
+}: FileUploadProps) => {
   return (
     <label className="w-full flex flex-col gap-2">
       <span className="text-sm text-[var(--neutral-700)]">
@@ -18,7 +21,7 @@ export const FileUpload = ({ field }: FileUploadProps) => {
           id={field.name}
           accept=".jpg,.png,.jpeg"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleFileChange(event)
+            onFileChange(event)
           }
           className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
         />
@@ -43,7 +46,7 @@ export const FileUpload = ({ field }: FileUploadProps) => {
                 alt="Preview"
                 className="w-12 h-12 object-cover rounded-lg"
               />
-              <button type="button" onClick={clearFileUploader}>
+              <button type="button" onClick={onFileRemove}>
                 <Close fontSize="medium" className="text-[var(--error)]" />
               </button>
             </span>

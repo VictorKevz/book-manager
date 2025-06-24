@@ -17,8 +17,12 @@ export type InputFieldProps = {
   onTextChange: (event: onChangeType) => void;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: PreviewUrlType;
+  onFileRemove: () => void;
 };
 
 export type FileUploadProps = {
   field: formItem;
+  onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  previewUrl: PreviewUrlType;
+  onFileRemove: () => void;
 };
