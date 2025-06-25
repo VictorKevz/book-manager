@@ -1,4 +1,5 @@
 import "./App.css";
+import { WarningModal } from "./components/common/WarningModal";
 
 import ThemeButton from "./components/ThemeButton";
 import { BookProvider } from "./context/BookContext";
@@ -13,6 +14,7 @@ function App() {
           <ThemeButton />
           <BookPage />
         </main>
+        <WarningModal />
       </BookProvider>
     </ThemeProvider>
   );

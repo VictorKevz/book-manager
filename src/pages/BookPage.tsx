@@ -6,7 +6,7 @@ export const BookPage = () => {
   const { isFormOpen, books, bookToEdit, toggleForm } = useBookProvider();
   return (
     <section className="w-full flex-col items-start">
-      <header className="w-full bg-amber-600">
+      <header className="w-ful">
         <p>This will be for categories</p>
         <button
           type="button"
