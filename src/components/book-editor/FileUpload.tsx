@@ -1,6 +1,6 @@
 import React from "react";
 import { Close } from "@mui/icons-material";
-import { FileUploadProps } from "../types/createBook";
+import { FileUploadProps } from "../../types/createBook";
 
 export const FileUpload = ({
   field,
@@ -46,9 +46,9 @@ export const FileUpload = ({
                 alt="Preview"
                 className="w-12 h-12 object-cover rounded-lg"
               />
-              <button type="button" onClick={onFileRemove}>
+              <span role="button" onClick={onFileRemove}>
                 <Close fontSize="medium" className="text-[var(--error)]" />
-              </button>
+              </span>
             </span>
           )}
         </button>
