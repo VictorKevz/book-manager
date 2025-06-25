@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 export type BookItem = {
+  id: string;
   title: string;
   author: string;
   category: string;
@@ -11,6 +12,7 @@ export type BookItem = {
 };
 
 export const EmptyBookItem: BookItem = {
+  id: "",
   title: "",
   author: "",
   category: "",
@@ -19,7 +21,9 @@ export const EmptyBookItem: BookItem = {
   quantity: "",
   image_url: "",
 };
-export const InitialValidItem: Record<keyof BookItem, boolean> = {
+type BookFormKeys = Exclude<keyof BookItem, "id">;
+
+export const InitialValidItem: Record<BookFormKeys, boolean> = {
   title: true,
   author: true,
   category: true,
@@ -34,9 +38,19 @@ export type uiStateType = {
 };
 export interface BookContextType {
   books: BookItem[];
+  bookToEdit: BookItem;
+  isFormOpen: boolean;
+  onFormEdit: (book: BookItem) => void;
+  onBookDelete: (title: string) => void;
+  toggleForm: () => void;
   uiState: uiStateType;
+  refreshBooks: () => void;
 }
 
 export type ContextProviderProps = {
   children: ReactNode;
+};
+
+export type BookCardProps = {
+  book: BookItem;
 };

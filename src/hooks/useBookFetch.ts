@@ -34,7 +34,7 @@ export const useBookFetch = () => {
   useEffect(() => {
     fetchBooks();
   }, [fetchBooks]);
-  return { books, uiState };
+  return { books, uiState, setBooks, fetchBooks };
 };
 
 export const supabase = createClient(
