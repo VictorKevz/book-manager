@@ -41,10 +41,13 @@ export interface BookContextType {
   bookToEdit: BookItem;
   isFormOpen: boolean;
   onFormEdit: (book: BookItem) => void;
-  onBookDelete: (title: string) => void;
+  onBookDelete: () => void;
+  onModalOpen: (id: string) => void;
+  onModalClose: () => void;
   toggleForm: () => void;
   uiState: uiStateType;
   refreshBooks: () => void;
+  isWarningModal: boolean;
 }
 
 export type ContextProviderProps = {

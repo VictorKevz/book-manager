@@ -4,7 +4,7 @@ import { useState } from "react";
 import { BookCardProps, BookItem } from "../types/book";
 
 const BookCard = ({ book }: BookCardProps) => {
-  const { onFormEdit, onBookDelete } = useBookProvider();
+  const { onFormEdit, onModalOpen } = useBookProvider();
 
   const [openMenuTitle, setOpenMenuTitle] = useState<string | null>(null);
 
@@ -14,7 +14,7 @@ const BookCard = ({ book }: BookCardProps) => {
 
   const handleOptions = (option: string, book: BookItem) => {
     if (option === "Edit") onFormEdit(book);
-    else if (option === "Delete") onBookDelete(book.title);
+    else if (option === "Delete") onModalOpen(book.id);
   };
 
   const options = ["Edit", "Delete"];

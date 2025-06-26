@@ -16,7 +16,8 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
   const { books, setBooks, uiState, fetchBooks } = useBookFetch();
   const [bookToEdit, setBookToEdit] = useState<BookItem>(EmptyBookItem);
   const [isFormOpen, setFormOpen] = useState<boolean>(false);
-
+  const [isWarningModal, setWarningModal] = useState<boolean>(false);
+  const [currentBookId, setCurrentBookId] = useState<string>("");
   const handleEditBook = useCallback(
     (book: BookItem) => {
       setBookToEdit(book);
@@ -34,9 +35,21 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
     setFormOpen(true);
   }, [isFormOpen]);
 
-  const handleDeleteBook = (title: string) => {
+  const openWarningModal = useCallback((id: string) => {
+    setWarningModal(true);
+    setCurrentBookId(id);
+  }, []);
+  const closeWarningModal = useCallback(() => {
+    setWarningModal(false);
+    setCurrentBookId("");
+  }, []);
+  const handleDeleteBook = () => {
     // temporarily remove book in FE
-    setBooks((prevBooks) => prevBooks.filter((book) => book.title != title));
+    setBooks((prevBooks) =>
+      prevBooks.filter((book) => book.id != currentBookId)
+    );
+    setWarningModal(false);
+    setCurrentBookId("");
   };
 
   const refreshBooks = useCallback(() => {
@@ -51,6 +64,9 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
         bookToEdit,
         onFormEdit: handleEditBook,
         onBookDelete: handleDeleteBook,
+        onModalClose: closeWarningModal,
+        onModalOpen: openWarningModal,
+        isWarningModal,
         isFormOpen,
         toggleForm,
         refreshBooks,

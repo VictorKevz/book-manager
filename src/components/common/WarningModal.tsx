@@ -1,5 +1,11 @@
 import { Close } from "@mui/icons-material";
-export const WarningModal = () => {
+import { useBookProvider } from "../../context/BookContext";
+import { AnimatePresence } from "framer-motion";
+type Modalprops = {
+  onModalClose: () => void;
+  onBookDelete: () => void;
+};
+export const WarningModal = ({ onModalClose, onBookDelete }: Modalprops) => {
   return (
     <div className="z-500 w-full min-h-screen fixed top-0 flex items-center justify-center bg-black/20 backdrop-blur-[2px] transition-all duration-300 ease-in-out px-4">
       <dialog className="max-w-lg w-full flex flex-col justify-between bg-[var(--neutral-200)] py-5 rounded-xl shadow-xl border border-[var(--neutral-100)] mx-auto">
@@ -7,7 +13,7 @@ export const WarningModal = () => {
           <h2 className="font-bold text-lg text-[var(--neutral-700)]">
             Confirm to delete the selected book
           </h2>
-          <button type="button">
+          <button type="button" onClick={onModalClose}>
             <Close />
           </button>
         </header>
@@ -20,12 +26,14 @@ export const WarningModal = () => {
         <footer className="w-full flex items-center justify-between gap-4 mt-5 px-4">
           <button
             type="button"
+            onClick={onModalClose}
             className="h-10 rounded-lg w-[50%] bg-[var(--neutral-400)] border border-[var(--neutral-100)]"
           >
             Cancel
           </button>
           <button
             type="button"
+            onClick={onBookDelete}
             className="h-10 rounded-lg w-[50%] bg-[var(--error)] "
           >
             Delete
@@ -33,5 +41,16 @@ export const WarningModal = () => {
         </footer>
       </dialog>
     </div>
+  );
+};
+
+export const DialogWrapper = () => {
+  const { isWarningModal, onModalClose, onBookDelete } = useBookProvider();
+  return (
+    <AnimatePresence mode="wait">
+      {isWarningModal && (
+        <WarningModal onModalClose={onModalClose} onBookDelete={onBookDelete} />
+      )}
+    </AnimatePresence>
   );
 };
