@@ -1,12 +1,20 @@
 import { BookEditor } from "../components/book-editor/BookEditor";
 import BookCard from "../components/BookCard";
+import { SyncLoaderWrapper } from "../components/common/Loaders";
 import { useBookProvider } from "../context/BookContext";
 
 export const BookPage = () => {
-  const { isFormOpen, books, bookToEdit, toggleForm } = useBookProvider();
+  const { isFormOpen, books, bookToEdit, toggleForm, uiState } =
+    useBookProvider();
+  if (uiState.isLoading)
+    return (
+      <div className="w-full flex items-center justify-center min-h-dvh">
+        <SyncLoaderWrapper />
+      </div>
+    );
   return (
     <section className="w-full flex-col items-start">
-      <header className="w-full bg-amber-600">
+      <header className="w-ful">
         <p>This will be for categories</p>
         <button
           type="button"

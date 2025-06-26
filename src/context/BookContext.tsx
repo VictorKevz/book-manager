@@ -3,27 +3,28 @@ import { createContext, useCallback, useContext, useState } from "react";
 import {
   BookContextType,
   BookItem,
+  BookMeta,
   ContextProviderProps,
   EmptyBookItem,
 } from "../types/book";
-import { useBookFetch } from "../hooks/useBookFetch";
+import { supabase, useBookFetch } from "../hooks/useBookFetch";
+import { extractImagePath } from "../utils/extractImage";
 
 export const BookContext = createContext<BookContextType | undefined>(
   undefined
 );
 
 export const BookProvider = ({ children }: ContextProviderProps) => {
-  const { books, setBooks, uiState, fetchBooks } = useBookFetch();
+  const { books, uiState, fetchBooks } = useBookFetch();
   const [bookToEdit, setBookToEdit] = useState<BookItem>(EmptyBookItem);
+  const [bookToDelete, setBookToDelete] = useState<BookMeta>(EmptyBookItem);
   const [isFormOpen, setFormOpen] = useState<boolean>(false);
+  const [isWarningModal, setWarningModal] = useState<boolean>(false);
 
-  const handleEditBook = useCallback(
-    (book: BookItem) => {
-      setBookToEdit(book);
-      setFormOpen(!isFormOpen);
-    },
-    [isFormOpen]
-  );
+  const handleEditBook = useCallback((book: BookItem) => {
+    setBookToEdit(book);
+    setFormOpen(true);
+  }, []);
 
   const toggleForm = useCallback(() => {
     if (isFormOpen) {
@@ -34,14 +35,49 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
     setFormOpen(true);
   }, [isFormOpen]);
 
-  const handleDeleteBook = (title: string) => {
-    // temporarily remove book in FE
-    setBooks((prevBooks) => prevBooks.filter((book) => book.title != title));
-  };
+  const openWarningModal = useCallback((book: BookMeta) => {
+    setWarningModal(true);
+    setBookToDelete(book);
+  }, []);
+
+  const closeWarningModal = useCallback(() => {
+    setWarningModal(false);
+    setBookToDelete(EmptyBookItem);
+  }, []);
 
   const refreshBooks = useCallback(() => {
     fetchBooks();
   }, [fetchBooks]);
+
+  // Handler responsible for deleting both the book and the book-cover
+  const handleDeleteBook = useCallback(async () => {
+    const { error } = await supabase
+      .from("books_inventory")
+      .delete()
+      .eq("id", bookToDelete?.id);
+    if (error) {
+      console.error("Delete Failed:", error.message);
+      alert("Failed to delete the book!");
+      return;
+    }
+
+    const imagePath = extractImagePath(bookToDelete?.image_url as string);
+    console.log("Deleting from storage:", imagePath);
+
+    const { error: ImageError } = await supabase.storage
+      .from("book-covers")
+      .remove([imagePath]);
+    if (ImageError) {
+      alert("Failed to delete book cover!");
+      console.error("Error", ImageError);
+      return;
+    }
+    alert("Book deleted successfully!");
+
+    refreshBooks();
+    setWarningModal(false);
+    setBookToDelete(EmptyBookItem);
+  }, [bookToDelete?.id, bookToDelete?.image_url, refreshBooks]);
 
   return (
     <BookContext.Provider
@@ -49,8 +85,12 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
         books,
         uiState,
         bookToEdit,
+        bookToDelete,
         onFormEdit: handleEditBook,
         onBookDelete: handleDeleteBook,
+        onModalClose: closeWarningModal,
+        onModalOpen: openWarningModal,
+        isWarningModal,
         isFormOpen,
         toggleForm,
         refreshBooks,

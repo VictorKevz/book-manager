@@ -1,6 +1,6 @@
 import React from "react";
 import { Close } from "@mui/icons-material";
-import { FileUploadProps } from "../../types/createBook";
+import { FileUploadProps } from "../../types/upsertBook";
 
 export const FileUpload = ({
   field,
