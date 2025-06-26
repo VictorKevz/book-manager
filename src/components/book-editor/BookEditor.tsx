@@ -1,9 +1,10 @@
-import { formItem } from "../../types/createBook";
+import { formItem } from "../../types/upsertBook";
 import { useBookForm } from "../../hooks/useBookForm";
 import { InputField } from "./InputField";
 import { BookCardProps } from "../../types/book";
 import { Close } from "@mui/icons-material";
 import { useBookProvider } from "../../context/BookContext";
+import { FormLoader } from "../common/Loaders";
 
 export const BookEditor = ({ book }: BookCardProps) => {
   const { refreshBooks, toggleForm } = useBookProvider();
@@ -16,6 +17,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     formValid,
     previewUrl,
     clearFileUploader,
+    formUiState,
   } = useBookForm(book, refreshBooks, toggleForm);
 
   const formData: formItem[] = [
@@ -85,7 +87,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     },
   ];
   return (
-    <div className="w-full min-h-dvh flex items-center justify-center fixed top-0 bg-black/20 backdrop-blur-[2px]">
+    <div className="w-full min-h-dvh flex items-center justify-center fixed top-0 bg-black/20 backdrop-blur-[2px] z-10">
       <form
         onSubmit={handleSubmit}
         className="max-w-2xl w-full my-6 shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
@@ -106,7 +108,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
             <Close />
           </button>
         </header>
-        <fieldset className={`w-full grid grid-cols-3 gap-6 mt-4 px-5`}>
+        <fieldset className={`w-full grid grid-cols-3 gap-6 mt-4 px-5 z-10`}>
           {formData.map((field) => (
             <InputField
               key={field.name}
@@ -134,6 +136,11 @@ export const BookEditor = ({ book }: BookCardProps) => {
           </button>
         </div>
       </form>
+      {formUiState.isLoading && (
+        <div className="absolute z-50 flex items-center justify-center bg-[var(--neutral-200)] rounded-full">
+          <FormLoader />
+        </div>
+      )}
     </div>
   );
 };

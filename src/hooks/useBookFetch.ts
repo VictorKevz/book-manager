@@ -1,9 +1,11 @@
 import { useCallback, useState, useEffect } from "react";
 import { BookItem, uiStateType } from "../types/book";
 import { createClient } from "@supabase/supabase-js";
+// import { useBookProvider } from "../context/BookContext";
 
 export const useBookFetch = () => {
   const [books, setBooks] = useState<BookItem[]>([]);
+  // const{turnOffLoader, turnOnLoader, handleError} = useBookProvider()
   const [uiState, setUIState] = useState<uiStateType>({
     isLoading: true,
     error: "",

@@ -1,5 +1,5 @@
 import "./App.css";
-import { DialogWrapper } from "./components/common/WarningModal";
+import { DialogWrapper } from "./components/common/WarningDialog";
 
 import ThemeButton from "./components/ThemeButton";
 import { BookProvider } from "./context/BookContext";

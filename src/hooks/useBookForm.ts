@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BookItem, EmptyBookItem, InitialValidItem } from "../types/book";
+import {
+  BookItem,
+  EmptyBookItem,
+  InitialValidItem,
+  uiStateType,
+} from "../types/book";
 import {
   BookItemForDB,
   CreateBookItem,
   InputType,
   onChangeType,
   PreviewUrlType,
-} from "../types/createBook";
+} from "../types/upsertBook";
 import { supabase } from "./useBookFetch";
 import { uploadFileToStorage } from "../utils/storage";
+// import { useBookProvider } from "../context/BookContext";
 
 export const useBookForm = (
   bookToEdit?: BookItem,
@@ -18,6 +24,10 @@ export const useBookForm = (
   const [form, setForm] = useState<BookItem>(bookToEdit ?? EmptyBookItem);
   const [formValid, setFormValid] = useState(InitialValidItem);
   const [previewUrl, setPreviewUrl] = useState<PreviewUrlType>("");
+  const [uiState, setUIState] = useState<uiStateType>({
+    isLoading: false,
+    error: "",
+  });
   const isEditing = !!bookToEdit?.id;
 
   // form.price and form.quantity state expects strings but bookToEdit objects returns numbers
@@ -115,22 +125,21 @@ export const useBookForm = (
     return Object.values(newFormValid).every(Boolean);
   };
 
-  // This abstracted logic conditionally handles UPDATE & CREATE
-  const upsertBook = async (data: BookItemForDB | CreateBookItem) => {
-    if (isEditing) {
-      return await supabase
-        .from("books_inventory")
-        .update(data as BookItemForDB)
-        .eq("id", (data as BookItemForDB).id);
-    } else {
-      return await supabase.from("books_inventory").insert([data]);
-    }
-  };
-  //
   const clearForm = () => {
     setForm(EmptyBookItem);
     setFormValid(InitialValidItem);
     setPreviewUrl("");
+  };
+
+  // This abstracted logic conditionally handles UPDATE & CREATE
+  //  id is only needed when editing. It returns a response from supabase
+  const upsertBook = async (
+    finalData: BookItemForDB | CreateBookItem,
+    id?: string
+  ) => {
+    return isEditing
+      ? await supabase.from("books_inventory").update(finalData).eq("id", id)
+      : await supabase.from("books_inventory").insert([finalData]);
   };
 
   // The handler responsible for sending data to the database
@@ -138,58 +147,57 @@ export const useBookForm = (
   // "handleValidation, uploadFileToStorage, upsertBook"
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setUIState({ isLoading: true, error: "" });
     const isValid = handleValidation();
     if (!isValid) {
       alert("Form Validation Failed!");
+      setUIState({ isLoading: false, error: "Form Validation Failed!" });
+
       return;
     }
 
     let imageUrl = "";
+    // First check if the image was uploaded by the user
+    // We grab that file and upload it to Supabase storage and get a URL.
     if (form.image_url && form.image_url instanceof File) {
       const uploadedUrl = await uploadFileToStorage(form.image_url);
       if (!uploadedUrl) {
         alert("Failed to upload image");
+        setUIState({ isLoading: false, error: "Failed to upload image" });
         return;
       }
       imageUrl = uploadedUrl;
+      // Here the alternative is that we have a string so we keep it and skip uploading the file
+      // We know the form state has the latest update since we injected it with "bookToEdit" so we use it to update imageUrl
     } else if (typeof form.image_url === "string") {
-      imageUrl = form.image_url; // preserve existing image's url on edit
+      imageUrl = form.image_url;
     }
 
     // Convert price and quantity back to numbers for database
-    const finalData = isEditing
-      ? ({
-          ...form,
-          image_url: imageUrl,
-          price: Number(form.price),
-          quantity: Number(form.quantity),
-        } as BookItemForDB)
-      : ({
-          // Exclude id field for new books - let Supabase auto-generate it
-          title: form.title,
-          author: form.author,
-          category: form.category,
-          description: form.description,
-          image_url: imageUrl,
-          price: Number(form.price),
-          quantity: Number(form.quantity),
-        } as CreateBookItem);
+    // id is passed as optional because it's only required when editing a book
+    const { id, ...rest } = form;
+    const finalData = {
+      ...rest,
+      image_url: imageUrl,
+      price: Number(form.price),
+      quantity: Number(form.quantity),
+    } as BookItemForDB | CreateBookItem;
 
-    const { error, data } = await upsertBook(finalData);
-
-    console.log("Supabase response:", { error, data });
+    const { error } = await upsertBook(finalData, id);
 
     if (error) {
       console.error("Supabase error:", error);
       alert(error.message);
+      setUIState({ isLoading: false, error: error.message });
+
       return;
     }
-
-    alert(isEditing ? "Book Edited" : "New Book Created");
+    // alert(isEditing ? "Book Edited" : "New Book Created");
     if (onSuccess && toggleForm) {
       onSuccess();
       clearForm();
       toggleForm();
+      setUIState({ isLoading: false, error: "" });
     }
   };
   return {
@@ -201,5 +209,6 @@ export const useBookForm = (
     clearForm,
     previewUrl,
     clearFileUploader,
+    formUiState: uiState,
   };
 };

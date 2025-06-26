@@ -1,4 +1,4 @@
-import { InputFieldProps, onChangeType } from "../../types/createBook";
+import { InputFieldProps, onChangeType } from "../../types/upsertBook";
 import { FileUpload } from "./FileUpload";
 
 export const InputField = ({

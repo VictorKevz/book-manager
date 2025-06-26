@@ -12,12 +12,18 @@ const BookCard = ({ book }: BookCardProps) => {
     setOpenMenuTitle((prev) => (prev === title ? null : title));
   };
 
-  const handleOptions = (option: string, book: BookItem) => {
-    if (option === "Edit") onFormEdit(book);
-    else if (option === "Delete") onModalOpen(book.id);
+  const handleOptions = (book: BookItem, option: string) => {
+    const { id, title, image_url } = book;
+
+    if (option === "Edit") {
+      onFormEdit(book);
+    } else {
+      onModalOpen({ id, title, image_url });
+    }
+
+    setOpenMenuTitle(null);
   };
 
-  const options = ["Edit", "Delete"];
   return (
     <div
       key={book.title}
@@ -33,12 +39,12 @@ const BookCard = ({ book }: BookCardProps) => {
         </button>
         {openMenuTitle === book.title && (
           <ul className="absolute top-full right-0 p-5 flex flex-col gap-1.5 items-start rounded-sm bg-[var(--neutral-300)] border border-[var(--neutral-100)] shadow-xl">
-            {options.map((option) => {
+            {["Edit", "Delete"].map((option) => {
               return (
                 <li key={option}>
                   <button
                     type="button"
-                    onClick={() => handleOptions(option, book)}
+                    onClick={() => handleOptions(book, option)}
                     className="text-[var(--neutral-900)]"
                   >
                     {option}

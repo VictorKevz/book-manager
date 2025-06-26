@@ -41,11 +41,15 @@ export interface BookContextType {
   bookToEdit: BookItem;
   isFormOpen: boolean;
   onFormEdit: (book: BookItem) => void;
+  bookToDelete: BookMeta;
   onBookDelete: () => void;
-  onModalOpen: (id: string) => void;
+  onModalOpen: (book: BookMeta) => void;
   onModalClose: () => void;
   toggleForm: () => void;
   uiState: uiStateType;
+  // turnOnLoader: () => void;
+  // turnOffLoader: () => void;
+  // handleError: (msg: string) => void;
   refreshBooks: () => void;
   isWarningModal: boolean;
 }
@@ -53,7 +57,7 @@ export interface BookContextType {
 export type ContextProviderProps = {
   children: ReactNode;
 };
-
+export type BookMeta = Pick<BookItem, "id" | "title" | "image_url">;
 export type BookCardProps = {
   book: BookItem;
 };
