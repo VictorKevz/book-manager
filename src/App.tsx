@@ -1,11 +1,12 @@
 import "./App.css";
-import { DialogWrapper } from "./components/common/WarningDialog";
+import { DialogWrapper } from "./components/WarningDialog";
 
 import ThemeButton from "./components/ThemeButton";
 import { AlertProvider } from "./context/AlertContext";
 import { BookProvider } from "./context/BookContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BookPage } from "./pages/BookPage";
+import { AlertMessage } from "./components/Alert";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <ThemeButton />
             <BookPage />
           </main>
+          <AlertMessage />
           <DialogWrapper />
         </BookProvider>
       </AlertProvider>

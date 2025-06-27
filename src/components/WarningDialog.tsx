@@ -1,8 +1,8 @@
 import { Close } from "@mui/icons-material";
-import { useBookProvider } from "../../context/BookContext";
+import { useBookProvider } from "../context/BookContext";
 import { AnimatePresence } from "framer-motion";
-import { BookMeta, uiStateType } from "../../types/book";
-import { FormLoader } from "./Loaders";
+import { BookMeta, uiStateType } from "../types/book";
+import { FormLoader } from "./common/Loaders";
 type Modalprops = {
   onModalClose: () => void;
   onBookDelete: () => void;

@@ -5,13 +5,12 @@ export type AlertState = {
   type: AlertType;
   visible: boolean;
 };
-export const EmptyAlertState: AlertState = {
+export const InitialAlertState: AlertState = {
   message: "",
   type: "success",
   visible: false,
 };
 export interface AlertContextType {
-  onShowAlert: (state: AlertState) => void;
-  onHideAlert: () => void;
+  onShowAlert: (update: AlertState) => void;
   alert: AlertState;
 }

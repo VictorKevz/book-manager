@@ -1,15 +1,15 @@
 import { useCallback, useState, useEffect } from "react";
 import { BookItem, uiStateType } from "../types/book";
 import { createClient } from "@supabase/supabase-js";
-// import { useBookProvider } from "../context/BookContext";
+import { useAlertProvider } from "../context/AlertContext";
 
 export const useBookFetch = () => {
   const [books, setBooks] = useState<BookItem[]>([]);
-  // const{turnOffLoader, turnOnLoader, handleError} = useBookProvider()
   const [uiState, setUIState] = useState<uiStateType>({
     isLoading: false,
     error: "",
   });
+  const { onShowAlert } = useAlertProvider();
 
   const turnOnLoader = useCallback(() => {
     setUIState({ isLoading: true, error: "" });
@@ -28,7 +28,14 @@ export const useBookFetch = () => {
       const { data, error } = await supabase
         .from("books_inventory")
         .select("*");
-      if (error) throw new Error(error.message);
+      if (error) {
+        onShowAlert({
+          message: error.message,
+          type: "error",
+          visible: true,
+        });
+        throw new Error(error.message);
+      }
       const result = Array.isArray(data) ? data : [];
 
       setBooks(result);
@@ -39,10 +46,15 @@ export const useBookFetch = () => {
       console.error(err);
       const errorMessage =
         err instanceof Error ? err.message : "Couldn't fetch books!";
+      onShowAlert({
+        message: errorMessage,
+        type: "error",
+        visible: true,
+      });
       handleError(errorMessage);
       return [];
     }
-  }, [handleError, turnOffLoader, turnOnLoader]);
+  }, [handleError, onShowAlert, turnOffLoader, turnOnLoader]);
 
   useEffect(() => {
     fetchBooks();

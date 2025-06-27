@@ -14,9 +14,10 @@ import {
 } from "../types/upsertBook";
 import { supabase } from "./useBookFetch";
 import { uploadFileToStorage } from "../utils/storage";
+import { useAlertProvider } from "../context/AlertContext";
 // import { useBookProvider } from "../context/BookContext";
 
-export const useBookForm = (
+export const useBookUpsertForm = (
   bookToEdit?: BookItem,
   onSuccess?: () => void,
   toggleForm?: () => void
@@ -29,6 +30,7 @@ export const useBookForm = (
     error: "",
   });
   const isEditing = !!bookToEdit?.id;
+  const { onShowAlert } = useAlertProvider();
 
   // form.price and form.quantity state expects strings but bookToEdit objects returns numbers
   // For that reason we make the conversion as a side-effect whenever bookToEdit changes.
@@ -150,7 +152,11 @@ export const useBookForm = (
     setUIState({ isLoading: true, error: "" });
     const isValid = handleValidation();
     if (!isValid) {
-      alert("Form Validation Failed!");
+      onShowAlert({
+        message: "Failed: Please check all fields",
+        type: "error",
+        visible: true,
+      });
       setUIState({ isLoading: false, error: "Form Validation Failed!" });
 
       return;
@@ -162,7 +168,11 @@ export const useBookForm = (
     if (form.image_url && form.image_url instanceof File) {
       const uploadedUrl = await uploadFileToStorage(form.image_url);
       if (!uploadedUrl) {
-        alert("Failed to upload image");
+        onShowAlert({
+          message: "Failed to upload the image!",
+          type: "error",
+          visible: true,
+        });
         setUIState({ isLoading: false, error: "Failed to upload image" });
         return;
       }
@@ -186,14 +196,22 @@ export const useBookForm = (
     const { error } = await upsertBook(finalData, id);
 
     if (error) {
-      console.error("Supabase error:", error);
-      alert(error.message);
+      onShowAlert({
+        message: error.message,
+        type: "error",
+        visible: true,
+      });
       setUIState({ isLoading: false, error: error.message });
 
       return;
     }
     // alert(isEditing ? "Book Edited" : "New Book Created");
     if (onSuccess && toggleForm) {
+      onShowAlert({
+        message: "New book created successfully!",
+        type: "success",
+        visible: true,
+      });
       onSuccess();
       clearForm();
       toggleForm();
