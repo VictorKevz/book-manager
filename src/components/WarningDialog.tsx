@@ -1,16 +1,19 @@
 import { Close } from "@mui/icons-material";
-import { useBookProvider } from "../../context/BookContext";
+import { useBookProvider } from "../context/BookContext";
 import { AnimatePresence } from "framer-motion";
-import { BookMeta } from "../../types/book";
+import { BookMeta, uiStateType } from "../types/book";
+import { FormLoader } from "./common/Loaders";
 type Modalprops = {
   onModalClose: () => void;
   onBookDelete: () => void;
   bookToDelete: BookMeta;
+  uiState: uiStateType;
 };
 export const WarningDialog = ({
   onModalClose,
   onBookDelete,
   bookToDelete,
+  uiState,
 }: Modalprops) => {
   return (
     <div className="z-500 w-full min-h-screen fixed top-0 flex items-center justify-center bg-black/60 backdrop-blur-[5px] transition-all duration-300 ease-in-out px-4">
@@ -49,13 +52,19 @@ export const WarningDialog = ({
             Delete
           </button>
         </footer>
+
+        {uiState.isLoading && (
+          <div className="absolute z-50 flex items-center justify-center bg-[var(--neutral-200)] rounded-full">
+            <FormLoader />
+          </div>
+        )}
       </dialog>
     </div>
   );
 };
 
 export const DialogWrapper = () => {
-  const { isWarningModal, onModalClose, onBookDelete, bookToDelete } =
+  const { isWarningModal, onModalClose, onBookDelete, bookToDelete, uiState } =
     useBookProvider();
   return (
     <AnimatePresence mode="wait">
@@ -64,6 +73,7 @@ export const DialogWrapper = () => {
           onModalClose={onModalClose}
           onBookDelete={onBookDelete}
           bookToDelete={bookToDelete}
+          uiState={uiState}
         />
       )}
     </AnimatePresence>

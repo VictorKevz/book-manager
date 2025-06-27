@@ -1,5 +1,5 @@
 import { formItem } from "../../types/upsertBook";
-import { useBookForm } from "../../hooks/useBookForm";
+import { useBookUpsertForm } from "../../hooks/useBookUpsertForm";
 import { InputField } from "./InputField";
 import { BookCardProps } from "../../types/book";
 import { Close } from "@mui/icons-material";
@@ -18,7 +18,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     previewUrl,
     clearFileUploader,
     formUiState,
-  } = useBookForm(book, refreshBooks, toggleForm);
+  } = useBookUpsertForm(book, refreshBooks, toggleForm);
 
   const formData: formItem[] = [
     {
