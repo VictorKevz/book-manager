@@ -15,7 +15,14 @@ export const BookContext = createContext<BookContextType | undefined>(
 );
 
 export const BookProvider = ({ children }: ContextProviderProps) => {
-  const { books, uiState, fetchBooks } = useBookFetch();
+  const {
+    books,
+    uiState,
+    fetchBooks,
+    turnOnLoader,
+    turnOffLoader,
+    handleError,
+  } = useBookFetch();
   const [bookToEdit, setBookToEdit] = useState<BookItem>(EmptyBookItem);
   const [bookToDelete, setBookToDelete] = useState<BookMeta>(EmptyBookItem);
   const [isFormOpen, setFormOpen] = useState<boolean>(false);
@@ -51,6 +58,7 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
 
   // Handler responsible for deleting both the book and the book-cover
   const handleDeleteBook = useCallback(async () => {
+    turnOnLoader();
     const { error } = await supabase
       .from("books_inventory")
       .delete()
@@ -58,6 +66,7 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
     if (error) {
       console.error("Delete Failed:", error.message);
       alert("Failed to delete the book!");
+      turnOffLoader();
       return;
     }
 
@@ -69,15 +78,23 @@ export const BookProvider = ({ children }: ContextProviderProps) => {
       .remove([imagePath]);
     if (ImageError) {
       alert("Failed to delete book cover!");
-      console.error("Error", ImageError);
+      console.error("Error", ImageError.message);
+      handleError(ImageError.message);
       return;
     }
-    alert("Book deleted successfully!");
 
     refreshBooks();
     setWarningModal(false);
     setBookToDelete(EmptyBookItem);
-  }, [bookToDelete?.id, bookToDelete?.image_url, refreshBooks]);
+    turnOffLoader();
+  }, [
+    bookToDelete?.id,
+    bookToDelete?.image_url,
+    handleError,
+    refreshBooks,
+    turnOffLoader,
+    turnOnLoader,
+  ]);
 
   return (
     <BookContext.Provider
