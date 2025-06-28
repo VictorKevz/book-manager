@@ -4,8 +4,7 @@ import { SyncLoaderWrapper } from "../components/common/Loaders";
 import { useBookProvider } from "../context/BookContext";
 
 export const BookPage = () => {
-  const { isFormOpen, books, bookToEdit, toggleForm, uiState } =
-    useBookProvider();
+  const { isFormOpen, books, bookToEdit, uiState } = useBookProvider();
   if (uiState.isLoading)
     return (
       <div className="w-full flex items-center justify-center min-h-dvh">
@@ -13,19 +12,8 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="w-full flex-col items-start">
-      <header className="w-ful">
-        <p>This will be for categories</p>
-        <button
-          type="button"
-          onClick={toggleForm}
-          className="h-11 px-3 rounded-full bg-[var(--primary-color)] text-white"
-        >
-          Create New Book
-        </button>
-      </header>
-
-      <div className="w-full grid grid-cols-3 gap-5 my-6">
+    <section className="max-w-screen-xl w-full flex-col items-center justify-center mx-auto px-5 overflow-x-hidden">
+      <div className="w-full grid grid-cols-3 gap-5 my-6 pl-[9rem]">
         {books.map((book) => (
           <BookCard key={book?.id} book={book} />
         ))}

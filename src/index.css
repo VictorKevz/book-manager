@@ -11,6 +11,7 @@
   --neutral-800: #272525;
   --neutral-900: #0c0b0b;
   --primary-color: #3ecf8e;
+  --secondary-color: #46af80;
   --error: #f06666;
   --main-bg: url("/dark-main-bg.svg");
 }
@@ -47,6 +48,7 @@ a {
 a {
   text-decoration: none;
   color: inherit;
+  font-weight: 400;
 }
 p {
   line-height: 1.5;
