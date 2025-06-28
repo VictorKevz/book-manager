@@ -2,9 +2,9 @@ import { formItem } from "../../types/upsertBook";
 import { useBookUpsertForm } from "../../hooks/useBookUpsertForm";
 import { InputField } from "./InputField";
 import { BookCardProps } from "../../types/book";
-import { Close } from "@mui/icons-material";
 import { useBookProvider } from "../../context/BookContext";
 import { FormLoader } from "../common/Loaders";
+import { FormWraper } from "../common/FormWraper";
 
 export const BookEditor = ({ book }: BookCardProps) => {
   const { refreshBooks, toggleForm } = useBookProvider();
@@ -88,26 +88,14 @@ export const BookEditor = ({ book }: BookCardProps) => {
   ];
   return (
     <div className="w-full min-h-dvh flex items-center justify-center fixed top-0 bg-black/20 backdrop-blur-[2px] z-10">
-      <form
+      <FormWraper
         onSubmit={handleSubmit}
-        className="max-w-2xl w-full my-6 shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
+        title=" Create a new book"
+        description=" Fill out the form below to add a new book to the inventory. All
+ fields are required unless stated otherwise."
+        toggleForm={toggleForm}
+        maxWidth="max-w-2xl"
       >
-        <header className="w-full relative bg-[var(--neutral-400)] border-b p-5 border-[var(--neutral-100)] rounded-t-2xl">
-          <h2 className="text-3xl font-bold text-[var(--neutral-900)]">
-            Create a new book
-          </h2>
-          <p className="text-[var(--neutral-700)] max-w-lg w-full">
-            Fill out the form below to add a new book to the inventory. All
-            fields are required unless stated otherwise.
-          </p>
-          <button
-            type="button"
-            onClick={toggleForm}
-            className="absolute right-4 top-4 h-10 w-10 bg-[var(--neutral-100)] rounded-full text-[var(--neutral-900)]"
-          >
-            <Close />
-          </button>
-        </header>
         <fieldset className={`w-full grid grid-cols-3 gap-6 mt-4 px-5 z-10`}>
           {formData.map((field) => (
             <InputField
@@ -135,7 +123,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
             Submit
           </button>
         </div>
-      </form>
+      </FormWraper>
       {formUiState.isLoading && (
         <div className="absolute z-50 flex items-center justify-center bg-[var(--neutral-200)] rounded-full">
           <FormLoader />

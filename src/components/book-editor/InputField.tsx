@@ -58,7 +58,7 @@ export const InputField = ({
               <button
                 type="button"
                 onClick={togglePassword}
-                className="absolute right-0 h-12 bg-[var(--neutral-100)] px-2.5 rounded-r-lg"
+                className="absolute right-0 h-12 bg-[var(--neutral-400)] px-2.5 rounded-r-lg"
               >
                 {showPassword ? (
                   <VisibilityOff fontSize="small" />

@@ -10,6 +10,7 @@ import { InputField } from "../components/book-editor/InputField";
 import { FormEventType, onChangeType } from "../types/upsertBook";
 import { supabase } from "../hooks/useBookFetch";
 import { useAlertProvider } from "../context/AlertContext";
+import { FormWraper } from "../components/common/FormWraper";
 
 export const RegisterPage = () => {
   const [register, setRegister] = useState<RegisterItem>(RegisterItemInitial);
@@ -167,15 +168,12 @@ export const RegisterPage = () => {
   ];
   return (
     <section className="w-full min-h-dvh px-5 flex items-center justify-center bg-[var(--neutral-400)]">
-      <form
-        onSubmit={(event: FormEventType) => handleSubmit(event)}
-        className="max-w-md w-full flex flex-col shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
+      <FormWraper
+        onSubmit={handleSubmit}
+        title="Create Your Account"
+        description="Easily create an account by filling all out all fields correctly"
+        maxWidth="max-w-md"
       >
-        <header className="w-full bg-[var(--neutral-300)] px-4 py-5 rounded-t-2xl">
-          <h2 className="font-bold text-xl sm:text-2xl text-[var(--neutral-900)]">
-            Create Your Account
-          </h2>
-        </header>
         <fieldset className="flex flex-col w-full gap-5 mt-5 px-4">
           {registerData.map((field) => (
             <InputField field={field} onTextChange={handleChange} />
@@ -192,7 +190,7 @@ export const RegisterPage = () => {
             Already have an account? Login
           </p>
         </footer>
-      </form>
+      </FormWraper>
     </section>
   );
 };

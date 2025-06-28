@@ -1,4 +1,5 @@
-import { formItem, InputFieldType } from "./upsertBook";
+import { ReactNode } from "react";
+import { FormEventType, formItem, InputFieldType } from "./upsertBook";
 export type RegisterField = Omit<formItem, "value" | "type"> & {
   value: string;
   type: InputFieldType;
@@ -24,4 +25,13 @@ export const RegisterValidInitial: RegisterValid = {
   email: true,
   password: true,
   confirmPassword: true,
+};
+
+export type FormWraperProps = {
+  children: ReactNode;
+  onSubmit: (event: FormEventType) => void;
+  title: string;
+  description?: string;
+  toggleForm?: () => void;
+  maxWidth: "max-w-md" | "max-w-2xl";
 };
