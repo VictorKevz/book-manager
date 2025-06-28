@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   BookItem,
   EmptyBookItem,
@@ -8,6 +8,7 @@ import {
 import {
   BookItemForDB,
   CreateBookItem,
+  FormEventType,
   InputType,
   onChangeType,
   PreviewUrlType,
@@ -147,7 +148,7 @@ export const useBookUpsertForm = (
   // The handler responsible for sending data to the database
   // The handler calls the appropriate helper func like:
   // "handleValidation, uploadFileToStorage, upsertBook"
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEventType) => {
     event.preventDefault();
     setUIState({ isLoading: true, error: "" });
     const isValid = handleValidation();

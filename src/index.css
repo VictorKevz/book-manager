@@ -40,6 +40,8 @@ a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-weight: 600;
 }
 
 a {

@@ -1,24 +1,27 @@
 import { BookItem } from "./book";
-
+export type InputFieldType = "text" | "password" | "textarea" | "file";
+type MUIIconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 export type formItem = {
   name: string;
   value: string | File;
   placeholder: string;
-  type: "text" | "textarea" | "file";
+  type: InputFieldType;
   label: string;
   isValid: boolean;
   errorMessage: string;
+  icon?: string | MUIIconType;
 };
 export type onChangeType = InputType | React.ChangeEvent<HTMLTextAreaElement>;
-
 export type InputType = React.ChangeEvent<HTMLInputElement>;
+export type FormEventType = React.FormEvent<HTMLFormElement>;
 export type PreviewUrlType = string;
+
 export type InputFieldProps = {
   field: formItem;
   onTextChange: (event: onChangeType) => void;
-  onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  previewUrl: PreviewUrlType;
-  onFileRemove: () => void;
+  onFileChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  previewUrl?: PreviewUrlType;
+  onFileRemove?: () => void;
 };
 
 export type FileUploadProps = {
