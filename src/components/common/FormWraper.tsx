@@ -13,7 +13,7 @@ export const FormWraper = ({
   return (
     <form
       onSubmit={(event: FormEventType) => onSubmit(event)}
-      className={`${maxWidth} w-full pb-6 shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]`}
+      className={`${maxWidth} w-full shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]`}
     >
       <header className="w-full relative bg-[var(--neutral-400)] border-b p-5 border-[var(--neutral-100)] rounded-t-2xl">
         <h2 className="font-bold text-xl sm:text-2xl text-[var(--neutral-900)]">
@@ -32,6 +32,7 @@ export const FormWraper = ({
           </button>
         )}
       </header>
+
       {children}
     </form>
   );

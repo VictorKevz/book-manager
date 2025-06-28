@@ -10,7 +10,7 @@ export const FileUpload = ({
 }: FileUploadProps) => {
   return (
     <label className="w-full flex flex-col gap-2">
-      <span className="text-sm text-[var(--neutral-700)]">
+      <span className="text-sm text-[var(--neutral-800)] font-medium">
         Upload Book Cover
       </span>
 

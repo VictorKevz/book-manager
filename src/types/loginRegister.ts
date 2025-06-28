@@ -10,7 +10,7 @@ export type RegisterItem = {
   password: string;
   confirmPassword: string;
 };
-export const RegisterItemInitial = {
+export const RegisterItemInitial: RegisterItem = {
   fullName: "",
   email: "",
   password: "",
@@ -34,4 +34,20 @@ export type FormWraperProps = {
   description?: string;
   toggleForm?: () => void;
   maxWidth: "max-w-md" | "max-w-2xl";
+};
+
+export type LoginItem = Pick<RegisterItem, "email" | "password">;
+export const LoginItemInitial: LoginItem = {
+  email: "",
+  password: "",
+};
+export type LoginValid = {
+  [key in keyof LoginItem]: boolean;
+};
+export const LoginValidInitial: LoginValid = {
+  email: true,
+  password: true,
+};
+export type LoginRegisterProps = {
+  onFormToggle: () => void;
 };

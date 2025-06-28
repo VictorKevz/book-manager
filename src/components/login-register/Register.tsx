@@ -1,18 +1,19 @@
 import { useCallback, useState } from "react";
 import {
+  LoginRegisterProps,
   RegisterField,
   RegisterItem,
   RegisterItemInitial,
   RegisterValid,
   RegisterValidInitial,
-} from "../types/loginRegister";
-import { InputField } from "../components/book-editor/InputField";
-import { FormEventType, onChangeType } from "../types/upsertBook";
-import { supabase } from "../hooks/useBookFetch";
-import { useAlertProvider } from "../context/AlertContext";
-import { FormWraper } from "../components/common/FormWraper";
+} from "../../types/loginRegister";
+import { InputField } from "../book-editor/InputField";
+import { FormEventType, onChangeType } from "../../types/upsertBook";
+import { supabase } from "../../hooks/useBookFetch";
+import { useAlertProvider } from "../../context/AlertContext";
+import { FormWraper } from "../common/FormWraper";
 
-export const RegisterPage = () => {
+export const Register = ({ onFormToggle }: LoginRegisterProps) => {
   const [register, setRegister] = useState<RegisterItem>(RegisterItemInitial);
   const [registerValid, setRegisterValid] =
     useState<RegisterValid>(RegisterValidInitial);
@@ -29,6 +30,7 @@ export const RegisterPage = () => {
       [name]: true,
     }));
   }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleValidation = () => {
     // 1. Clone the validation state to be updated during checks
     const newRegisterValid: Record<keyof RegisterItem, boolean> = {
@@ -83,46 +85,55 @@ export const RegisterPage = () => {
     setRegisterValid(newRegisterValid);
     return Object.values(newRegisterValid).every(Boolean);
   };
-  const handleSubmit = async (event: FormEventType) => {
-    event.preventDefault();
-    const isValid = handleValidation();
-    if (!isValid) {
-      onShowAlert({
-        type: "error",
-        visible: true,
-        message: "Form Validation Failed",
-      });
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (event: FormEventType) => {
+      event.preventDefault();
+      const isValid = handleValidation();
+      if (!isValid) {
+        onShowAlert({
+          type: "error",
+          visible: true,
+          message: "Form Validation Failed",
+        });
+        return;
+      }
 
-    const { error } = await supabase.auth.signUp({
-      email: register.email,
-      password: register.password,
-      options: {
-        data: {
-          full_name: register.fullName,
+      const { error } = await supabase.auth.signUp({
+        email: register.email,
+        password: register.password,
+        options: {
+          data: {
+            full_name: register.fullName,
+          },
         },
-      },
-    });
-
-    if (error) {
-      onShowAlert({
-        type: "error",
-        visible: true,
-        message: error.message,
       });
-      return;
-    }
 
-    onShowAlert({
-      type: "success",
-      visible: true,
-      message:
-        "Account created successfully! Please check your email to confirm.",
-    });
+      if (error) {
+        onShowAlert({
+          type: "error",
+          visible: true,
+          message: error.message,
+        });
+        return;
+      }
 
-    clearForm();
-  };
+      onShowAlert({
+        type: "success",
+        visible: true,
+        message:
+          "Account created successfully! Please check your email to confirm.",
+      });
+
+      clearForm();
+    },
+    [
+      handleValidation,
+      onShowAlert,
+      register.email,
+      register.fullName,
+      register.password,
+    ]
+  );
 
   const clearForm = () => {
     setRegister(RegisterItemInitial);
@@ -167,30 +178,36 @@ export const RegisterPage = () => {
     },
   ];
   return (
-    <section className="w-full min-h-dvh px-5 flex items-center justify-center bg-[var(--neutral-400)]">
-      <FormWraper
-        onSubmit={handleSubmit}
-        title="Create Your Account"
-        description="Easily create an account by filling all out all fields correctly"
-        maxWidth="max-w-md"
-      >
-        <fieldset className="flex flex-col w-full gap-5 mt-5 px-4">
-          {registerData.map((field) => (
-            <InputField field={field} onTextChange={handleChange} />
-          ))}
-        </fieldset>
-        <footer className="w-full my-6 px-4 flex flex-col items-center">
-          <button
-            type="submit"
-            className={`h-10 w-full rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
-          >
-            Register
-          </button>
-          <p className="text-[var(--neutral-800)] text-xs mt-2">
-            Already have an account? Login
-          </p>
-        </footer>
-      </FormWraper>
-    </section>
+    <FormWraper
+      onSubmit={handleSubmit}
+      title="Create Your Account"
+      description="Easily create an account by filling all out all fields correctly"
+      maxWidth="max-w-md"
+    >
+      <fieldset className="flex flex-col w-full gap-5 mt-5 px-4">
+        {registerData.map((field) => (
+          <InputField
+            key={field.name}
+            field={field}
+            onTextChange={handleChange}
+          />
+        ))}
+      </fieldset>
+      <footer className="w-full my-6 px-4 flex flex-col items-center">
+        <button
+          type="submit"
+          className={`h-10 w-full rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
+        >
+          Register
+        </button>
+        <button
+          type="button"
+          onClick={onFormToggle}
+          className="text-[var(--neutral-800)] text-xs mt-2 gap-0.5"
+        >
+          Already have an account? <span className="text-blue-500">Login</span>
+        </button>
+      </footer>
+    </FormWraper>
   );
 };

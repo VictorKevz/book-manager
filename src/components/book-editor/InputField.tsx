@@ -37,7 +37,6 @@ export const InputField = ({
           htmlFor={field.name}
         >
           <span className="text-[var(--neutral-800)] font-medium">
-            {" "}
             {field.label}
           </span>
           <div className="w-full relative flex items-center">
@@ -88,10 +87,12 @@ export const InputField = ({
           htmlFor=""
           className="w-full flex flex-col items-start gap-2 text-[var(--neutral-700)]"
         >
-          {field.label}
+          <span className="text-[var(--neutral-800)] font-medium">
+            {field.label}
+          </span>
           <textarea
             rows={4}
-            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border ${
+            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border placeholder:text-[var(--neutral-700)] ${
               !field.isValid
                 ? "border-[var(--error)]"
                 : "border-[var(--neutral-100)]"
