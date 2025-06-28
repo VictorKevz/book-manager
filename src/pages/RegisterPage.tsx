@@ -29,6 +29,7 @@ export const RegisterPage = () => {
     }));
   }, []);
   const handleValidation = () => {
+    // 1. Clone the validation state to be updated during checks
     const newRegisterValid: Record<keyof RegisterItem, boolean> = {
       ...registerValid,
     };
@@ -36,19 +37,29 @@ export const RegisterPage = () => {
     Object.entries(register).forEach(([key, value]) => {
       const trimmedValue = value.trim();
 
+      // 2. Mark field as invalid if it's empty or less than 3 characters
       if (!trimmedValue || trimmedValue.length < 3) {
         newRegisterValid[key as keyof typeof newRegisterValid] = false;
         return;
       }
 
+      // 3. Email: Check basic format
       if (key === "email") {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(trimmedValue)) {
           newRegisterValid[key as keyof typeof newRegisterValid] = false;
           return;
         }
+
+        // 4. Email: Ensure domain is @victokevz.com
+        const domainRegex = /^[^\s@]+@victorkevz\.com$/;
+        if (!domainRegex.test(register.email)) {
+          newRegisterValid.email = false;
+          return;
+        }
       }
 
+      // 5. Password: Validate strength (uppercase, lowercase, digit, special char, min 6 chars)
       if (key === "password") {
         const passwordRegex =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-_*@#$%^&+=!]).{6,}$/;
@@ -58,6 +69,7 @@ export const RegisterPage = () => {
         }
       }
 
+      // 6. Confirm Password: Must exactly match password
       if (key === "confirmPassword") {
         if (register.password !== register.confirmPassword) {
           newRegisterValid[key as keyof typeof newRegisterValid] = false;
@@ -66,6 +78,7 @@ export const RegisterPage = () => {
       }
     });
 
+    // 7. Update the validation state and return final boolean result
     setRegisterValid(newRegisterValid);
     return Object.values(newRegisterValid).every(Boolean);
   };
@@ -131,7 +144,7 @@ export const RegisterPage = () => {
       type: "text",
       isValid: registerValid.email,
       label: "Email",
-      errorMessage: "Your email is required",
+      errorMessage: "Email must be a valid @victokevz.com address",
     },
     {
       name: "password",
