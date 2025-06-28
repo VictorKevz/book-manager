@@ -7,6 +7,7 @@ import { BookProvider } from "./context/BookContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { BookPage } from "./pages/BookPage";
 import { AlertMessage } from "./components/Alert";
+import { RegisterPage } from "./pages/RegisterPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           </main>
           <AlertMessage />
           <DialogWrapper />
+          <RegisterPage />
         </BookProvider>
       </AlertProvider>
     </ThemeProvider>

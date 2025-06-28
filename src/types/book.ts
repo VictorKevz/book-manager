@@ -47,9 +47,6 @@ export interface BookContextType {
   onModalClose: () => void;
   toggleForm: () => void;
   uiState: uiStateType;
-  // turnOnLoader: () => void;
-  // turnOffLoader: () => void;
-  // handleError: (msg: string) => void;
   refreshBooks: () => void;
   isWarningModal: boolean;
 }
