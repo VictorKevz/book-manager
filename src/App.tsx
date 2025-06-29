@@ -7,6 +7,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { AlertMessage } from "./components/Alert";
 import { AuthProvider } from "./context/AuthContext";
 import { MainApp } from "./MainApp";
+import { SearchProvider } from "./context/SearchContext";
 
 function App() {
   return (
@@ -14,9 +15,11 @@ function App() {
       <ThemeProvider>
         <AlertProvider>
           <BookProvider>
-            <MainApp />
-            <AlertMessage />
-            <DialogWrapper />
+            <SearchProvider>
+              <MainApp />
+              <AlertMessage />
+              <DialogWrapper />
+            </SearchProvider>
           </BookProvider>
         </AlertProvider>
       </ThemeProvider>
