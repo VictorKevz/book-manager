@@ -14,16 +14,15 @@ export const MainApp = () => {
           index
           element={user ? <Navigate to="/dashboard" /> : <WelcomePage />}
         />
-        {user && (
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<Overview />} />
-            <Route path="books" element={<BookPage />} />
-          </Route>
-        )}
         <Route
           path="/dashboard/*"
           element={user ? <Dashboard /> : <Navigate to="/" />}
-        />
+        >
+          <Route index element={<Overview />} />
+          <Route path="books" element={<BookPage />} />
+          {/* <Route path="categories" element={<CategoriesPage />} />
+    <Route path="settings" element={<SettingsPage />} /> */}
+        </Route>
       </Routes>
     </main>
   );
