@@ -5,18 +5,21 @@ import {
   useEffect,
   useState,
 } from "react";
-import { SearchContextType } from "../types/search";
+import { CategoryDataType, SearchContextType } from "../types/search";
 import { ContextProviderProps } from "../types/book";
 import { useBookFetch } from "../hooks/useBookFetch";
 import { InputType } from "../types/upsertBook";
 import { useLocation, useNavigate } from "react-router-dom";
+import { categoryIcons } from "../categoryIconsData";
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 export const SearchProvider = ({ children }: ContextProviderProps) => {
   const [query, setQuery] = useState<string>("");
-  const [categories, setCategories] = useState<string[]>([]);
   const [debouncedQuery, setDebouncedQuery] = useState<string>("");
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [categoryData, setCategoryData] = useState<CategoryDataType[]>([]);
+
   const { books } = useBookFetch();
 
   const handleQueryChange = useCallback((event: InputType) => {
@@ -24,11 +27,17 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
   }, []);
 
   //   Update categories on component mount
+
   useEffect(() => {
-    const categoryList = Array.from(
-      new Set(books.map((book) => book.category))
-    );
-    setCategories(categoryList);
+    const list = Array.from(new Set(books.map((book) => book.category)));
+    setCategoryList(["All", ...list]);
+
+    const newData = categoryList.map((category) => ({
+      name: category,
+      icon: categoryIcons[category],
+    }));
+
+    setCategoryData(newData);
   }, [books]);
 
   //   Delay updating the debounced query as query changes
@@ -56,7 +65,8 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
     <SearchContext.Provider
       value={{
         query,
-        categories,
+        categoryList,
+        categoryData,
         OnQueryChange: handleQueryChange,
         debouncedQuery,
       }}

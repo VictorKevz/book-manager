@@ -1,8 +1,12 @@
-import { InputType } from "./upsertBook";
-
+import { InputType, MUIIconType } from "./upsertBook";
+export type CategoryDataType = {
+  name: string;
+  icon: MUIIconType;
+};
 export interface SearchContextType {
   query: string;
-  categories: string[];
+  categoryList: string[];
+  categoryData: CategoryDataType[];
   OnQueryChange: (event: InputType) => void;
   debouncedQuery: string;
 }
