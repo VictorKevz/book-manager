@@ -1,7 +1,6 @@
-import { Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { SyncLoaderWrapper } from "../components/common/Loaders";
 import { useBookProvider } from "../context/BookContext";
-import { BookPage } from "./BookPage";
 import { TopHeader } from "../components/TopHeader";
 import { SideBar } from "../components/common/Sidebar";
 
@@ -14,14 +13,20 @@ export const Dashboard = () => {
       </div>
     );
   return (
-    <section className="w-full flex-col items-start h-full">
+    <>
+      {/* Fixed Top Header */}
       <TopHeader />
-      <div className="w-full flex items-start mt-[5rem] h-full">
-        <Routes>
-          <Route index element={<BookPage />} />
-        </Routes>
+
+      {/* Sidebar + Main Content Wrapper */}
+      <div className="flex pt-[5rem] min-h-screen">
+        {/* Fixed Sidebar */}
         <SideBar />
+
+        {/* Page Content */}
+        <main className="flex-1 ml-[11rem] p-6 overflow-auto">
+          <Outlet />
+        </main>
       </div>
-    </section>
+    </>
   );
 };

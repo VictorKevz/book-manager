@@ -12,8 +12,8 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-xl w-full flex-col items-center justify-center mx-auto px-5 overflow-x-hidden">
-      <div className="w-full grid grid-cols-3 gap-5 my-6 pl-[9rem]">
+    <section className="max-w-screen-2xl w-full flex-col items-center justify-center ">
+      <div className="w-full grid grid-cols-3 gap-5 my-6">
         {books.map((book) => (
           <BookCard key={book?.id} book={book} />
         ))}

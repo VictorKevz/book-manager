@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { Dashboard } from "./pages/Dashboard";
 import { WelcomePage } from "./pages/WelcomePage";
+import { BookPage } from "./pages/BookPage";
+import { Overview } from "./pages/Overview";
 
 export const MainApp = () => {
   const { user } = useAuth();
@@ -12,8 +14,14 @@ export const MainApp = () => {
           index
           element={user ? <Navigate to="/dashboard" /> : <WelcomePage />}
         />
+        {user && (
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<Overview />} />
+            <Route path="books" element={<BookPage />} />
+          </Route>
+        )}
         <Route
-          path="/dashboard"
+          path="/dashboard/*"
           element={user ? <Dashboard /> : <Navigate to="/" />}
         />
       </Routes>
