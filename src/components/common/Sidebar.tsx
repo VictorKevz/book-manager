@@ -1,6 +1,7 @@
 import { AutoStories, Category, Home, Settings } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import ThemeButton from "../ThemeButton";
+import profile from "../../assets/profile.png";
 
 export const SideBar = () => {
   return (
@@ -11,7 +12,7 @@ export const SideBar = () => {
       <div className="flex items-center flex-col gap-3 border-t border-[var(--neutral-100)] pt-3">
         <button type="button" className="  ">
           <img
-            src="/public/profile.png"
+            src={profile}
             className="w-14 h-14 rounded-full border-2 border-[var(--neutral-100)] object-left"
             alt="user profile picture"
           />

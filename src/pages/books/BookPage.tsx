@@ -9,7 +9,7 @@ import { sortByData } from "../../data/searchData";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { PaginateItems } from "./PaginateItems";
 import { DropDown } from "./DropDown";
-
+import noResultsImg from "../../assets/no-results.png";
 export const BookPage = () => {
   const { isFormOpen, books, bookToEdit, uiState } = useBookProvider();
   const { debouncedQuery, categoryData } = useSearchProvider();
@@ -173,7 +173,7 @@ export const BookPage = () => {
       {/* Renders the no-search results UI */}
       {paginatedBooks.length === 0 && (
         <div className="w-fit mx-auto px-5 min-h-[20rem] flex flex-col items-center justify-between gap-5 py-8 border border-[var(--neutral-100)] rounded-xl">
-          <img src="/public/no-results.png" className="w-[15rem]" alt="" />
+          <img src={noResultsImg} className="w-[15rem]" alt="" />
           <p className="text-[var(--neutral-900)]">
             Looks like you don't have a book that matches your search:
             <strong className="px-1 text-[var(--secondary-color)]">
