@@ -11,7 +11,7 @@ import { ContextProviderProps } from "../types/book";
 import { useBookFetch } from "../hooks/useBookFetch";
 import { InputType } from "../types/upsertBook";
 import { useLocation, useNavigate } from "react-router-dom";
-import { categoryIcons } from "../categoryIconsData";
+import { categoryIcons } from "../data/searchData";
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 

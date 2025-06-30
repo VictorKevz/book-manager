@@ -10,3 +10,17 @@ export interface SearchContextType {
   OnQueryChange: (event: InputType) => void;
   debouncedQuery: string;
 }
+export type SortOption = {
+  field: "title" | "author" | "stock";
+  order: "asc" | "desc";
+};
+
+export type SortDataType = SortOption & {
+  label: string;
+};
+
+export type DropDownProps = {
+  onSortUpdate: (option: SortOption, label: string) => void;
+  data: SortDataType[];
+  sortLabel: string;
+};

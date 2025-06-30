@@ -59,7 +59,7 @@ const BookCard = ({ book }: BookCardProps) => {
           <button
             type="button"
             onClick={() => toggleMenu(book.title)}
-            className="my-2 h-8 w-8 rounded-full bg-[var(--neutral-100)] text-[var(--neutral-900)]"
+            className="my-2 h-8 w-8 justify-center rounded-full bg-[var(--neutral-100)] text-[var(--neutral-900)]"
           >
             <MoreVert />
           </button>

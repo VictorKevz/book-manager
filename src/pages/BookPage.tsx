@@ -4,29 +4,67 @@ import BookCard from "../components/BookCard";
 import { SyncLoaderWrapper } from "../components/common/Loaders";
 import { useBookProvider } from "../context/BookContext";
 import { useSearchProvider } from "../context/SearchContext";
+import { DropDownProps, SortOption } from "../types/search";
+import { sortByData } from "../data/searchData";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
 export const BookPage = () => {
   const { isFormOpen, books, bookToEdit, uiState } = useBookProvider();
   const { debouncedQuery, categoryData } = useSearchProvider();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [sortOption, setSortOption] = useState<SortOption>({
+    field: "author",
+    order: "asc",
+  });
+  const [dropDown, setDropDown] = useState<boolean>(false);
+  const [sortLabel, setSortLabel] = useState<string>("Author (A–Z)");
 
   const updateCategory = (category: string) => {
     setSelectedCategory(category);
   };
 
+  const updateSortOption = (option: SortOption, label: string) => {
+    setSortOption(option);
+    setSortLabel(label);
+    toggleDropDown();
+  };
+
+  const toggleDropDown = () => {
+    setDropDown((prev) => !prev);
+  };
   const filteredBooks = useMemo(() => {
-    let filteredByCategory;
-    if (selectedCategory === "All") {
-      filteredByCategory = books;
-    } else {
-      filteredByCategory = books.filter((b) => b.category === selectedCategory);
+    const q = debouncedQuery.trim().toLowerCase();
+
+    // 1. Filter by category
+    let filtered =
+      selectedCategory === "All"
+        ? books
+        : books.filter((b) => b.category === selectedCategory);
+
+    // 2. Filter by search query (title or author)
+    if (q.length >= 3) {
+      filtered = filtered.filter(
+        (b) =>
+          b.title.toLowerCase().includes(q) ||
+          b.author.toLowerCase().includes(q)
+      );
     }
-    const q = debouncedQuery.trim();
-    return filteredByCategory.filter(
-      (b) =>
-        b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)
-    );
-  }, [books, debouncedQuery, selectedCategory]);
+
+    // 3. Sort the filtered results
+    const { field, order } = sortOption;
+
+    const sorted = [...filtered].sort((a, b) => {
+      if (field === "stock") {
+        const diff = Number(a.quantity) - Number(b.quantity);
+        return order === "asc" ? diff : -diff;
+      }
+
+      const compare = a[field].localeCompare(b[field]);
+      return order === "asc" ? compare : -compare;
+    });
+
+    return sorted;
+  }, [books, debouncedQuery, selectedCategory, sortOption]);
 
   if (uiState.isLoading)
     return (
@@ -39,12 +77,28 @@ export const BookPage = () => {
       <header className="w-full flex flex-col items-start">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-[var(--neutral-900)] text-2xl">Filters</h2>
-          <button
-            type="button"
-            className="max-w-[15rem] w-full h-12 border border-[var(--neutral-100)] rounded-lg px-3"
-          >
-            Sort by:
-          </button>
+          <div className="relative flex flex-col items-start justify-start z-10">
+            <span className="font-bold text-sm text-[var(--neutral-700)]">
+              Sort By:
+            </span>
+            <button
+              type="button"
+              onClick={toggleDropDown}
+              className="min-w-[12rem] w-full h-12 border border-[var(--neutral-100)] rounded-lg px-4 text-[var(--neutral-900)] justify-between"
+            >
+              {sortLabel}{" "}
+              <span>
+                {dropDown ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+              </span>
+            </button>
+            {dropDown && (
+              <DropDown
+                onSortUpdate={updateSortOption}
+                data={sortByData}
+                sortLabel={sortLabel}
+              />
+            )}
+          </div>
         </div>
         <ul className="w-full flex items-center justify-between mt-5">
           {categoryData.map((category) => {
@@ -84,5 +138,30 @@ export const BookPage = () => {
 
       {isFormOpen && <BookEditor book={bookToEdit} />}
     </section>
+  );
+};
+
+export const DropDown = ({ data, onSortUpdate, sortLabel }: DropDownProps) => {
+  return (
+    <ul className="absolute top-full flex flex-col gap-5 py-5 px-6 rounded-xl shadow-2xl bg-[var(--neutral-300)] border border-[var(--neutral-100)]">
+      {data.map((option, i) => {
+        const activeLabel = option.label === sortLabel;
+        return (
+          <li key={i}>
+            <button
+              type="button"
+              onClick={() => onSortUpdate(option, option.label)}
+              className={`${
+                activeLabel
+                  ? "text-[var(--primary-color)]"
+                  : "text-[var(--neutral-900)]"
+              }`}
+            >
+              {option.label}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
