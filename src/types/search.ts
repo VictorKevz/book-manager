@@ -5,7 +5,7 @@ export type CategoryDataType = {
 };
 export interface SearchContextType {
   query: string;
-  categoryList: string[];
+  //   categoryList: string[];
   categoryData: CategoryDataType[];
   OnQueryChange: (event: InputType) => void;
   debouncedQuery: string;

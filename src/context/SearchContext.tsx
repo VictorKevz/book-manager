@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   createContext,
   useCallback,
@@ -18,7 +17,7 @@ const SearchContext = createContext<SearchContextType | undefined>(undefined);
 export const SearchProvider = ({ children }: ContextProviderProps) => {
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState<string>("");
-  const [categoryList, setCategoryList] = useState<string[]>([]);
+  //   const [categoryList, setCategoryList] = useState<string[]>([]);
   const [categoryData, setCategoryData] = useState<CategoryDataType[]>([]);
 
   const { books } = useBookFetch();
@@ -32,17 +31,13 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
     setDebouncedQuery("");
   }, []);
 
-  //   Update categories on component mount
-
+  //   Update categories on component mount - assumes data fetching is done!
   useEffect(() => {
     const list = Array.from(new Set(books.map((book) => book.category)));
-    setCategoryList(["All", ...list]);
-
-    const newData = categoryList.map((category) => ({
+    const newData = ["All", ...list].map((category) => ({
       name: category,
       icon: categoryIcons[category],
     }));
-
     setCategoryData(newData);
   }, [books]);
 
@@ -71,7 +66,7 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
     <SearchContext.Provider
       value={{
         query,
-        categoryList,
+        // categoryList,
         categoryData,
         OnQueryChange: handleQueryChange,
         debouncedQuery,

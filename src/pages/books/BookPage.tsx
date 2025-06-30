@@ -130,7 +130,7 @@ export const BookPage = () => {
             )}
           </div>
         </div>
-        <ul className="w-full flex flex-wrap items-center justify-between mt-5">
+        <ul className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
           {categoryData.map((category) => {
             const isSelected = category.name === selectedCategory;
             return (
