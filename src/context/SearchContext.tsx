@@ -27,6 +27,11 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
     setQuery(event.target.value.toLowerCase());
   }, []);
 
+  const onClearQuery = useCallback(() => {
+    setQuery("");
+    setDebouncedQuery("");
+  }, []);
+
   //   Update categories on component mount
 
   useEffect(() => {
@@ -70,6 +75,7 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
         categoryData,
         OnQueryChange: handleQueryChange,
         debouncedQuery,
+        onClearQuery,
       }}
     >
       {children}

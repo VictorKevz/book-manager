@@ -16,7 +16,7 @@ export const WarningDialog = ({
   uiState,
 }: Modalprops) => {
   return (
-    <div className="z-500 w-full min-h-screen fixed top-0 flex items-center justify-center bg-black/60 backdrop-blur-[5px] transition-all duration-300 ease-in-out px-4">
+    <div className="z-500 w-full min-h-screen fixed top-0 left-0 flex items-center justify-center bg-black/60 backdrop-blur-[5px] transition-all duration-300 ease-in-out px-4">
       <dialog className="max-w-lg w-full flex flex-col justify-between bg-[var(--neutral-200)] py-5 rounded-xl shadow-2xl border border-[var(--neutral-100)] mx-auto">
         <header className="w-full flex justify-between items-start gap-4 px-4 pb-4">
           <h2 className="font-bold text-lg text-[var(--neutral-700)]">
@@ -40,14 +40,14 @@ export const WarningDialog = ({
           <button
             type="button"
             onClick={onModalClose}
-            className="h-10 rounded-lg w-[50%] text-[var(--neutral-900)] bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
+            className="h-10 justify-center rounded-lg w-[50%] text-[var(--neutral-900)] bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onBookDelete}
-            className="h-10 rounded-lg w-[50%] bg-[var(--error)] "
+            className="h-10 justify-center rounded-lg w-[50%] bg-[var(--error)] "
           >
             Delete
           </button>

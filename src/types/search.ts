@@ -9,6 +9,7 @@ export interface SearchContextType {
   categoryData: CategoryDataType[];
   OnQueryChange: (event: InputType) => void;
   debouncedQuery: string;
+  onClearQuery: () => void;
 }
 export type SortOption = {
   field: "title" | "author" | "stock";
@@ -23,4 +24,10 @@ export type DropDownProps = {
   onSortUpdate: (option: SortOption, label: string) => void;
   data: SortDataType[];
   sortLabel: string;
+};
+
+export type PaginateItemsProps = {
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: (pageNum: number) => void;
 };

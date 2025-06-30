@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
-import { BookEditor } from "../components/book-editor/BookEditor";
-import BookCard from "../components/BookCard";
-import { SyncLoaderWrapper } from "../components/common/Loaders";
-import { useBookProvider } from "../context/BookContext";
-import { useSearchProvider } from "../context/SearchContext";
-import { DropDownProps, SortOption } from "../types/search";
-import { sortByData } from "../data/searchData";
+import { useEffect, useMemo, useState } from "react";
+import { BookEditor } from "../../components/book-editor/BookEditor";
+import BookCard from "../../components/BookCard";
+import { SyncLoaderWrapper } from "../../components/common/Loaders";
+import { useBookProvider } from "../../context/BookContext";
+import { useSearchProvider } from "../../context/SearchContext";
+import { SortOption } from "../../types/search";
+import { sortByData } from "../../data/searchData";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { PaginateItems } from "./PaginateItems";
+import { DropDown } from "./DropDown";
 
 export const BookPage = () => {
   const { isFormOpen, books, bookToEdit, uiState } = useBookProvider();
@@ -18,6 +20,8 @@ export const BookPage = () => {
   });
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [sortLabel, setSortLabel] = useState<string>("Author (A–Z)");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   const updateCategory = (category: string) => {
     setSelectedCategory(category);
@@ -66,6 +70,32 @@ export const BookPage = () => {
     return sorted;
   }, [books, debouncedQuery, selectedCategory, sortOption]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedQuery, selectedCategory, sortOption]);
+
+  // Responsible for dynamically updating items per page based on screen size
+  useEffect(() => {
+    const updateItems = () => {
+      const width = window.innerWidth;
+
+      if (width < 640) setItemsPerPage(4);
+      else if (width >= 640 && width < 1536) setItemsPerPage(6);
+      else setItemsPerPage(8);
+    };
+
+    updateItems();
+    window.addEventListener("resize", updateItems);
+
+    return () => window.removeEventListener("resize", updateItems);
+  }, []);
+
+  const paginatedBooks = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredBooks.slice(start, start + itemsPerPage);
+  }, [currentPage, itemsPerPage, filteredBooks]);
+
+  const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
   if (uiState.isLoading)
     return (
       <div className="w-full flex items-center justify-center min-h-dvh">
@@ -73,7 +103,7 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-2xl w-full flex-col items-center justify-center ">
+    <section className="max-w-screen-2xl w-full">
       <header className="w-full flex flex-col items-start">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-[var(--neutral-900)] text-2xl">Filters</h2>
@@ -100,7 +130,7 @@ export const BookPage = () => {
             )}
           </div>
         </div>
-        <ul className="w-full flex items-center justify-between mt-5">
+        <ul className="w-full flex flex-wrap items-center justify-between mt-5">
           {categoryData.map((category) => {
             const isSelected = category.name === selectedCategory;
             return (
@@ -131,37 +161,29 @@ export const BookPage = () => {
         </ul>
       </header>
       <div className="w-full grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 mt-6 py-5">
-        {filteredBooks.map((book) => (
+        {paginatedBooks.map((book) => (
           <BookCard key={book?.id} book={book} />
         ))}
       </div>
-
+      <PaginateItems
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+      {/* Renders the no-search results UI */}
+      {paginatedBooks.length === 0 && (
+        <div className="w-fit mx-auto px-5 min-h-[20rem] flex flex-col items-center justify-between gap-5 py-8 border border-[var(--neutral-100)] rounded-xl">
+          <img src="/public/no-results.png" className="w-[15rem]" alt="" />
+          <p className="text-[var(--neutral-900)]">
+            Looks like you don't have a book that matches your search:
+            <strong className="px-1 text-[var(--secondary-color)]">
+              "{debouncedQuery}".
+            </strong>{" "}
+            Please try another search.
+          </p>
+        </div>
+      )}
       {isFormOpen && <BookEditor book={bookToEdit} />}
     </section>
-  );
-};
-
-export const DropDown = ({ data, onSortUpdate, sortLabel }: DropDownProps) => {
-  return (
-    <ul className="absolute top-full flex flex-col gap-5 py-5 px-6 rounded-xl shadow-2xl bg-[var(--neutral-300)] border border-[var(--neutral-100)]">
-      {data.map((option, i) => {
-        const activeLabel = option.label === sortLabel;
-        return (
-          <li key={i}>
-            <button
-              type="button"
-              onClick={() => onSortUpdate(option, option.label)}
-              className={`${
-                activeLabel
-                  ? "text-[var(--primary-color)]"
-                  : "text-[var(--neutral-900)]"
-              }`}
-            >
-              {option.label}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
   );
 };
