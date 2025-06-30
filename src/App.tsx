@@ -8,6 +8,7 @@ import { AlertMessage } from "./components/Alert";
 import { AuthProvider } from "./context/AuthContext";
 import { MainApp } from "./MainApp";
 import { SearchProvider } from "./context/SearchContext";
+import { BookEditorWrapper } from "./pages/books/BookPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <MainApp />
               <AlertMessage />
               <DialogWrapper />
+              <BookEditorWrapper />
             </SearchProvider>
           </BookProvider>
         </AlertProvider>

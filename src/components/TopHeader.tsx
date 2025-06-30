@@ -1,9 +1,8 @@
-import { AddCircle, NotificationAdd } from "@mui/icons-material";
-import { useBookProvider } from "../context/BookContext";
+import { NotificationAdd } from "@mui/icons-material";
 import { SearchBar } from "./common/SearchBar";
 import logo from "../../public/favicon.png";
+import { AddBookButton } from "./common/AddBookButton";
 export const TopHeader = () => {
-  const { toggleForm } = useBookProvider();
   return (
     <header className="w-full min-h-[5rem] fixed top-0 flex items-center justify-between px-5 bg-[var(--neutral-200)] border-b border-[var(--neutral-100)] z-20">
       <div className="flex items-center gap-2">
@@ -15,14 +14,7 @@ export const TopHeader = () => {
         <span>
           <NotificationAdd />
         </span>
-        <button
-          type="button"
-          onClick={toggleForm}
-          className="h-11 px-3 rounded-full bg-[var(--primary-color)] text-white gap-0.5"
-        >
-          <AddCircle />
-          Create New Book
-        </button>
+        <AddBookButton />
       </div>
     </header>
   );

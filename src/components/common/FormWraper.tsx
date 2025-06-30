@@ -13,7 +13,7 @@ export const FormWraper = ({
   return (
     <form
       onSubmit={(event: FormEventType) => onSubmit(event)}
-      className={`${maxWidth} w-full shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]`}
+      className={`${maxWidth} w-full shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6`}
     >
       <header className="w-full relative bg-[var(--neutral-400)] border-b p-5 border-[var(--neutral-100)] rounded-t-2xl">
         <h2 className="font-bold text-xl sm:text-2xl text-[var(--neutral-900)]">
@@ -26,7 +26,7 @@ export const FormWraper = ({
           <button
             type="button"
             onClick={toggleForm}
-            className="absolute right-4 top-4 h-10 w-10 bg-[var(--neutral-100)] rounded-full text-[var(--neutral-900)]"
+            className="absolute right-4 top-4 h-10 w-10 justify-center bg-[var(--neutral-100)] rounded-full text-[var(--neutral-900)]"
           >
             <Close />
           </button>
