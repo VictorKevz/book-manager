@@ -18,7 +18,7 @@ export const Dashboard = () => {
       <TopHeader />
 
       {/* Sidebar + Main Content Wrapper */}
-      <div className="flex pt-[5rem] min-h-screen">
+      <div className="flex pt-[5rem] min-h-screen w-full">
         {/* Fixed Sidebar */}
         <SideBar />
 

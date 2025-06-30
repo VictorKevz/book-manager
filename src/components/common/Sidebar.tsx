@@ -11,7 +11,7 @@ export const SideBar = () => {
       <div className="flex items-center flex-col gap-3 border-t border-[var(--neutral-100)] pt-3">
         <button type="button" className="  ">
           <img
-            src="./public/profile.png"
+            src="/public/profile.png"
             className="w-14 h-14 rounded-full border-2 border-[var(--neutral-100)] object-left"
             alt="user profile picture"
           />

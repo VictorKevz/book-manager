@@ -25,8 +25,8 @@
   --neutral-300: #1e1d1c;
   --neutral-400: #161616;
   --neutral-600: #696c6ac0;
-  --neutral-700: #959daa;
-  --neutral-800: #e7e9ec;
+  --neutral-700: #878a8e;
+  --neutral-800: #d7d9dcf1;
   --neutral-900: #f2efef;
   --primary-color: #33b078;
   --secondary-color: #75e0aeec;
@@ -38,11 +38,14 @@
   font-family: "Roboto", sans-serif;
   box-sizing: border-box;
 }
-
+h1,
+h2,
+h3 {
+  font-weight: bold;
+}
 button {
   display: flex;
   align-items: center;
-  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-weight: 600;

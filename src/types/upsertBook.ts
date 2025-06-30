@@ -1,6 +1,6 @@
 import { BookItem } from "./book";
 export type InputFieldType = "text" | "password" | "textarea" | "file";
-type MUIIconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
+export type MUIIconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 export type formItem = {
   name: string;
   value: string | File;
