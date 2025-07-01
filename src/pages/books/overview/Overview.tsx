@@ -3,6 +3,8 @@ import bookUploadImg from "../../../assets/book-upload.png";
 import { AddBookButton } from "../../../components/common/AddBookButton";
 import { useBookProvider } from "../../../context/BookContext";
 import { useSearchProvider } from "../../../context/SearchContext";
+import BookCard from "../../../components/BookCard";
+import { Link } from "react-router-dom";
 
 export const Overview = () => {
   const { books } = useBookProvider();
@@ -26,6 +28,11 @@ export const Overview = () => {
   });
 
   const convertedTotalValue = formatter.format(Number(totals.totalPrice));
+  // For display purposes only - show first 3 books with the lowest quantity
+  const topSellingBooks = books
+    .filter((book) => Number(book.quantity) <= 15)
+    .slice(0, 3);
+
   const statsCardData = [
     {
       id: 1,
@@ -47,7 +54,7 @@ export const Overview = () => {
     },
   ];
   return (
-    <section className="w-full flex flex-col items-center justify-center mx-auto">
+    <section className="max-w-screen-xl w-full flex flex-col items-center justify-center mx-auto mt-6">
       <header className="max-w-screen-md  w-full bg-[var(--neutral-200)] flex items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl">
         <div className="flex flex-col gap-1.5 items-start w-[80%]">
           <h2 className="text-[var(--neutral-900)] text-3xl">
@@ -63,7 +70,7 @@ export const Overview = () => {
           <img src={bookUploadImg} alt="" className="w-full" />
         </figure>
       </header>
-      <div className="max-w-screen-xl w-full grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-10">
+      <div className="w-full grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-10">
         {statsCardData.map((card) => (
           <div
             key={card.id}
@@ -79,6 +86,21 @@ export const Overview = () => {
             <p className="text-[var(--neutral-700)]">{card.label}</p>
           </div>
         ))}
+      </div>
+      <div className="w-full mt-10">
+        <div className="w-full grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          {topSellingBooks.map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
+        </div>
+        <div className="w-full flex items-center justify-end mt-4">
+          <Link
+            to="/dashboard/books"
+            className="h-10 flex items-center justify-center rounded-xl bg-[var(--neutral-50)] text-[var(--neutral-900)] px-4"
+          >
+            See All Books
+          </Link>
+        </div>
       </div>
     </section>
   );

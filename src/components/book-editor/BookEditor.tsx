@@ -111,14 +111,14 @@ export const BookEditor = ({ book }: BookCardProps) => {
         <div className="w-full flex items-center justify-between gap-6 mt-4 bg-[var(--neutral-400)] border-t p-5 border-[var(--neutral-100)] rounded-b-2xl">
           <button
             type="button"
-            className="max-w-30 w-full h-10 justify-center rounded-full px-4 border border-[var(--primary-color)] text-[var(--neutral-900)]"
+            className="max-w-30 w-full h-10 justify-center rounded-xl px-4 border border-[var(--primary-color)] text-[var(--neutral-900)]"
             onClick={clearForm}
           >
             Clear
           </button>
           <button
             type="submit"
-            className="max-w-30 w-full h-10 justify-center rounded-full px-4 bg-[var(--primary-color)] text-[var(--neutral-900)]"
+            className="max-w-30 w-full h-10 justify-center rounded-xl px-4 bg-[var(--primary-color)] text-[var(--neutral-900)]"
           >
             Submit
           </button>

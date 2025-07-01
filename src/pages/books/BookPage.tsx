@@ -96,6 +96,7 @@ export const BookPage = () => {
   }, [currentPage, itemsPerPage, filteredBooks]);
 
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+
   if (uiState.isLoading)
     return (
       <div className="w-full flex items-center justify-center min-h-dvh">

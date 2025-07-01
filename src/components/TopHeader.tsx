@@ -1,6 +1,6 @@
 import { NotificationAdd } from "@mui/icons-material";
 import { SearchBar } from "./common/SearchBar";
-import logo from "../../public/favicon.png";
+import logo from "../assets/logo.png";
 import { AddBookButton } from "./common/AddBookButton";
 export const TopHeader = () => {
   return (
