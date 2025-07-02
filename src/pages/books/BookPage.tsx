@@ -104,7 +104,7 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-2xl w-full mx-auto ">
+    <section className="max-w-screen-2xl w-full mx-auto px-5">
       <header className="w-full flex flex-col items-start">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-[var(--neutral-900)] text-2xl">Filters</h2>

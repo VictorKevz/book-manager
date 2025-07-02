@@ -63,7 +63,7 @@ export const Overview = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-xl w-full flex flex-col items-center justify-center mx-auto mt-6">
+    <section className="max-w-screen-xl w-full flex flex-col items-center justify-center px-5 mx-auto mt-6">
       <header className="w-full bg-[var(--neutral-200)] flex flex-col items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl md:flex-row">
         <div className="flex flex-col gap-1.5 items-start md:w-[80%]">
           <h2 className="text-[var(--neutral-900)] text-3xl">
