@@ -13,9 +13,9 @@ export const FormWraper = ({
   return (
     <form
       onSubmit={(event: FormEventType) => onSubmit(event)}
-      className={`${maxWidth} w-full shadow-xl rounded-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6`}
+      className={`${maxWidth} w-full h-[30rem] lg:h-fit shadow-xl rounded-xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6 overflow-auto`}
     >
-      <header className="w-full relative bg-[var(--neutral-400)] border-b p-5 border-[var(--neutral-100)] rounded-t-2xl">
+      <header className="w-full relative bg-[var(--neutral-400)] border-b px-5 py-6 border-[var(--neutral-100)] rounded-t-2xl">
         <h2 className="font-bold text-xl sm:text-2xl text-[var(--neutral-900)]">
           {title}
         </h2>

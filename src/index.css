@@ -41,6 +41,8 @@
 html,
 body {
   overflow-x: hidden;
+  scrollbar-color: var(--primary-color) transparent;
+  scrollbar-width: thin;
 }
 h1,
 h2,
@@ -74,4 +76,16 @@ textarea:hover {
   border: 1px solid var(--primary-color);
   cursor: pointer;
   transition: 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }

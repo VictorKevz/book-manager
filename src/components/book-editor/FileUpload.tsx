@@ -27,7 +27,7 @@ export const FileUpload = ({
         />
         <button
           type="button"
-          className={`w-full flex items-center h-14 border rounded-lg text-sm font-medium ${
+          className={`w-full justify-center h-14 border rounded-lg text-sm font-medium ${
             !field.isValid
               ? "border-[var(--error)]"
               : "border-[var(--neutral-100)]"
