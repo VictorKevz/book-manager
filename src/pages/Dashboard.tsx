@@ -23,7 +23,7 @@ export const Dashboard = () => {
         <SideBar />
 
         {/* Page Content */}
-        <main className="flex-1 ml-[11rem] 2xl:ml-[13rem] p-6 overflow-auto">
+        <main className="flex-1 xl:ml-[6rem] px-6 pb-[6rem] mt-8 overflow-x-hidden">
           <Outlet />
         </main>
       </div>

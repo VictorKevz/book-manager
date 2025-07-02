@@ -11,7 +11,7 @@ import { PaginateItems } from "./PaginateItems";
 import { DropDown } from "./DropDown";
 import noResultsImg from "../../assets/no-results.png";
 export const BookPage = () => {
-  const { isFormOpen, books, bookToEdit, uiState } = useBookProvider();
+  const { books, uiState } = useBookProvider();
   const { debouncedQuery, categoryData } = useSearchProvider();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [sortOption, setSortOption] = useState<SortOption>({
@@ -96,6 +96,7 @@ export const BookPage = () => {
   }, [currentPage, itemsPerPage, filteredBooks]);
 
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+
   if (uiState.isLoading)
     return (
       <div className="w-full flex items-center justify-center min-h-dvh">
@@ -103,7 +104,7 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-2xl w-full">
+    <section className="max-w-screen-2xl w-full mx-auto ">
       <header className="w-full flex flex-col items-start">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-[var(--neutral-900)] text-2xl">Filters</h2>
@@ -183,7 +184,12 @@ export const BookPage = () => {
           </p>
         </div>
       )}
-      {isFormOpen && <BookEditor book={bookToEdit} />}
+      {/* {isFormOpen && <BookEditor book={bookToEdit} />} */}
     </section>
   );
+};
+
+export const BookEditorWrapper = () => {
+  const { bookToEdit, isFormOpen } = useBookProvider();
+  return <>{isFormOpen && <BookEditor book={bookToEdit} />}</>;
 };

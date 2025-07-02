@@ -5,9 +5,11 @@ import {
   useEffect,
   useContext,
   ReactNode,
+  useCallback,
 } from "react";
 import { supabase } from "../hooks/useBookFetch";
 import { User } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   user: User | null;
@@ -18,6 +20,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -33,10 +36,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
-  };
+    navigate("/");
+  }, [navigate]);
 
   return (
     <AuthContext.Provider value={{ user, logout }}>

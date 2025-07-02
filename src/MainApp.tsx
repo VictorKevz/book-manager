@@ -3,7 +3,7 @@ import { useAuth } from "./context/AuthContext";
 import { Dashboard } from "./pages/Dashboard";
 import { WelcomePage } from "./pages/WelcomePage";
 import { BookPage } from "./pages/books/BookPage";
-import { Overview } from "./pages/Overview";
+import { Overview } from "./pages/overview/OverviewPage";
 
 export const MainApp = () => {
   const { user } = useAuth();

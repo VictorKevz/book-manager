@@ -47,7 +47,7 @@ export const InputField = ({
               placeholder={field.placeholder}
               id={field.name}
               onChange={(event: onChangeType) => onTextChange(event)}
-              className={`w-full h-12 border bg-[var(--neutral-50)] rounded-lg pl-5 placeholder:text-[var(--neutral-700)] ${
+              className={`w-full h-11 border bg-[var(--neutral-50)] rounded-lg pl-5 placeholder:text-[var(--neutral-700)] ${
                 !field.isValid
                   ? "border-[var(--error)]"
                   : "border-[var(--neutral-100)]"
@@ -91,7 +91,7 @@ export const InputField = ({
             {field.label}
           </span>
           <textarea
-            rows={4}
+            rows={2}
             className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border placeholder:text-[var(--neutral-700)] ${
               !field.isValid
                 ? "border-[var(--error)]"
