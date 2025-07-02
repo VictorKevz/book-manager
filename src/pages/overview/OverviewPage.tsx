@@ -7,9 +7,10 @@ import BookCard from "../../components/BookCard";
 import { Link } from "react-router-dom";
 import { BookCategoryPiechart } from "./BookCategoryPiechart";
 import { BookPriceBarChart } from "./BookPriceBarChart";
+import { SyncLoaderWrapper } from "../../components/common/Loaders";
 
 export const Overview = () => {
-  const { books } = useBookProvider();
+  const { books, uiState } = useBookProvider();
   const { categoryData } = useSearchProvider();
 
   const totals = books.reduce(
@@ -55,6 +56,12 @@ export const Overview = () => {
       value: convertedTotalValue,
     },
   ];
+  if (uiState.isLoading)
+    return (
+      <div className="w-full flex items-center justify-center min-h-dvh">
+        <SyncLoaderWrapper />
+      </div>
+    );
   return (
     <section className="max-w-screen-xl w-full flex flex-col items-center justify-center mx-auto mt-6">
       <header className="w-full bg-[var(--neutral-200)] flex flex-col items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl md:flex-row">

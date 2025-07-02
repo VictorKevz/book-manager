@@ -1,7 +1,9 @@
-import { NotificationAdd } from "@mui/icons-material";
 import { SearchBar } from "./common/SearchBar";
 import logo from "../../public/favicon.png";
 import { AddBookButton } from "./common/AddBookButton";
+import { NavLink } from "react-router-dom";
+import profile from "../assets/profile.png";
+
 export const TopHeader = () => {
   return (
     <header className="w-full min-h-[5rem] fixed top-0 flex items-center justify-between px-5 bg-[var(--neutral-200)] border-b border-[var(--neutral-100)] z-20">
@@ -11,10 +13,14 @@ export const TopHeader = () => {
       </div>
       <SearchBar />
       <div className="flex items-center gap-5">
-        <span>
-          <NotificationAdd />
-        </span>
         <AddBookButton />
+        <NavLink to="/dashboard/settings" className="  ">
+          <img
+            src={profile}
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[var(--neutral-100)] object-left"
+            alt="user profile picture"
+          />
+        </NavLink>
       </div>
     </header>
   );

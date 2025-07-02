@@ -1,22 +1,29 @@
-import { AutoStories, Category, Home, Settings } from "@mui/icons-material";
+import {
+  AutoStories,
+  Category,
+  Home,
+  Logout,
+  Settings,
+} from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
 import ThemeButton from "../ThemeButton";
-import profile from "../../assets/profile.png";
+import { useAuth } from "../../context/AuthContext";
 
 export const SideBar = () => {
+  const { logout } = useAuth();
   return (
     <aside className="fixed bottom-0 w-full h-[4.5rem] px-4 xl:px-0 rounded-t-[2.5rem] border-t xl:border-t-0 xl:rounded-none bg-[var(--neutral-200)] xl:left-0 xl:top-[5rem] xl:w-[6rem] xl:h-[calc(100vh-5rem)] xl:bg-[var(--neutral-400)] xl:border-r border-[var(--neutral-100)] xl:py-3  flex flex-row xl:flex-col justify-between z-40">
       <nav className="flex items-center">
         <PagesList />
       </nav>
       <div className="flex items-center xl:flex-col gap-3 xl:border-t border-[var(--neutral-100)] xl:pt-3">
-        <NavLink to="/dashboard/settings" className="  ">
-          <img
-            src={profile}
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-[var(--neutral-100)] object-left"
-            alt="user profile picture"
-          />
-        </NavLink>
+        <button
+          type="button"
+          onClick={logout}
+          className="flex-col text-[var(--neutral-900)] hover:text-[var(--primary-color)]"
+        >
+          <Logout /> <span>Logout</span>
+        </button>
         <ThemeButton />
       </div>
     </aside>
