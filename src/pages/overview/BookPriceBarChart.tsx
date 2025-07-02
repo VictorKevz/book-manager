@@ -42,7 +42,7 @@ export const BookPriceBarChart = () => {
       </h3>
 
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} style={{ outline: "none" }}>
+        <BarChart data={data}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
@@ -50,12 +50,6 @@ export const BookPriceBarChart = () => {
             dataKey="avgPrice"
             fill="var(--primary-color)"
             style={{ outline: "none" }}
-            activeBar={{
-              fill: "var(--primary-color)",
-              stroke: "none",
-              strokeWidth: 0,
-              width: 10, // Optional: keep it same as base to prevent stretching
-            }}
           />
         </BarChart>
       </ResponsiveContainer>

@@ -58,7 +58,7 @@ export const Overview = () => {
   return (
     <section className="max-w-screen-xl w-full flex flex-col items-center justify-center mx-auto mt-6">
       <header className="w-full bg-[var(--neutral-200)] flex flex-col items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl md:flex-row">
-        <div className="flex flex-col gap-1.5 items-start w-[80%]">
+        <div className="flex flex-col gap-1.5 items-start md:w-[80%]">
           <h2 className="text-[var(--neutral-900)] text-3xl">
             Add new books to increase your sales
           </h2>
@@ -72,13 +72,13 @@ export const Overview = () => {
           <img src={bookUploadImg} alt="" className="w-full" />
         </figure>
       </header>
-      <div className="w-full grid gap-5 grid-cols-2 mt-10">
-        <div className="grid grid-cols-2 gap-5">
+      <div className="w-full grid gap-5 xl:grid-cols-2 mt-10">
+        <div className="grid md:grid-cols-3 md:col-span-3 xl:grid-cols-2 xl:col-span-1 gap-5 w-full">
           {statsCardData.map((card) => (
             <div
               key={card.id}
               className={`border border-[var(--neutral-100)] flex flex-col items-center justify-center gap-3 rounded-xl py-4 px-4 ${
-                card.id === 3 && "col-span-2"
+                card.id === 3 && "xl:col-span-2"
               }`}
             >
               <card.icon
@@ -92,7 +92,9 @@ export const Overview = () => {
             </div>
           ))}
         </div>
-        <BookCategoryPiechart />
+        <div className="w-full md:col-span-3 xl:col-span-1">
+          <BookCategoryPiechart />
+        </div>
       </div>
       <div className="w-full mt-10">
         <BookPriceBarChart />

@@ -30,13 +30,13 @@ export const BookCategoryPiechart = () => {
   const data = getCategoryData(books);
 
   return (
-    <div className="w-full aspect-[3/2] border border-[var(--neutral-100)] rounded-xl py-5 px-4">
+    <div className="w-full aspect-[4/2] xl:aspect-[3/2] border border-[var(--neutral-100)] rounded-xl py-5 px-4">
       <h3 className="text-3xl text-[var(--neutral-900)] text-center">
         Books by Category
       </h3>
 
       <ResponsiveContainer width={"100%"} height={"100%"}>
-        <PieChart>
+        <PieChart style={{ outline: "none" }}>
           <Pie
             data={data}
             cx="50%"
