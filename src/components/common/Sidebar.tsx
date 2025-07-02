@@ -20,7 +20,7 @@ export const SideBar = () => {
         <button
           type="button"
           onClick={logout}
-          className="flex-col text-[var(--neutral-900)] hover:text-[var(--primary-color)]"
+          className="flex-col text-[var(--neutral-700)] hover:text-[var(--primary-color)]"
         >
           <Logout /> <span>Logout</span>
         </button>
@@ -41,12 +41,12 @@ export const PagesList = () => {
   };
 
   return (
-    <ul className="w-full flex flex-row xl:flex-col items-center gap-5">
+    <ul className="w-full flex flex-row xl:flex-col items-center gap-5 divide-x divide-[var(--neutral-100)] xl:divide-x-0">
       {pages.map((page) => (
-        <li key={page.text} className="text-sm w-full">
+        <li key={page.text} className="text-sm w-full h-full">
           <NavLink
             to={page.route}
-            className={`flex flex-col gap-1 items-center justify-center
+            className={`flex flex-col gap-0.5 items-center justify-center h-full
               ${
                 isActive(page.route)
                   ? "text-[var(--secondary-color)] font-bold px-4"
@@ -54,7 +54,7 @@ export const PagesList = () => {
               }
             `}
           >
-            <span>{<page.icon fontSize="small" />}</span>{" "}
+            <span>{<page.icon fontSize="medium" />}</span>{" "}
             <span className="hidden sm:block">{page.text}</span>
           </NavLink>
         </li>
