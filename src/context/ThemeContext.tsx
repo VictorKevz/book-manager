@@ -6,9 +6,11 @@ import {
   useState,
   ReactNode,
   useContext,
+  useCallback,
 } from "react";
-import { Theme, ThemeContextType } from "../types";
+import { Theme, ThemeContextType } from "../types/settings";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ThemeContext = createContext<ThemeContextType | undefined>(
   undefined
 );
@@ -20,9 +22,12 @@ interface ThemeProviderProps {
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const getInitialTheme = (): Theme => {
     if (typeof localStorage !== "undefined") {
-      const saved = localStorage.getItem("theme");
-      if (saved === "dark" || saved === "light") return saved;
+      const saved = localStorage.getItem("theme") as Theme;
+      if (saved === "dark" || saved === "light" || saved === "system") {
+        return saved;
+      }
     }
+
     return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
       : "light";
@@ -30,31 +35,47 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
-  const setTheme = (theme: Theme) => {
-    setThemeState(theme);
-    localStorage.setItem("theme", theme);
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const setTheme = useCallback((newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem("theme", newTheme);
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
+
+    const applyTheme = (value: "dark" | "light") => {
+      if (value === "dark") {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    };
+
+    if (theme === "system") {
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      );
+      applyTheme(systemPrefersDark.matches ? "dark" : "light");
+
+      const listener = (e: MediaQueryListEvent) => {
+        applyTheme(e.matches ? "dark" : "light");
+      };
+      systemPrefersDark.addEventListener("change", listener);
+
+      return () => systemPrefersDark.removeEventListener("change", listener);
     }
+
+    applyTheme(theme);
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, onThemeUpdate: setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) throw new Error("useTheme must be used within a ThemeProvider");

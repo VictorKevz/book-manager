@@ -155,7 +155,7 @@ export const Login = ({ onFormToggle }: LoginRegisterProps) => {
         <footer className="w-full my-6 px-4 flex flex-col items-center">
           <button
             type="submit"
-            className={`h-10 w-full rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
+            className={`h-10 w-full justify-center rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
           >
             Login
           </button>

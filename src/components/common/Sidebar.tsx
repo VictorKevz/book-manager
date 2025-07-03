@@ -6,7 +6,6 @@ import {
   Settings,
 } from "@mui/icons-material";
 import { NavLink, useLocation } from "react-router-dom";
-import ThemeButton from "../ThemeButton";
 import { useAuth } from "../../context/AuthContext";
 
 export const SideBar = () => {
@@ -16,16 +15,13 @@ export const SideBar = () => {
       <nav className="flex items-center">
         <PagesList />
       </nav>
-      <div className="flex items-center xl:flex-col gap-3 xl:border-t border-[var(--neutral-100)] xl:pt-3">
-        <button
-          type="button"
-          onClick={logout}
-          className="flex-col text-[var(--neutral-700)] hover:text-[var(--primary-color)]"
-        >
-          <Logout /> <span>Logout</span>
-        </button>
-        <ThemeButton />
-      </div>
+      <button
+        type="button"
+        onClick={logout}
+        className="flex-col text-[var(--neutral-700)] hover:text-[var(--primary-color)] xl:border-t border-[var(--neutral-100)] xl:pt-4"
+      >
+        <Logout /> <span>Logout</span>
+      </button>
     </aside>
   );
 };

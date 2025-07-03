@@ -20,7 +20,7 @@
 
 .dark {
   --neutral-50: #272727;
-  --neutral-100: #2e2e2e;
+  --neutral-100: #343434;
   --neutral-200: #202020;
   --neutral-300: #1e1d1c;
   --neutral-400: #161616;
@@ -65,6 +65,7 @@ a {
 }
 p {
   line-height: 1.5;
+  color: var(--neutral-700);
 }
 li {
   list-style: none;

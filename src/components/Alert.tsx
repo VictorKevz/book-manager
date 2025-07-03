@@ -7,7 +7,7 @@ export const AlertMessage = () => {
   return (
     <AnimatePresence>
       {alert.visible && (
-        <motion.div className="fixed w-full flex items-center justify-end top-5 z-999 px-5">
+        <motion.div className="fixed w-full flex items-center justify-center top-5 z-999 px-5">
           <Alert
             variant="filled"
             severity={alert.type}
