@@ -1,60 +1,150 @@
 import {
+  Code,
   ColorLens,
   DarkMode,
   DevicesOther,
   FontDownload,
+  FormatUnderlined,
   GTranslate,
   LightMode,
-  LockReset,
   ManageAccounts,
-  RadioButtonChecked,
-  RadioButtonUnchecked,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
-import { Theme } from "../../types/settings";
+import {
+  Font,
+  Language,
+  SettingsTabKey,
+  TabDataType,
+  TabKey,
+  TabsHeadingData,
+  TabValue,
+  Theme,
+} from "../../types/settings";
 import { useAlertProvider } from "../../context/AlertContext";
+import { SettingsTab } from "./SettingsTab";
+import fi from "../../assets/finland.png";
+import uk from "../../assets/uk.png";
 
 export const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState<string>("colorTheme");
+  const [activeTab, setActiveTab] = useState<TabKey>("color");
   const { theme, onThemeUpdate } = useTheme();
   const { onShowAlert } = useAlertProvider();
+  const [font, setFont] = useState<Font>("modern");
+  const [language, setLanguage] = useState<Language>("en");
 
-  const handleReset = () => {
+  const onTabUpdate = useCallback(
+    (value: TabValue) => {
+      if (activeTab === "color") {
+        onThemeUpdate(value as Theme);
+      } else if (activeTab === "font") {
+        setFont(value as Font);
+      } else if (activeTab === "language") {
+        setLanguage(value as Language);
+      }
+    },
+    [activeTab, onThemeUpdate]
+  );
+
+  const handleTabReset = () => {
     onThemeUpdate("system");
+    setLanguage("en");
+    setFont("modern");
+    setActiveTab("color");
     onShowAlert({
-      message: "Theme applied successfully",
+      message: "Settings applied successfully",
       type: "success",
       visible: true,
     });
   };
-  const tabsData = [
-    { id: "accountInfo", text: "Account Info", icon: ManageAccounts },
-    { id: "colorTheme", text: "Color Theme", icon: ColorLens },
-    { id: "fontTheme", text: "Font Style", icon: FontDownload },
+  const tabsNavData = [
+    { id: "account", text: "Account Info", icon: ManageAccounts },
+    { id: "color", text: "Color Theme", icon: ColorLens },
+    { id: "font", text: "Font Style", icon: FontDownload },
     { id: "language", text: "Language", icon: GTranslate },
   ];
 
-  const colorThemeData = [
-    {
-      mode: "light",
-      label: "Light Mode",
-      icon: LightMode,
-      description: "Clean and minimal white-based layout",
+  const tabsHeadingData: TabsHeadingData = {
+    color: {
+      title: "Theme Preferences",
+      description: "Switch between light, dark, or system mode",
     },
-    {
-      mode: "dark",
-      label: "Dark Mode",
-      icon: DarkMode,
-      description: "Low-glare layout for dark environments",
+    font: {
+      title: "Font Style",
+      description: "Choose your preferred typography style",
     },
-    {
-      mode: "system",
-      label: "System Default",
-      icon: DevicesOther,
-      description: "Follows your device’s current theme",
+    language: {
+      title: "Language Settings",
+      description: "Set your app language preference",
     },
-  ];
+    account: {
+      title: "Account Information",
+      description: "View and manage your account details",
+    },
+  };
+
+  const settingsTabData: Record<SettingsTabKey, TabDataType[]> = {
+    color: [
+      {
+        value: "light",
+        label: "Light Mode",
+        icon: LightMode,
+        description: "Clean and minimal white-based layout",
+      },
+      {
+        value: "dark",
+        label: "Dark Mode",
+        icon: DarkMode,
+        description: "Low-glare layout for dark environments",
+      },
+      {
+        value: "system",
+        label: "System Default",
+        icon: DevicesOther,
+        description: "Follows your device’s current theme",
+      },
+    ],
+    font: [
+      {
+        value: "modern",
+        label: "Modern",
+        icon: FontDownload,
+        description: "Clean sans-serif for a modern look",
+      },
+      {
+        value: "classic",
+        label: "Classic",
+        icon: FormatUnderlined,
+        description: "Serif font with a formal style",
+      },
+      {
+        value: "code",
+        label: "Code",
+        icon: Code,
+        description: "Monospace font for developer feel",
+      },
+    ],
+    language: [
+      {
+        value: "en",
+        label: "English",
+        icon: uk,
+        description: "Set app language to English",
+      },
+      {
+        value: "fi",
+        label: "Finnish",
+        icon: fi,
+        description: "Set app language to Finnish",
+      },
+    ],
+  };
+
+  const state: Record<SettingsTabKey, Theme | Font | Language> = {
+    color: theme,
+    font,
+    language,
+  };
   return (
     <section className="w-full flex flex-col mx-auto">
       <header className="w-full pb-4">
@@ -65,72 +155,39 @@ export const SettingsPage = () => {
       </header>
       <article className="w-full flex flex-col items-start gap-5 mx-auto">
         <ul className="w-full flex justify-start items-center gap-5 border-b border-[var(--neutral-100)]">
-          {tabsData.map((tab) => {
+          {tabsNavData.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <li key={tab.id}>
                 <button
                   type="button"
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => setActiveTab(tab.id as TabKey)}
                   className={` h-10 flex justify-center gap-1 px-3 rounded-t-lg ${
                     isActive
                       ? "bg-[var(--secondary-color)] text-black"
                       : "bg-[var(--neutral-100)] text-[var(--neutral-900)]"
                   }`}
                 >
-                  <tab.icon />{" "}
+                  <tab.icon />
                   <span className="hidden md:block">{tab.text}</span>
                 </button>
               </li>
             );
           })}
         </ul>
-        {activeTab === "colorTheme" && (
-          <div className="max-w-screen-lg w-full flex flex-col items-start gap-5 mt-6 place-items-center">
-            <div className="flex flex-col items-start">
-              <h2 className="text-xl">Color Theme</h2>
-              <p>Pick your preferred color theme</p>
-            </div>
-            <div className="w-full flex items-center justify-between gap-5">
-              {colorThemeData.map((obj) => {
-                const isActive = obj.mode === theme;
-                return (
-                  <li key={obj.mode}>
-                    <button
-                      type="button"
-                      onClick={() => onThemeUpdate(obj.mode as Theme)}
-                      className={`w-full border px-4 py-6  rounded-lg flex-col justify-between hover:bg-[var(--neutral-200)] ${
-                        isActive
-                          ? "border-[var(--secondary-color)] bg-[var(--neutral-300)]"
-                          : "border-[var(--neutral-100)]"
-                      }`}
-                    >
-                      <span className="h-20 w-20 flex items-center justify-center my-5 text-[var(--neutral-700)] border border-[var(--neutral-100)] rounded-xl">
-                        <obj.icon fontSize="large" />
-                      </span>
-                      <h3 className="text-lg">{obj.label}</h3>
-                      <p className="text-sm mb-3">{obj.description}</p>
 
-                      {isActive ? (
-                        <RadioButtonChecked className="text-[var(--primary-color)]" />
-                      ) : (
-                        <RadioButtonUnchecked className="text-[var(--neutral-700)]" />
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </div>
-            <div className="w-full flex justify-end">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="h-12 w-fit px-4 bg-[var(--primary-color)] rounded-xl gap-1 text-white"
-              >
-                <LockReset /> Reset Theme
-              </button>
-            </div>
-          </div>
+        {activeTab === "account" ? (
+          <div>Account Info Tab!!!</div>
+        ) : (
+          <SettingsTab
+            data={settingsTabData[activeTab]!}
+            selectedValue={state[activeTab as SettingsTabKey]}
+            onUpdate={onTabUpdate}
+            title={tabsHeadingData[activeTab].title}
+            description={tabsHeadingData[activeTab].description}
+            onReset={handleTabReset}
+            activeTab={activeTab}
+          />
         )}
       </article>
     </section>
