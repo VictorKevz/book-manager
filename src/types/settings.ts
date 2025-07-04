@@ -34,3 +34,10 @@ export interface ThemeContextType {
   theme: Theme;
   onThemeUpdate: (theme: Theme) => void;
 }
+
+// Font typing
+export const fontMap: Record<Font, string> = {
+  modern: '"Roboto", sans-serif',
+  code: '"Space Mono", monospace',
+  classic: '"Cormorant Garamond", serif',
+};

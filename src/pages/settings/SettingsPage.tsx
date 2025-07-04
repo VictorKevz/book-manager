@@ -9,10 +9,11 @@ import {
   LightMode,
   ManageAccounts,
 } from "@mui/icons-material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import {
   Font,
+  fontMap,
   Language,
   SettingsTabKey,
   TabDataType,
@@ -39,17 +40,26 @@ export const SettingsPage = () => {
         onThemeUpdate(value as Theme);
       } else if (activeTab === "font") {
         setFont(value as Font);
+        localStorage.setItem("font", value);
+        document.documentElement.style.setProperty(
+          "--app-font",
+          fontMap[value as Font]
+        );
       } else if (activeTab === "language") {
         setLanguage(value as Language);
       }
     },
     [activeTab, onThemeUpdate]
   );
-
+  const fontReset = () => {
+    setFont("modern");
+    localStorage.setItem("font", JSON.stringify(font));
+    document.documentElement.style.setProperty("--app-font", fontMap["modern"]);
+  };
   const handleTabReset = () => {
     onThemeUpdate("system");
     setLanguage("en");
-    setFont("modern");
+    fontReset();
     setActiveTab("color");
     onShowAlert({
       message: "Settings applied successfully",
@@ -57,6 +67,11 @@ export const SettingsPage = () => {
       visible: true,
     });
   };
+  useEffect(() => {
+    const saved = (localStorage.getItem("font") as Font) || "modern";
+    setFont(saved);
+    document.documentElement.style.setProperty("--app-font", fontMap[saved]);
+  }, []);
   const tabsNavData = [
     { id: "account", text: "Account Info", icon: ManageAccounts },
     { id: "color", text: "Color Theme", icon: ColorLens },

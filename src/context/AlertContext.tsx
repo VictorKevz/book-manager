@@ -33,7 +33,7 @@ export const AlertProvider = ({ children }: ContextProviderProps) => {
     // 3. Start a new timeout to hide the alert after 3 seconds
     alertTimeout.current = setTimeout(() => {
       setAlert(InitialAlertState); // Reset to initial (hidden) state
-    }, 3000);
+    }, 3500);
   }, []);
 
   return (

@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import "tailwindcss";
 :root {
   --neutral-50: #f3f2f2;
@@ -12,10 +11,11 @@
   --neutral-800: #272525;
   --neutral-900: #0c0b0b;
   --primary-color: #3ecf8e;
-  --secondary-color: #267f54fa;
+  --secondary-color: #66b490;
 
   --error: #f06666;
   --main-bg: url("/dark-main-bg.svg");
+  --app-font: "Roboto", sans-serif;
 }
 
 .dark {
@@ -29,13 +29,11 @@
   --neutral-800: #d7d9dcf1;
   --neutral-900: #f2efef;
   --primary-color: #33b078;
-  --secondary-color: #75e0aeec;
   --main-bg: url("/dark-main-bg.svg");
 }
 *,
 ::after,
 ::before {
-  font-family: "Roboto", sans-serif;
   box-sizing: border-box;
 }
 html,
@@ -43,6 +41,7 @@ body {
   overflow-x: hidden;
   scrollbar-color: var(--primary-color) transparent;
   scrollbar-width: thin;
+  font-family: var(--app-font);
 }
 h1,
 h2,

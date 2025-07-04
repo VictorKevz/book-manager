@@ -34,19 +34,18 @@ export const SettingsTab = ({
                     : "border-[var(--neutral-100)]"
                 }`}
               >
-                <span className="h-20 w-20 flex items-center justify-center my-5 text-[var(--neutral-700)] border border-[var(--neutral-100)] bg-[var(--neutral-400)] rounded-xl">
-                  {activeTab === "language" ? (
-                    typeof obj.icon === "string" ? (
-                      <img src={obj.icon} alt="" />
-                    ) : (
-                      <obj.icon fontSize="large" />
-                    )
-                  ) : (
+                {activeTab === "language" && typeof obj.icon === "string" ? (
+                  <span
+                    style={{ backgroundImage: `url(${obj.icon})` }}
+                    className="h-20 w-20 border border-[var(--neutral-100)] bg-cover rounded-xl mb-4"
+                  ></span>
+                ) : (
+                  <span className="h-20 w-20 flex items-center justify-center my-5 text-[var(--neutral-700)] border border-[var(--neutral-100)] bg-[var(--neutral-400)] rounded-xl">
                     <obj.icon fontSize="large" />
-                  )}
-                </span>
+                  </span>
+                )}
                 <h3 className="text-lg">{obj.label}</h3>
-                <p className="text-sm mb-3">{obj.description}</p>
+                <p className="text-sm mb-4">{obj.description}</p>
 
                 {isActive ? (
                   <RadioButtonChecked className="text-[var(--primary-color)]" />
@@ -62,7 +61,7 @@ export const SettingsTab = ({
         <button
           type="button"
           onClick={onReset}
-          className="h-12 w-fit px-4 bg-[var(--primary-color)] rounded-xl gap-1 text-white"
+          className="h-12 w-fit px-4 border border-[var(--secondary-color)] rounded-xl gap-1 text-[var(--neutral-900)]"
         >
           <LockReset /> Reset Settings
         </button>
