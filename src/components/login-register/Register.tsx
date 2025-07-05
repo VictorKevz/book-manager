@@ -54,12 +54,12 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
           return;
         }
 
-        // 4. Email: Ensure domain is @victokevz.com
-        const domainRegex = /^[^\s@]+@victorkevz\.com$/;
-        if (!domainRegex.test(register.email)) {
-          newRegisterValid.email = false;
-          return;
-        }
+        // // 4. Email: Ensure domain is @victokevz.com
+        // const domainRegex = /^[^\s@]+@victorkevz\.com$/;
+        // if (!domainRegex.test(register.email)) {
+        //   newRegisterValid.email = false;
+        //   return;
+        // }
       }
 
       // 5. Password: Validate strength (uppercase, lowercase, digit, special char, min 6 chars)

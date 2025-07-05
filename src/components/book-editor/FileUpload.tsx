@@ -1,6 +1,5 @@
-import React from "react";
 import { Close } from "@mui/icons-material";
-import { FileUploadProps } from "../../types/upsertBook";
+import { FileUploadProps, InputType } from "../../types/upsertBook";
 
 export const FileUpload = ({
   field,
@@ -20,14 +19,11 @@ export const FileUpload = ({
           name={field.name}
           id={field.name}
           accept=".jpg,.png,.jpeg"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            onFileChange(event)
-          }
+          onChange={(event: InputType) => onFileChange(event)}
           className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
         />
-        <button
-          type="button"
-          className={`w-full justify-center h-14 border rounded-lg text-sm font-medium ${
+        <div
+          className={`w-full flex items-center justify-center h-14 border rounded-lg text-sm font-medium ${
             !field.isValid
               ? "border-[var(--error)]"
               : "border-[var(--neutral-100)]"
@@ -46,12 +42,12 @@ export const FileUpload = ({
                 alt="Preview"
                 className="w-12 h-12 object-cover rounded-lg"
               />
-              <span role="button" onClick={onFileRemove}>
+              <button type="button" onClick={onFileRemove}>
                 <Close fontSize="medium" className="text-[var(--error)]" />
-              </span>
+              </button>
             </span>
           )}
-        </button>
+        </div>
       </div>
 
       {!field.isValid && (

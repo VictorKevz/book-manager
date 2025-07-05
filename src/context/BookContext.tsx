@@ -14,7 +14,7 @@ import {
   EmptyBookItem,
 } from "../types/book";
 import { supabase, useBookFetch } from "../hooks/useBookFetch";
-import { extractImagePath } from "../utils/extractImage";
+import { extractImagePath } from "../utils/storage";
 import { useAlertProvider } from "./AlertContext";
 
 export const BookContext = createContext<BookContextType | undefined>(

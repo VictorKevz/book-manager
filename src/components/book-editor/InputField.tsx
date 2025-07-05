@@ -14,7 +14,6 @@ export const InputField = ({
   const isInputTextField = field.type === "text" || field.type === "password";
   const isTitle = field.name === "title";
   const isPassword = field.type === "password";
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const inputType = isPassword
     ? showPassword
@@ -47,7 +46,7 @@ export const InputField = ({
               placeholder={field.placeholder}
               id={field.name}
               onChange={(event: onChangeType) => onTextChange(event)}
-              className={`w-full h-11 border bg-[var(--neutral-50)] rounded-lg pl-5 placeholder:text-[var(--neutral-700)] ${
+              className={`w-full h-11 border bg-[var(--neutral-50)] rounded-lg pl-5 text-[var(--neutral-900)] placeholder:text-[var(--neutral-700)] ${
                 !field.isValid
                   ? "border-[var(--error)]"
                   : "border-[var(--neutral-100)]"
@@ -84,7 +83,7 @@ export const InputField = ({
 
       {field.type === "textarea" && (
         <label
-          htmlFor=""
+          htmlFor={field.name}
           className="w-full flex flex-col items-start gap-2 text-[var(--neutral-700)]"
         >
           <span className="text-[var(--neutral-800)] font-medium">
@@ -92,7 +91,8 @@ export const InputField = ({
           </span>
           <textarea
             rows={2}
-            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border placeholder:text-[var(--neutral-700)] ${
+            id={field.name}
+            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border text-[var(--neutral-900)] placeholder:text-[var(--neutral-700)] ${
               !field.isValid
                 ? "border-[var(--error)]"
                 : "border-[var(--neutral-100)]"

@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import { BookItem, uiStateType } from "../types/book";
 import { createClient } from "@supabase/supabase-js";
 import { useAlertProvider } from "../context/AlertContext";
+import { useAuth } from "../context/AuthContext";
 
 export const useBookFetch = () => {
   const [books, setBooks] = useState<BookItem[]>([]);
@@ -10,6 +11,7 @@ export const useBookFetch = () => {
     error: "",
   });
   const { onShowAlert } = useAlertProvider();
+  const { user } = useAuth();
 
   const turnOnLoader = useCallback(() => {
     setUIState({ isLoading: true, error: "" });
@@ -23,11 +25,14 @@ export const useBookFetch = () => {
     setUIState({ isLoading: false, error: msg });
   }, []);
   const fetchBooks = useCallback(async (): Promise<BookItem[]> => {
+    if (!user) return [];
+
     try {
       turnOnLoader();
       const { data, error } = await supabase
         .from("books_inventory")
-        .select("*");
+        .select("*")
+        .eq("user_id", user.id);
       if (error) {
         onShowAlert({
           message: error.message,
@@ -54,7 +59,7 @@ export const useBookFetch = () => {
       handleError(errorMessage);
       return [];
     }
-  }, [handleError, onShowAlert, turnOffLoader, turnOnLoader]);
+  }, [handleError, onShowAlert, turnOffLoader, turnOnLoader, user]);
 
   useEffect(() => {
     fetchBooks();

@@ -10,6 +10,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { PaginateItems } from "./PaginateItems";
 import { DropDown } from "./DropDown";
 import noResultsImg from "../../assets/no-results.png";
+
 export const BookPage = () => {
   const { books, uiState } = useBookProvider();
   const { debouncedQuery, categoryData } = useSearchProvider();
@@ -152,7 +153,9 @@ export const BookPage = () => {
                         : "bg-[var(--neutral-400)] text-[var(--neutral-800)]"
                     }`}
                   >
-                    <category.icon fontSize="large" className="scale-80" />
+                    {category.icon && (
+                      <category.icon fontSize="large" className="scale-80" />
+                    )}
                   </span>
                   {category.name}
                 </button>

@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 export type BookItem = {
   id: string;
+  user_id: string;
   title: string;
   author: string;
   category: string;
@@ -9,10 +10,13 @@ export type BookItem = {
   price: string;
   quantity: string;
   image_url: string | File;
+  created_at: string;
+  updated_at: string | null;
 };
 
 export const EmptyBookItem: BookItem = {
   id: "",
+  user_id: "",
   title: "",
   author: "",
   category: "",
@@ -20,8 +24,13 @@ export const EmptyBookItem: BookItem = {
   price: "",
   quantity: "",
   image_url: "",
+  created_at: "",
+  updated_at: null,
 };
-type BookFormKeys = Exclude<keyof BookItem, "id">;
+type BookFormKeys = Exclude<
+  keyof BookItem,
+  "id" | "user_id" | "created_at" | "updated_at"
+>;
 
 export const InitialValidItem: Record<BookFormKeys, boolean> = {
   title: true,

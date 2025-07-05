@@ -1,13 +1,29 @@
-import { formItem } from "../../types/upsertBook";
+import { BookFormItem, formItem } from "../../types/upsertBook";
 import { useBookUpsertForm } from "../../hooks/useBookUpsertForm";
 import { InputField } from "./InputField";
-import { BookCardProps } from "../../types/book";
+import { BookCardProps, BookItem } from "../../types/book";
 import { useBookProvider } from "../../context/BookContext";
 import { FormLoader } from "../common/Loaders";
 import { FormWraper } from "../common/FormWraper";
 
 export const BookEditor = ({ book }: BookCardProps) => {
   const { refreshBooks, toggleForm } = useBookProvider();
+
+  // The book passed is of type BookItem so we need to convert to BookFormItem
+  // Form doesn't need fields like "id, user_id" so we remove them
+  const convertBookToForm = (book: BookItem): BookFormItem => ({
+    title: book.title,
+    author: book.author,
+    category: book.category,
+    description: book.description,
+    price: String(book.price),
+    quantity: String(book.quantity),
+    image_url: book.image_url,
+  });
+  // A DB-based identifier is still needed to determine whether we are editing or not
+  const bookId = book.id;
+  // Call the hook here and pass the required arguments
+  const bookToEdit = convertBookToForm(book);
   const {
     handleFileChange,
     handleTextChange,
@@ -18,7 +34,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     previewUrl,
     clearFileUploader,
     formUiState,
-  } = useBookUpsertForm(book, refreshBooks, toggleForm);
+  } = useBookUpsertForm(bookToEdit, bookId, refreshBooks, toggleForm);
 
   const formData: formItem[] = [
     {

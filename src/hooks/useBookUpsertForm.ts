@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { EmptyBookItem, InitialValidItem, uiStateType } from "../types/book";
 import {
-  BookItem,
-  EmptyBookItem,
-  InitialValidItem,
-  uiStateType,
-} from "../types/book";
-import {
+  BookFormItem,
   BookItemForDB,
   CreateBookItem,
+  EmptyBookFormItem,
   FormEventType,
   InputType,
   onChangeType,
@@ -16,36 +13,40 @@ import {
 import { supabase } from "./useBookFetch";
 import { uploadFileToStorage } from "../utils/storage";
 import { useAlertProvider } from "../context/AlertContext";
+import { useAuth } from "../context/AuthContext";
 // import { useBookProvider } from "../context/BookContext";
 
 export const useBookUpsertForm = (
-  bookToEdit?: BookItem,
+  bookToEdit?: BookFormItem,
+  bookId?: string,
   onSuccess?: () => void,
   toggleForm?: () => void
 ) => {
-  const [form, setForm] = useState<BookItem>(bookToEdit ?? EmptyBookItem);
+  const [form, setForm] = useState<BookFormItem>(
+    bookToEdit ?? EmptyBookFormItem
+  );
   const [formValid, setFormValid] = useState(InitialValidItem);
   const [previewUrl, setPreviewUrl] = useState<PreviewUrlType>("");
   const [uiState, setUIState] = useState<uiStateType>({
     isLoading: false,
     error: "",
   });
-  const isEditing = !!bookToEdit?.id;
+  const isEditing = !!bookId;
   const { onShowAlert } = useAlertProvider();
+  const { user } = useAuth();
 
   // form.price and form.quantity state expects strings but bookToEdit objects returns numbers
   // For that reason we make the conversion as a side-effect whenever bookToEdit changes.
   //   Same thing for the previewUrl state which only accepts strings
   useEffect(() => {
-    if (bookToEdit) {
-      setForm({
-        ...bookToEdit,
-        price: String(bookToEdit.price),
-        quantity: String(bookToEdit.quantity),
-      });
-      setPreviewUrl(String(bookToEdit.image_url));
+    if (
+      bookToEdit &&
+      typeof bookToEdit.image_url === "string" &&
+      !previewUrl // Only if it's not already set
+    ) {
+      setPreviewUrl(bookToEdit.image_url);
     }
-  }, [bookToEdit]);
+  }, [bookToEdit, previewUrl]);
 
   //   This is a simple event handler for capturing all text fields except for the "file"
   const handleTextChange = useCallback((event: onChangeType) => {
@@ -64,6 +65,7 @@ export const useBookUpsertForm = (
       setFormValid((prev) => ({ ...prev, image_url: true }));
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
+      console.log(objectUrl);
     }
   }, []);
 
@@ -85,7 +87,7 @@ export const useBookUpsertForm = (
         return;
       }
 
-      const trimmedValue = value.toString().trim();
+      const trimmedValue = value != null ? value.toString().trim() : "";
 
       // 1. Check for empty fields
       if (!trimmedValue) {
@@ -167,7 +169,11 @@ export const useBookUpsertForm = (
     // First check if the image was uploaded by the user
     // We grab that file and upload it to Supabase storage and get a URL.
     if (form.image_url && form.image_url instanceof File) {
-      const uploadedUrl = await uploadFileToStorage(form.image_url);
+      const userId = user?.id;
+      const uploadedUrl = await uploadFileToStorage(
+        form.image_url,
+        userId as string
+      );
       if (!uploadedUrl) {
         onShowAlert({
           message: "Failed to upload the image!",
@@ -185,16 +191,17 @@ export const useBookUpsertForm = (
     }
 
     // Convert price and quantity back to numbers for database
-    // id is passed as optional because it's only required when editing a book
-    const { id, ...rest } = form;
+    const { ...rest } = form;
     const finalData = {
       ...rest,
+      user_id: user?.id,
       image_url: imageUrl,
       price: Number(form.price),
       quantity: Number(form.quantity),
+      updated_at: new Date().toISOString(),
     } as BookItemForDB | CreateBookItem;
 
-    const { error } = await upsertBook(finalData, id);
+    const { error } = await upsertBook(finalData, bookId);
 
     if (error) {
       onShowAlert({
@@ -206,10 +213,13 @@ export const useBookUpsertForm = (
 
       return;
     }
-    // alert(isEditing ? "Book Edited" : "New Book Created");
     if (onSuccess && toggleForm) {
       onShowAlert({
-        message: "New book created successfully!",
+        message: `${
+          isEditing
+            ? "Book edited successfully."
+            : "New book created successfully!"
+        }`,
         type: "success",
         visible: true,
       });

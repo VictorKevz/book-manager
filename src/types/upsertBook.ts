@@ -1,6 +1,20 @@
 import { BookItem } from "./book";
 export type InputFieldType = "text" | "password" | "textarea" | "file";
 export type MUIIconType = React.ElementType;
+
+export type BookFormItem = Omit<
+  BookItem,
+  "id" | "user_id" | "created_at" | "updated_at"
+>;
+export const EmptyBookFormItem: BookFormItem = {
+  title: "",
+  author: "",
+  category: "",
+  description: "",
+  price: "",
+  quantity: "",
+  image_url: "",
+};
 export type formItem = {
   name: string;
   value: string | File;
