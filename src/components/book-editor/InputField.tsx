@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { InputFieldProps, onChangeType } from "../../types/upsertBook";
 import { FileUpload } from "./FileUpload";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import { DropDown } from "../../pages/books/DropDown";
+import { categoryData } from "../../data/searchData";
 
 export const InputField = ({
   field,
@@ -9,12 +16,19 @@ export const InputField = ({
   onFileChange,
   previewUrl,
   onFileRemove,
+  onOptionUpdate,
+  currentLabel,
+  onToggleDropDown,
+  dropDown,
 }: InputFieldProps) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const isFullWidth = field.type === "textarea" || field.type === "file";
-  const isInputTextField = field.type === "text" || field.type === "password";
+  const isCategory = field.name === "category";
+  const isInputTextField =
+    !isCategory && (field.type === "text" || field.type === "password");
   const isTitle = field.name === "title";
   const isPassword = field.type === "password";
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const inputType = isPassword
     ? showPassword
       ? "text"
@@ -24,6 +38,7 @@ export const InputField = ({
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   return (
     <div
       className={`w-full ${isFullWidth ? "col-span-3" : ""} ${
@@ -80,7 +95,28 @@ export const InputField = ({
           )}
         </label>
       )}
-
+      {isCategory && (
+        <div className="relative flex flex-col items-start gap-2">
+          <span className="text-[var(--neutral-800)] font-medium">
+            {field.label}
+          </span>
+          <button
+            type="button"
+            onClick={onToggleDropDown}
+            className="w-full justify-between h-11 border border-[var(--neutral-100)] bg-[var(--neutral-50)] rounded-lg px-5 text-[var(--neutral-900)]"
+          >
+            {currentLabel}
+            {dropDown ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </button>
+          {dropDown && (
+            <DropDown
+              data={categoryData.slice(1, categoryData.length)}
+              onOptionUpdate={onOptionUpdate ?? (() => {})}
+              currentLabel={currentLabel ?? ""}
+            />
+          )}
+        </div>
+      )}
       {field.type === "textarea" && (
         <label
           htmlFor={field.name}

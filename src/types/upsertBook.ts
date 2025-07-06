@@ -1,4 +1,5 @@
 import { BookItem } from "./book";
+import { DropdownOption } from "./search";
 export type InputFieldType = "text" | "password" | "textarea" | "file";
 export type MUIIconType = React.ElementType;
 
@@ -36,6 +37,10 @@ export type InputFieldProps = {
   onFileChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl?: PreviewUrlType;
   onFileRemove?: () => void;
+  onOptionUpdate?: (option: DropdownOption, label: string) => void;
+  currentLabel?: string;
+  onToggleDropDown?: () => void;
+  dropDown?: boolean;
 };
 
 export type FileUploadProps = {

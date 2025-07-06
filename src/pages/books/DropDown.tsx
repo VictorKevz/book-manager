@@ -1,15 +1,19 @@
 import { DropDownProps } from "../../types/search";
 
-export const DropDown = ({ data, onSortUpdate, sortLabel }: DropDownProps) => {
+export const DropDown = ({
+  data,
+  onOptionUpdate,
+  currentLabel,
+}: DropDownProps) => {
   return (
-    <ul className="absolute top-full right-0 mt-2 flex flex-col items-start gap-5 py-5 px-7 rounded-xl shadow-2xl bg-[var(--neutral-300)] border border-[var(--neutral-100)]">
+    <ul className="w-full absolute top-full right-0 mt-2 flex flex-col items-start gap-5 py-5 px-7 rounded-xl shadow-2xl bg-[var(--neutral-300)] border border-[var(--neutral-100)] z-20">
       {data.map((option, i) => {
-        const activeLabel = option.label === sortLabel;
+        const activeLabel = option.label === currentLabel;
         return (
           <li key={i}>
             <button
               type="button"
-              onClick={() => onSortUpdate(option, option.label)}
+              onClick={() => onOptionUpdate(option, option.label)}
               className={` text-sm ${
                 activeLabel
                   ? "text-[var(--primary-color)]"

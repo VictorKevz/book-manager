@@ -4,8 +4,8 @@ import BookCard from "../../components/BookCard";
 import { SyncLoaderWrapper } from "../../components/common/Loaders";
 import { useBookProvider } from "../../context/BookContext";
 import { useSearchProvider } from "../../context/SearchContext";
-import { SortOption } from "../../types/search";
-import { sortByData } from "../../data/searchData";
+import { DropdownOption } from "../../types/search";
+import { categoryData, sortByData } from "../../data/searchData";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { PaginateItems } from "./PaginateItems";
 import { DropDown } from "./DropDown";
@@ -13,9 +13,11 @@ import noResultsImg from "../../assets/no-results.png";
 
 export const BookPage = () => {
   const { books, uiState } = useBookProvider();
-  const { debouncedQuery, categoryData } = useSearchProvider();
+  const { debouncedQuery } = useSearchProvider();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [sortOption, setSortOption] = useState<SortOption>({
+  const [sortOption, setSortOption] = useState<DropdownOption>({
+    type: "sort",
+    label: "Author (A–Z)",
     field: "author",
     order: "asc",
   });
@@ -28,8 +30,14 @@ export const BookPage = () => {
     setSelectedCategory(category);
   };
 
-  const updateSortOption = (option: SortOption, label: string) => {
-    setSortOption(option);
+  const updateSortOption = (option: DropdownOption, label: string) => {
+    if (option.type !== "sort") return; // ignore non-sort options here
+    setSortOption({
+      type: "sort",
+      label,
+      field: option.field,
+      order: option.order,
+    });
     setSortLabel(label);
     toggleDropDown();
   };
@@ -55,20 +63,21 @@ export const BookPage = () => {
       );
     }
 
-    // 3. Sort the filtered results
-    const { field, order } = sortOption;
+    // 3. Sort the filtered results ONLY if sortOption.type is 'sort'
+    if (sortOption.type === "sort") {
+      const { field, order } = sortOption;
 
-    const sorted = [...filtered].sort((a, b) => {
-      if (field === "stock") {
-        const diff = Number(a.quantity) - Number(b.quantity);
-        return order === "asc" ? diff : -diff;
-      }
+      filtered = [...filtered].sort((a, b) => {
+        if (field === "stock") {
+          const diff = Number(a.quantity) - Number(b.quantity);
+          return order === "asc" ? diff : -diff;
+        }
+        const compare = a[field].localeCompare(b[field]);
+        return order === "asc" ? compare : -compare;
+      });
+    }
 
-      const compare = a[field].localeCompare(b[field]);
-      return order === "asc" ? compare : -compare;
-    });
-
-    return sorted;
+    return filtered;
   }, [books, debouncedQuery, selectedCategory, sortOption]);
 
   useEffect(() => {
@@ -125,21 +134,21 @@ export const BookPage = () => {
             </button>
             {dropDown && (
               <DropDown
-                onSortUpdate={updateSortOption}
+                onOptionUpdate={updateSortOption}
                 data={sortByData}
-                sortLabel={sortLabel}
+                currentLabel={sortLabel}
               />
             )}
           </div>
         </div>
         <ul className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
           {categoryData.map((category) => {
-            const isSelected = category.name === selectedCategory;
+            const isSelected = category.label === selectedCategory;
             return (
-              <li key={category.name}>
+              <li key={category.label}>
                 <button
                   type="button"
-                  onClick={() => updateCategory(category.name)}
+                  onClick={() => updateCategory(category.label)}
                   className={`h-14 w-full max-w-[12rem]  pl-0.5 pr-4 rounded-2xl gap-2 border ${
                     isSelected
                       ? "bg-[var(--primary-color)] text-white border-transparent"
@@ -153,11 +162,11 @@ export const BookPage = () => {
                         : "bg-[var(--neutral-400)] text-[var(--neutral-800)]"
                     }`}
                   >
-                    {category.icon && (
+                    {category.type === "category" && category.icon && (
                       <category.icon fontSize="large" className="scale-80" />
                     )}
                   </span>
-                  {category.name}
+                  {category.label}
                 </button>
               </li>
             );

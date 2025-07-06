@@ -2,16 +2,17 @@ import { Category, MenuBook, PriceCheck } from "@mui/icons-material";
 import bookUploadImg from "../../assets/book-upload.png";
 import { AddBookButton } from "../../components/common/AddBookButton";
 import { useBookProvider } from "../../context/BookContext";
-import { useSearchProvider } from "../../context/SearchContext";
+// import { useSearchProvider } from "../../context/SearchContext";
 import BookCard from "../../components/BookCard";
 import { Link } from "react-router-dom";
 import { BookCategoryPiechart } from "./BookCategoryPiechart";
 import { BookPriceBarChart } from "./BookPriceBarChart";
 import { SyncLoaderWrapper } from "../../components/common/Loaders";
+import { categoryData } from "../../data/searchData";
 
 export const Overview = () => {
   const { books, uiState } = useBookProvider();
-  const { categoryData } = useSearchProvider();
+  // const { categoryData } = useSearchProvider();
 
   const totals = books.reduce(
     (acc, book) => {

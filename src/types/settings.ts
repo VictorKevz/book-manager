@@ -39,5 +39,5 @@ export interface ThemeContextType {
 export const fontMap: Record<Font, string> = {
   modern: '"Roboto", sans-serif',
   code: '"Space Mono", monospace',
-  classic: '"Cormorant Garamond", serif',
+  classic: '"Crimson Text", serif',
 };

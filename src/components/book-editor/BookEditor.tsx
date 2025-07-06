@@ -24,6 +24,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
   const bookId = book.id;
   // Call the hook here and pass the required arguments
   const bookToEdit = convertBookToForm(book);
+
   const {
     handleFileChange,
     handleTextChange,
@@ -34,6 +35,10 @@ export const BookEditor = ({ book }: BookCardProps) => {
     previewUrl,
     clearFileUploader,
     formUiState,
+    updateCategory,
+    category,
+    dropDown,
+    toggleDropDown,
   } = useBookUpsertForm(bookToEdit, bookId, refreshBooks, toggleForm);
 
   const formData: formItem[] = [
@@ -57,12 +62,12 @@ export const BookEditor = ({ book }: BookCardProps) => {
     },
     {
       name: "category",
-      value: form.category,
-      placeholder: "Psychological Thriller",
+      value: category,
+      placeholder: "",
       type: "text",
-      isValid: formValid.category,
+      isValid: true,
       label: "Category",
-      errorMessage: "Category is required",
+      errorMessage: "",
     },
     {
       name: "price",
@@ -121,6 +126,10 @@ export const BookEditor = ({ book }: BookCardProps) => {
               onFileChange={handleFileChange}
               previewUrl={previewUrl}
               onFileRemove={clearFileUploader}
+              onOptionUpdate={updateCategory}
+              currentLabel={category}
+              onToggleDropDown={toggleDropDown}
+              dropDown={dropDown}
             />
           ))}
         </fieldset>

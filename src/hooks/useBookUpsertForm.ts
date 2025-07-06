@@ -14,6 +14,7 @@ import { supabase } from "./useBookFetch";
 import { uploadFileToStorage } from "../utils/storage";
 import { useAlertProvider } from "../context/AlertContext";
 import { useAuth } from "../context/AuthContext";
+import { DropdownOption } from "../types/search";
 // import { useBookProvider } from "../context/BookContext";
 
 export const useBookUpsertForm = (
@@ -31,6 +32,10 @@ export const useBookUpsertForm = (
     isLoading: false,
     error: "",
   });
+  // inside hook
+  const [category, setCategory] = useState(bookToEdit?.category || "Science");
+  const [dropDown, setDropDown] = useState<boolean>(false);
+
   const isEditing = !!bookId;
   const { onShowAlert } = useAlertProvider();
   const { user } = useAuth();
@@ -55,6 +60,21 @@ export const useBookUpsertForm = (
     setFormValid((prev) => ({ ...prev, [name]: true }));
   }, []);
 
+  const toggleDropDown = useCallback(() => {
+    setDropDown((prev) => !prev);
+  }, []);
+
+  const updateCategory = useCallback(
+    (option: DropdownOption, label: string) => {
+      if (option.type === "sort") return;
+      setCategory(label);
+      setForm((prev) => ({ ...prev, category: label }));
+
+      toggleDropDown();
+    },
+    [toggleDropDown]
+  );
+
   //   This is a simple event handler for capturing the uploaded file
   // I ensure to update the form state & validity without mutating it by using ...rest
   //   In order to show a preview of the uploaded state, I also update the preViewUrl state
@@ -65,7 +85,6 @@ export const useBookUpsertForm = (
       setFormValid((prev) => ({ ...prev, image_url: true }));
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
-      console.log(objectUrl);
     }
   }, []);
 
@@ -87,7 +106,7 @@ export const useBookUpsertForm = (
         return;
       }
 
-      const trimmedValue = value != null ? value.toString().trim() : "";
+      const trimmedValue = value.toString().trim();
 
       // 1. Check for empty fields
       if (!trimmedValue) {
@@ -239,5 +258,9 @@ export const useBookUpsertForm = (
     previewUrl,
     clearFileUploader,
     formUiState: uiState,
+    updateCategory,
+    category,
+    dropDown,
+    toggleDropDown,
   };
 };
