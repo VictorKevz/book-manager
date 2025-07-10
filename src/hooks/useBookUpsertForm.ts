@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { EmptyBookItem, InitialValidItem, uiStateType } from "../types/book";
+import { EmptyBookItem, InitialValidItem, UIStateType } from "../types/book";
 import {
   BookFormItem,
   BookItemForDB,
@@ -10,7 +10,7 @@ import {
   onChangeType,
   PreviewUrlType,
 } from "../types/upsertBook";
-import { supabase } from "./useBookFetch";
+import { supabase } from "./useUserDataFetch";
 import { uploadFileToStorage } from "../utils/storage";
 import { useAlertProvider } from "../context/AlertContext";
 import { useAuth } from "../context/AuthContext";
@@ -28,7 +28,7 @@ export const useBookUpsertForm = (
   );
   const [formValid, setFormValid] = useState(InitialValidItem);
   const [previewUrl, setPreviewUrl] = useState<PreviewUrlType>("");
-  const [uiState, setUIState] = useState<uiStateType>({
+  const [uiState, setUIState] = useState<UIStateType>({
     isLoading: false,
     error: "",
   });
@@ -191,7 +191,8 @@ export const useBookUpsertForm = (
       const userId = user?.id;
       const uploadedUrl = await uploadFileToStorage(
         form.image_url,
-        userId as string
+        userId as string,
+        "book-covers"
       );
       if (!uploadedUrl) {
         onShowAlert({

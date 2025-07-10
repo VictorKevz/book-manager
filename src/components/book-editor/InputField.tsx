@@ -2,6 +2,7 @@ import { useState } from "react";
 import { InputFieldProps, onChangeType } from "../../types/upsertBook";
 import { FileUpload } from "./FileUpload";
 import {
+  Emergency,
   KeyboardArrowDown,
   KeyboardArrowUp,
   Visibility,
@@ -20,6 +21,7 @@ export const InputField = ({
   currentLabel,
   onToggleDropDown,
   dropDown,
+  id,
 }: InputFieldProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const isFullWidth = field.type === "textarea" || field.type === "file";
@@ -41,17 +43,23 @@ export const InputField = ({
 
   return (
     <div
-      className={`w-full ${isFullWidth ? "col-span-3" : ""} ${
-        isTitle && "col-span-2"
-      }`}
+      className={`w-full ${isFullWidth && id === "bookForm" && "col-span-3"} ${
+        isFullWidth && id === "accountForm" && "col-span-2"
+      } ${isTitle && "col-span-2"}`}
     >
       {isInputTextField && (
         <label
           className={`w-full flex flex-col items-start gap-1.5 text-[var(--neutral-700)]`}
           htmlFor={field.name}
         >
-          <span className="text-[var(--neutral-800)] font-medium">
-            {field.label}
+          <span className="text-[var(--neutral-800)] font-medium relative">
+            {field.label}{" "}
+            {field.errorMessage.trim() && (
+              <Emergency
+                fontSize="small"
+                className="absolute top-0 -right-4 scale-40 text-red-500/90"
+              />
+            )}
           </span>
           <div className="w-full relative flex items-center">
             <input
@@ -81,7 +89,7 @@ export const InputField = ({
               </button>
             )}
           </div>
-          {isPassword && (
+          {isPassword && id !== "login" && (
             <span className="text-xs pt-1 text-[var(--neutral-800)]">
               Enter a password with at least 6 characters, including: a number,
               a lowercase letter, an uppercase letter, and a special character
@@ -122,11 +130,17 @@ export const InputField = ({
           htmlFor={field.name}
           className="w-full flex flex-col items-start gap-2 text-[var(--neutral-700)]"
         >
-          <span className="text-[var(--neutral-800)] font-medium">
+          <span className=" relative text-[var(--neutral-800)] font-medium">
             {field.label}
+            {field.errorMessage.trim() && (
+              <Emergency
+                fontSize="small"
+                className="absolute -top-1 -right-4 scale-40 text-red-500/90"
+              />
+            )}
           </span>
           <textarea
-            rows={2}
+            rows={3}
             id={field.name}
             className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border text-[var(--neutral-900)] placeholder:text-[var(--neutral-700)] ${
               !field.isValid

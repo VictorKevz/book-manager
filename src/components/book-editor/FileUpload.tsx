@@ -1,4 +1,4 @@
-import { Close } from "@mui/icons-material";
+import { Close, Emergency } from "@mui/icons-material";
 import { FileUploadProps, InputType } from "../../types/upsertBook";
 
 export const FileUpload = ({
@@ -9,8 +9,14 @@ export const FileUpload = ({
 }: FileUploadProps) => {
   return (
     <label className="w-full flex flex-col gap-2 z-10">
-      <span className="text-sm text-[var(--neutral-800)] font-medium">
-        Upload Book Cover
+      <span className="relative text-sm text-[var(--neutral-800)] font-medium w-fit">
+        {field.label}
+        {field.errorMessage.trim() && (
+          <Emergency
+            fontSize="small"
+            className="absolute -top-1 -right-4 scale-40 text-red-500/90"
+          />
+        )}
       </span>
 
       <div className="relative">

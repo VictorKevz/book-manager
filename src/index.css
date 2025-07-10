@@ -29,7 +29,6 @@
   --neutral-800: #d7d9dcf1;
   --neutral-900: #f2efef;
   --primary-color: #33b078;
-  --main-bg: url("/dark-main-bg.svg");
 }
 *,
 ::after,
@@ -42,6 +41,7 @@ body {
   scrollbar-color: var(--primary-color) transparent;
   scrollbar-width: thin;
   font-family: var(--app-font);
+  /* background-image: var(--main-bg) !important; */
 }
 h1,
 h2,

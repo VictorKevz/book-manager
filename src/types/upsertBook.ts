@@ -41,6 +41,7 @@ export type InputFieldProps = {
   currentLabel?: string;
   onToggleDropDown?: () => void;
   dropDown?: boolean;
+  id?: "bookForm" | "accountForm" | "login";
 };
 
 export type FileUploadProps = {

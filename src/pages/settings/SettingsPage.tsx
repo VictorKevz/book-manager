@@ -1,165 +1,66 @@
-import {
-  Code,
-  ColorLens,
-  DarkMode,
-  DevicesOther,
-  FontDownload,
-  FormatUnderlined,
-  GTranslate,
-  LightMode,
-  ManageAccounts,
-} from "@mui/icons-material";
-import { useCallback, useEffect, useState } from "react";
-import { useTheme } from "../../context/ThemeContext";
-import {
-  Font,
-  fontMap,
-  Language,
-  SettingsTabKey,
-  TabDataType,
-  TabKey,
-  TabsHeadingData,
-  TabValue,
-  Theme,
-} from "../../types/settings";
-import { useAlertProvider } from "../../context/AlertContext";
-import { SettingsTab } from "./SettingsTab";
-import fi from "../../assets/finland.png";
-import uk from "../../assets/uk.png";
+import { ColorLens, ManageAccounts, Security } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { TabKey } from "../../types/settings";
+import { PreferenceTab } from "./PreferenceTab";
+import { AccountTab } from "./account/AccountTab";
+import { PasswordTab } from "./PasswordTab";
+import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../hooks/useUserDataFetch";
+import { SyncLoaderWrapper } from "../../components/common/Loaders";
+
+const tabsNavData = [
+  { id: "account", text: "Account", icon: ManageAccounts },
+  { id: "preference", text: "Preferences", icon: ColorLens },
+  { id: "password", text: "Password", icon: Security },
+];
 
 export const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>("color");
-  const { theme, onThemeUpdate } = useTheme();
-  const { onShowAlert } = useAlertProvider();
-  const [font, setFont] = useState<Font>("modern");
-  const [language, setLanguage] = useState<Language>("en");
+  const [activeTab, setActiveTab] = useState<TabKey>("account");
+  const [isLoading, setLoading] = useState(true);
 
-  const onTabUpdate = useCallback(
-    (value: TabValue) => {
-      if (activeTab === "color") {
-        onThemeUpdate(value as Theme);
-      } else if (activeTab === "font") {
-        setFont(value as Font);
-        localStorage.setItem("font", value);
-        document.documentElement.style.setProperty(
-          "--app-font",
-          fontMap[value as Font]
-        );
-      } else if (activeTab === "language") {
-        setLanguage(value as Language);
-      }
-    },
-    [activeTab, onThemeUpdate]
-  );
-  const fontReset = () => {
-    setFont("modern");
-    localStorage.setItem("font", JSON.stringify(font));
-    document.documentElement.style.setProperty("--app-font", fontMap["modern"]);
-  };
-  const handleTabReset = () => {
-    onThemeUpdate("system");
-    setLanguage("en");
-    fontReset();
-    setActiveTab("color");
-    onShowAlert({
-      message: "Settings applied successfully",
-      type: "success",
-      visible: true,
-    });
-  };
+  const { user } = useAuth();
+
   useEffect(() => {
-    const saved = (localStorage.getItem("font") as Font) || "modern";
-    setFont(saved);
-    document.documentElement.style.setProperty("--app-font", fontMap[saved]);
-  }, []);
-  const tabsNavData = [
-    { id: "account", text: "Account Info", icon: ManageAccounts },
-    { id: "color", text: "Color Theme", icon: ColorLens },
-    { id: "font", text: "Font Style", icon: FontDownload },
-    { id: "language", text: "Language", icon: GTranslate },
-  ];
+    const createProfileIfMissing = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-  const tabsHeadingData: TabsHeadingData = {
-    color: {
-      title: "Theme Preferences",
-      description: "Switch between light, dark, or system mode",
-    },
-    font: {
-      title: "Font Style",
-      description: "Choose your preferred typography style",
-    },
-    language: {
-      title: "Language Settings",
-      description: "Set your app language preference",
-    },
-    account: {
-      title: "Account Information",
-      description: "View and manage your account details",
-    },
-  };
+      setLoading(true);
+      const { data } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", user.id)
+        .single();
 
-  const settingsTabData: Record<SettingsTabKey, TabDataType[]> = {
-    color: [
-      {
-        value: "light",
-        label: "Light Mode",
-        icon: LightMode,
-        description: "Clean and minimal white-based layout",
-      },
-      {
-        value: "dark",
-        label: "Dark Mode",
-        icon: DarkMode,
-        description: "Low-glare layout for dark environments",
-      },
-      {
-        value: "system",
-        label: "System Default",
-        icon: DevicesOther,
-        description: "Follows your device’s current theme",
-      },
-    ],
-    font: [
-      {
-        value: "modern",
-        label: "Modern",
-        icon: FontDownload,
-        description: "Clean sans-serif for a modern look",
-      },
-      {
-        value: "classic",
-        label: "Classic",
-        icon: FormatUnderlined,
-        description: "Serif font with a formal style",
-      },
-      {
-        value: "code",
-        label: "Code",
-        icon: Code,
-        description: "Monospace font for developer feel",
-      },
-    ],
-    language: [
-      {
-        value: "en",
-        label: "English",
-        icon: uk,
-        description: "Set app language to English",
-      },
-      {
-        value: "fi",
-        label: "Finnish",
-        icon: fi,
-        description: "Set app language to Finnish",
-      },
-    ],
-  };
+      if (!data) {
+        await supabase.from("profiles").insert([
+          {
+            id: user.id,
+            email: user.email,
+            full_name: user.user_metadata?.full_name || "",
+            avatar_url: null,
+            phone: null,
+            country: null,
+            bio: null,
+          },
+        ]);
+      }
+      setLoading(false);
+    };
 
-  const state: Record<SettingsTabKey, Theme | Font | Language> = {
-    color: theme,
-    font,
-    language,
-  };
+    createProfileIfMissing();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-dvh">
+        <SyncLoaderWrapper />
+      </div>
+    );
+  }
+
   return (
     <section className="w-full flex flex-col mx-auto">
       <header className="w-full pb-4">
@@ -168,6 +69,7 @@ export const SettingsPage = () => {
           Customize your preferences and account options
         </p>
       </header>
+
       <article className="w-full flex flex-col items-start gap-5 mx-auto">
         <ul className="w-full flex justify-start items-center gap-5 border-b border-[var(--neutral-100)]">
           {tabsNavData.map((tab) => {
@@ -177,7 +79,7 @@ export const SettingsPage = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(tab.id as TabKey)}
-                  className={` h-10 flex justify-center gap-1 px-3 rounded-t-lg ${
+                  className={`h-10 flex justify-center gap-1 px-3 rounded-t-lg ${
                     isActive
                       ? "bg-[var(--secondary-color)] text-black"
                       : "bg-[var(--neutral-100)] text-[var(--neutral-900)]"
@@ -191,19 +93,9 @@ export const SettingsPage = () => {
           })}
         </ul>
 
-        {activeTab === "account" ? (
-          <div>Account Info Tab!!!</div>
-        ) : (
-          <SettingsTab
-            data={settingsTabData[activeTab]!}
-            selectedValue={state[activeTab as SettingsTabKey]}
-            onUpdate={onTabUpdate}
-            title={tabsHeadingData[activeTab].title}
-            description={tabsHeadingData[activeTab].description}
-            onReset={handleTabReset}
-            activeTab={activeTab}
-          />
-        )}
+        {activeTab === "account" && <AccountTab />}
+        {activeTab === "preference" && <PreferenceTab />}
+        {activeTab === "password" && <PasswordTab />}
       </article>
     </section>
   );

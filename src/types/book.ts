@@ -41,7 +41,7 @@ export const InitialValidItem: Record<BookFormKeys, boolean> = {
   quantity: true,
   image_url: true,
 };
-export type uiStateType = {
+export type UIStateType = {
   isLoading: boolean;
   error: string;
 };
@@ -55,7 +55,7 @@ export interface BookContextType {
   onModalOpen: (book: BookMeta) => void;
   onModalClose: () => void;
   toggleForm: () => void;
-  uiState: uiStateType;
+  uiState: UIStateType;
   refreshBooks: () => void;
   isWarningModal: boolean;
 }

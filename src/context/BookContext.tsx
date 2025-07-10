@@ -13,7 +13,7 @@ import {
   ContextProviderProps,
   EmptyBookItem,
 } from "../types/book";
-import { supabase, useBookFetch } from "../hooks/useBookFetch";
+import { supabase, useUserDataFetch } from "../hooks/useUserDataFetch";
 import { extractImagePath } from "../utils/storage";
 import { useAlertProvider } from "./AlertContext";
 
@@ -23,13 +23,13 @@ export const BookContext = createContext<BookContextType | undefined>(
 
 export const BookProvider = ({ children }: ContextProviderProps) => {
   const {
-    books,
+    data: books,
     uiState,
-    fetchBooks,
+    fetchData: fetchBooks,
     turnOnLoader,
     turnOffLoader,
     handleError,
-  } = useBookFetch();
+  } = useUserDataFetch<BookItem>("books_inventory");
   const { onShowAlert } = useAlertProvider();
 
   const [bookToEdit, setBookToEdit] = useState<BookItem>(EmptyBookItem);

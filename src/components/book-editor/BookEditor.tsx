@@ -130,6 +130,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
               currentLabel={category}
               onToggleDropDown={toggleDropDown}
               dropDown={dropDown}
+              id="bookForm"
             />
           ))}
         </fieldset>

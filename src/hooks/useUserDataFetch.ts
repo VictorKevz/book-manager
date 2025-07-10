@@ -1,15 +1,19 @@
 import { useCallback, useState, useEffect } from "react";
-import { BookItem, uiStateType } from "../types/book";
+import { UIStateType } from "../types/book";
 import { createClient } from "@supabase/supabase-js";
 import { useAlertProvider } from "../context/AlertContext";
 import { useAuth } from "../context/AuthContext";
 
-export const useBookFetch = () => {
-  const [books, setBooks] = useState<BookItem[]>([]);
-  const [uiState, setUIState] = useState<uiStateType>({
+export const useUserDataFetch = <T>(
+  table: string,
+  filterKey: string = "user_id"
+) => {
+  const [data, setData] = useState<T[]>([]);
+  const [uiState, setUIState] = useState<UIStateType>({
     isLoading: false,
     error: "",
   });
+
   const { onShowAlert } = useAlertProvider();
   const { user } = useAuth();
 
@@ -24,51 +28,47 @@ export const useBookFetch = () => {
   const handleError = useCallback((msg: string) => {
     setUIState({ isLoading: false, error: msg });
   }, []);
-  const fetchBooks = useCallback(async (): Promise<BookItem[]> => {
+
+  const fetchData = useCallback(async (): Promise<T[]> => {
     if (!user) return [];
 
     try {
       turnOnLoader();
-      const { data, error } = await supabase
-        .from("books_inventory")
+      const { data: fetchedData, error } = await supabase
+        .from(table)
         .select("*")
-        .eq("user_id", user.id);
-      if (error) {
-        onShowAlert({
-          message: error.message,
-          type: "error",
-          visible: true,
-        });
-        throw new Error(error.message);
-      }
-      const result = Array.isArray(data) ? data : [];
+        .eq(filterKey, user.id);
 
-      setBooks(result);
+      if (error) throw new Error(error.message);
 
+      const result = Array.isArray(fetchedData) ? fetchedData : [];
+      setData(result);
       turnOffLoader();
       return result;
     } catch (err) {
-      console.error(err);
-      const errorMessage =
-        err instanceof Error ? err.message : "Couldn't fetch books!";
-      onShowAlert({
-        message: errorMessage,
-        type: "error",
-        visible: true,
-      });
-      handleError(errorMessage);
+      const msg = err instanceof Error ? err.message : "Fetch failed.";
+      onShowAlert({ message: msg, type: "error", visible: true });
+      handleError(msg);
       return [];
     }
-  }, [handleError, onShowAlert, turnOffLoader, turnOnLoader, user]);
+  }, [
+    user,
+    turnOnLoader,
+    table,
+    filterKey,
+    turnOffLoader,
+    onShowAlert,
+    handleError,
+  ]);
 
   useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+    fetchData();
+  }, [fetchData]);
+
   return {
-    books,
+    data,
     uiState,
-    setBooks,
-    fetchBooks,
+    fetchData,
     turnOnLoader,
     turnOffLoader,
     handleError,

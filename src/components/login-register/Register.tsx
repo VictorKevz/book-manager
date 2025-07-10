@@ -9,7 +9,7 @@ import {
 } from "../../types/loginRegister";
 import { InputField } from "../book-editor/InputField";
 import { FormEventType, onChangeType } from "../../types/upsertBook";
-import { supabase } from "../../hooks/useBookFetch";
+import { supabase } from "../../hooks/useUserDataFetch";
 import { useAlertProvider } from "../../context/AlertContext";
 import { FormWraper } from "../common/FormWraper";
 
@@ -18,7 +18,6 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
   const [registerValid, setRegisterValid] =
     useState<RegisterValid>(RegisterValidInitial);
   const { onShowAlert } = useAlertProvider();
-
   const handleChange = useCallback((event: onChangeType) => {
     const { value, name } = event.target;
     setRegister((prev) => ({
@@ -30,6 +29,7 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
       [name]: true,
     }));
   }, []);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleValidation = () => {
     // 1. Clone the validation state to be updated during checks
@@ -88,6 +88,8 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
   const handleSubmit = useCallback(
     async (event: FormEventType) => {
       event.preventDefault();
+
+      // 1. Ensure all fields are valid first
       const isValid = handleValidation();
       if (!isValid) {
         onShowAlert({
@@ -97,7 +99,7 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
         });
         return;
       }
-
+      // 2. Proceed to sign up the user
       const { error } = await supabase.auth.signUp({
         email: register.email,
         password: register.password,
@@ -107,7 +109,7 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
           },
         },
       });
-
+      // 3. Show an error if there is and escape early!
       if (error) {
         onShowAlert({
           type: "error",
@@ -117,6 +119,7 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
         return;
       }
 
+      // 4. Show success alert and show the login form in 2.5 seconds
       onShowAlert({
         type: "success",
         visible: true,
@@ -124,10 +127,15 @@ export const Register = ({ onFormToggle }: LoginRegisterProps) => {
           "Account created successfully! Please check your email to confirm.",
       });
 
+      setTimeout(() => {
+        onFormToggle();
+      }, 2500);
+
       clearForm();
     },
     [
       handleValidation,
+      onFormToggle,
       onShowAlert,
       register.email,
       register.fullName,
