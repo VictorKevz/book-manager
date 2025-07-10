@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { InputFieldProps, onChangeType } from "../../types/upsertBook";
 import { FileUpload } from "./FileUpload";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Emergency,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import { DropDown } from "../../pages/books/DropDown";
+import { categoryData } from "../../data/searchData";
 
 export const InputField = ({
   field,
@@ -9,13 +17,20 @@ export const InputField = ({
   onFileChange,
   previewUrl,
   onFileRemove,
+  onOptionUpdate,
+  currentLabel,
+  onToggleDropDown,
+  dropDown,
+  id,
 }: InputFieldProps) => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const isFullWidth = field.type === "textarea" || field.type === "file";
-  const isInputTextField = field.type === "text" || field.type === "password";
+  const isCategory = field.name === "category";
+  const isInputTextField =
+    !isCategory && (field.type === "text" || field.type === "password");
   const isTitle = field.name === "title";
   const isPassword = field.type === "password";
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const inputType = isPassword
     ? showPassword
       ? "text"
@@ -25,19 +40,26 @@ export const InputField = ({
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   return (
     <div
-      className={`w-full ${isFullWidth ? "col-span-3" : ""} ${
-        isTitle && "col-span-2"
-      }`}
+      className={`w-full ${isFullWidth && id === "bookForm" && "col-span-3"} ${
+        isFullWidth && id === "accountForm" && "col-span-2"
+      } ${isTitle && "col-span-2"}`}
     >
       {isInputTextField && (
         <label
           className={`w-full flex flex-col items-start gap-1.5 text-[var(--neutral-700)]`}
           htmlFor={field.name}
         >
-          <span className="text-[var(--neutral-800)] font-medium">
-            {field.label}
+          <span className="text-[var(--neutral-800)] font-medium relative">
+            {field.label}{" "}
+            {field.errorMessage.trim() && (
+              <Emergency
+                fontSize="small"
+                className="absolute top-0 -right-4 scale-40 text-red-500/90"
+              />
+            )}
           </span>
           <div className="w-full relative flex items-center">
             <input
@@ -47,7 +69,7 @@ export const InputField = ({
               placeholder={field.placeholder}
               id={field.name}
               onChange={(event: onChangeType) => onTextChange(event)}
-              className={`w-full h-11 border bg-[var(--neutral-50)] rounded-lg pl-5 placeholder:text-[var(--neutral-700)] ${
+              className={`w-full h-11 border bg-[var(--neutral-50)] rounded-lg pl-5 text-[var(--neutral-900)] placeholder:text-[var(--neutral-700)] ${
                 !field.isValid
                   ? "border-[var(--error)]"
                   : "border-[var(--neutral-100)]"
@@ -67,7 +89,7 @@ export const InputField = ({
               </button>
             )}
           </div>
-          {isPassword && (
+          {isPassword && id !== "login" && (
             <span className="text-xs pt-1 text-[var(--neutral-800)]">
               Enter a password with at least 6 characters, including: a number,
               a lowercase letter, an uppercase letter, and a special character
@@ -81,18 +103,46 @@ export const InputField = ({
           )}
         </label>
       )}
-
-      {field.type === "textarea" && (
-        <label
-          htmlFor=""
-          className="w-full flex flex-col items-start gap-2 text-[var(--neutral-700)]"
-        >
+      {isCategory && (
+        <div className="relative flex flex-col items-start gap-2">
           <span className="text-[var(--neutral-800)] font-medium">
             {field.label}
           </span>
+          <button
+            type="button"
+            onClick={onToggleDropDown}
+            className="w-full justify-between h-11 border border-[var(--neutral-100)] bg-[var(--neutral-50)] rounded-lg px-5 text-[var(--neutral-900)]"
+          >
+            {currentLabel}
+            {dropDown ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </button>
+          {dropDown && (
+            <DropDown
+              data={categoryData.slice(1, categoryData.length)}
+              onOptionUpdate={onOptionUpdate ?? (() => {})}
+              currentLabel={currentLabel ?? ""}
+            />
+          )}
+        </div>
+      )}
+      {field.type === "textarea" && (
+        <label
+          htmlFor={field.name}
+          className="w-full flex flex-col items-start gap-2 text-[var(--neutral-700)]"
+        >
+          <span className=" relative text-[var(--neutral-800)] font-medium">
+            {field.label}
+            {field.errorMessage.trim() && (
+              <Emergency
+                fontSize="small"
+                className="absolute -top-1 -right-4 scale-40 text-red-500/90"
+              />
+            )}
+          </span>
           <textarea
-            rows={2}
-            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border placeholder:text-[var(--neutral-700)] ${
+            rows={3}
+            id={field.name}
+            className={`w-full bg-[var(--neutral-50)] rounded-lg p-5 border text-[var(--neutral-900)] placeholder:text-[var(--neutral-700)] ${
               !field.isValid
                 ? "border-[var(--error)]"
                 : "border-[var(--neutral-100)]"

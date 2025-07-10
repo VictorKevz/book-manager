@@ -1,6 +1,5 @@
-import React from "react";
-import { Close } from "@mui/icons-material";
-import { FileUploadProps } from "../../types/upsertBook";
+import { Close, Emergency } from "@mui/icons-material";
+import { FileUploadProps, InputType } from "../../types/upsertBook";
 
 export const FileUpload = ({
   field,
@@ -9,9 +8,15 @@ export const FileUpload = ({
   previewUrl,
 }: FileUploadProps) => {
   return (
-    <label className="w-full flex flex-col gap-2">
-      <span className="text-sm text-[var(--neutral-800)] font-medium">
-        Upload Book Cover
+    <label className="w-full flex flex-col gap-2 z-10">
+      <span className="relative text-sm text-[var(--neutral-800)] font-medium w-fit">
+        {field.label}
+        {field.errorMessage.trim() && (
+          <Emergency
+            fontSize="small"
+            className="absolute -top-1 -right-4 scale-40 text-red-500/90"
+          />
+        )}
       </span>
 
       <div className="relative">
@@ -20,14 +25,11 @@ export const FileUpload = ({
           name={field.name}
           id={field.name}
           accept=".jpg,.png,.jpeg"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            onFileChange(event)
-          }
+          onChange={(event: InputType) => onFileChange(event)}
           className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
         />
-        <button
-          type="button"
-          className={`w-full flex items-center h-14 border rounded-lg text-sm font-medium ${
+        <div
+          className={`w-full flex items-center justify-center h-14 border rounded-lg text-sm font-medium ${
             !field.isValid
               ? "border-[var(--error)]"
               : "border-[var(--neutral-100)]"
@@ -46,12 +48,12 @@ export const FileUpload = ({
                 alt="Preview"
                 className="w-12 h-12 object-cover rounded-lg"
               />
-              <span role="button" onClick={onFileRemove}>
+              <button type="button" onClick={onFileRemove}>
                 <Close fontSize="medium" className="text-[var(--error)]" />
-              </span>
+              </button>
             </span>
           )}
-        </button>
+        </div>
       </div>
 
       {!field.isValid && (

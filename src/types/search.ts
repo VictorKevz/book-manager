@@ -5,8 +5,6 @@ export type CategoryDataType = {
 };
 export interface SearchContextType {
   query: string;
-  //   categoryList: string[];
-  categoryData: CategoryDataType[];
   OnQueryChange: (event: InputType) => void;
   debouncedQuery: string;
   onClearQuery: () => void;
@@ -20,14 +18,31 @@ export type SortDataType = SortOption & {
   label: string;
 };
 
+export type DropdownOption =
+  | {
+      type: "category";
+      label: string;
+      icon: MUIIconType;
+    }
+  | {
+      type: "sort";
+      label: string;
+      field: "title" | "author" | "stock";
+      order: "asc" | "desc";
+    };
 export type DropDownProps = {
-  onSortUpdate: (option: SortOption, label: string) => void;
-  data: SortDataType[];
-  sortLabel: string;
+  data: DropdownOption[];
+  onOptionUpdate: (option: DropdownOption, label: string) => void;
+  currentLabel: string;
 };
 
 export type PaginateItemsProps = {
   totalPages: number;
   currentPage: number;
   setCurrentPage: (pageNum: number) => void;
+};
+
+export type CategoryData = {
+  label: string;
+  icon: MUIIconType;
 };

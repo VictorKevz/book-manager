@@ -1,13 +1,30 @@
-import { formItem } from "../../types/upsertBook";
+import { BookFormItem, formItem } from "../../types/upsertBook";
 import { useBookUpsertForm } from "../../hooks/useBookUpsertForm";
 import { InputField } from "./InputField";
-import { BookCardProps } from "../../types/book";
+import { BookCardProps, BookItem } from "../../types/book";
 import { useBookProvider } from "../../context/BookContext";
 import { FormLoader } from "../common/Loaders";
 import { FormWraper } from "../common/FormWraper";
 
 export const BookEditor = ({ book }: BookCardProps) => {
   const { refreshBooks, toggleForm } = useBookProvider();
+
+  // The book passed is of type BookItem so we need to convert to BookFormItem
+  // Form doesn't need fields like "id, user_id" so we remove them
+  const convertBookToForm = (book: BookItem): BookFormItem => ({
+    title: book.title,
+    author: book.author,
+    category: book.category,
+    description: book.description,
+    price: String(book.price),
+    quantity: String(book.quantity),
+    image_url: book.image_url,
+  });
+  // A DB-based identifier is still needed to determine whether we are editing or not
+  const bookId = book.id;
+  // Call the hook here and pass the required arguments
+  const bookToEdit = convertBookToForm(book);
+
   const {
     handleFileChange,
     handleTextChange,
@@ -18,7 +35,11 @@ export const BookEditor = ({ book }: BookCardProps) => {
     previewUrl,
     clearFileUploader,
     formUiState,
-  } = useBookUpsertForm(book, refreshBooks, toggleForm);
+    updateCategory,
+    category,
+    dropDown,
+    toggleDropDown,
+  } = useBookUpsertForm(bookToEdit, bookId, refreshBooks, toggleForm);
 
   const formData: formItem[] = [
     {
@@ -41,12 +62,12 @@ export const BookEditor = ({ book }: BookCardProps) => {
     },
     {
       name: "category",
-      value: form.category,
-      placeholder: "Psychological Thriller",
+      value: category,
+      placeholder: "",
       type: "text",
-      isValid: formValid.category,
+      isValid: true,
       label: "Category",
-      errorMessage: "Category is required",
+      errorMessage: "",
     },
     {
       name: "price",
@@ -105,6 +126,11 @@ export const BookEditor = ({ book }: BookCardProps) => {
               onFileChange={handleFileChange}
               previewUrl={previewUrl}
               onFileRemove={clearFileUploader}
+              onOptionUpdate={updateCategory}
+              currentLabel={category}
+              onToggleDropDown={toggleDropDown}
+              dropDown={dropDown}
+              id="bookForm"
             />
           ))}
         </fieldset>

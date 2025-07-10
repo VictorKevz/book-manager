@@ -36,7 +36,7 @@ const BookCard = ({ book }: BookCardProps) => {
       key={book.id}
       className="flex flex-col items-start justify-between rounded-2xl shadow-2xl bg-[var(--neutral-200)] border border-[var(--neutral-100)]"
     >
-      <div className="flex items-start justify-between gap-2 p-3">
+      <div className="w-full flex items-start justify-between gap-2 p-3">
         <div className="">
           <header className="flex flex-col gap-1 items-start">
             <div

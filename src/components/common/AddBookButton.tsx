@@ -8,7 +8,7 @@ export const AddBookButton = () => {
     <button
       type="button"
       onClick={toggleForm}
-      className="h-11 px-3 rounded-xl bg-[var(--primary-color)] text-white gap-0.5 justify-center"
+      className="h-11 px-3 rounded-xl bg-[var(--primary-color)] text-black/90 gap-0.5 justify-center"
     >
       <AddCircle />
       <span className="hidden md:block">Create New Book</span>

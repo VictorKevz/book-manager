@@ -2,16 +2,17 @@ import { Category, MenuBook, PriceCheck } from "@mui/icons-material";
 import bookUploadImg from "../../assets/book-upload.png";
 import { AddBookButton } from "../../components/common/AddBookButton";
 import { useBookProvider } from "../../context/BookContext";
-import { useSearchProvider } from "../../context/SearchContext";
+// import { useSearchProvider } from "../../context/SearchContext";
 import BookCard from "../../components/BookCard";
 import { Link } from "react-router-dom";
 import { BookCategoryPiechart } from "./BookCategoryPiechart";
 import { BookPriceBarChart } from "./BookPriceBarChart";
 import { SyncLoaderWrapper } from "../../components/common/Loaders";
+import { categoryData } from "../../data/searchData";
 
 export const Overview = () => {
   const { books, uiState } = useBookProvider();
-  const { categoryData } = useSearchProvider();
+  // const { categoryData } = useSearchProvider();
 
   const totals = books.reduce(
     (acc, book) => {
@@ -63,7 +64,7 @@ export const Overview = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-xl w-full flex flex-col items-center justify-center mx-auto mt-6">
+    <section className="max-w-screen-xl w-full flex flex-col items-center justify-center px-5 mx-auto mt-6">
       <header className="w-full bg-[var(--neutral-200)] flex flex-col items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl md:flex-row">
         <div className="flex flex-col gap-1.5 items-start md:w-[80%]">
           <h2 className="text-[var(--neutral-900)] text-3xl">

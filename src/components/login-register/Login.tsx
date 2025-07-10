@@ -11,7 +11,7 @@ import {
 } from "../../types/loginRegister";
 import { InputField } from "../book-editor/InputField";
 import { useAlertProvider } from "../../context/AlertContext";
-import { supabase } from "../../hooks/useBookFetch";
+import { supabase } from "../../hooks/useUserDataFetch";
 
 export const Login = ({ onFormToggle }: LoginRegisterProps) => {
   const [login, setLogin] = useState<LoginItem>(LoginItemInitial);
@@ -47,9 +47,8 @@ export const Login = ({ onFormToggle }: LoginRegisterProps) => {
       // 3. Email-specific validation
       if (key === "email") {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const domainRegex = /^[^\s@]+@victorkevz\.com$/;
 
-        if (!emailRegex.test(trimmedValue) || !domainRegex.test(trimmedValue)) {
+        if (!emailRegex.test(trimmedValue)) {
           newLoginValid.email = false;
           return;
         }
@@ -76,7 +75,7 @@ export const Login = ({ onFormToggle }: LoginRegisterProps) => {
         return;
       }
 
-      //  2. Form is valid proceed to login using supabase SDK
+      //  2. Form is valid proceed to login
       const { error, data } = await supabase.auth.signInWithPassword({
         email: login.email,
         password: login.password,
@@ -123,7 +122,7 @@ export const Login = ({ onFormToggle }: LoginRegisterProps) => {
       type: "text",
       isValid: loginValid.email,
       label: "Email",
-      errorMessage: "Email must be a valid @victokevz.com address",
+      errorMessage: "Please enter a valid email address",
     },
     {
       name: "password",
@@ -136,39 +135,38 @@ export const Login = ({ onFormToggle }: LoginRegisterProps) => {
     },
   ];
   return (
-    <section className="w-full min-h-dvh px-5 flex items-center justify-center bg-[var(--neutral-400)]">
-      <FormWraper
-        onSubmit={handleSubmit}
-        title="Create Your Account"
-        description="Easily create an account by filling all out all fields correctly"
-        maxWidth="max-w-md"
-      >
-        <fieldset className="flex flex-col w-full gap-5 mt-5 px-4">
-          {loginData.map((field) => (
-            <InputField
-              key={field.name}
-              field={field}
-              onTextChange={handleChange}
-            />
-          ))}
-        </fieldset>
-        <footer className="w-full my-6 px-4 flex flex-col items-center">
-          <button
-            type="submit"
-            className={`h-10 w-full rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            onClick={onFormToggle}
-            className="text-[var(--neutral-800)] text-xs mt-2 gap-0.5"
-          >
-            Don't have an account?
-            <span className="text-blue-500">Register</span>
-          </button>
-        </footer>
-      </FormWraper>
-    </section>
+    <FormWraper
+      onSubmit={handleSubmit}
+      title="Login to your Account"
+      description="Access your account by entering your details correctly"
+      maxWidth="max-w-md"
+    >
+      <fieldset className="flex flex-col w-full gap-5 mt-5 px-4">
+        {loginData.map((field) => (
+          <InputField
+            key={field.name}
+            field={field}
+            onTextChange={handleChange}
+            id="login"
+          />
+        ))}
+      </fieldset>
+      <footer className="w-full my-6 px-4 flex flex-col items-center">
+        <button
+          type="submit"
+          className={`h-10 w-full justify-center rounded-lg border border-transparent bg-[var(--primary-color)] text-white hover:text-[var(--neutral-900)] hover:bg-transparent hover:border-[var(--primary-color)]`}
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          onClick={onFormToggle}
+          className="text-[var(--neutral-800)] text-xs mt-2 gap-0.5"
+        >
+          Don't have an account?
+          <span className="text-blue-500">Register</span>
+        </button>
+      </footer>
+    </FormWraper>
   );
 };

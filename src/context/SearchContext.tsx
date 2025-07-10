@@ -5,12 +5,12 @@ import {
   useEffect,
   useState,
 } from "react";
-import { CategoryDataType, SearchContextType } from "../types/search";
+import { SearchContextType } from "../types/search";
 import { ContextProviderProps } from "../types/book";
-import { useBookFetch } from "../hooks/useBookFetch";
+// import { useBookFetch } from "../hooks/useBookFetch";
 import { InputType } from "../types/upsertBook";
 import { useLocation, useNavigate } from "react-router-dom";
-import { categoryIcons } from "../data/searchData";
+// import { categoryIcons } from "../data/searchData";
 
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
@@ -18,9 +18,9 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
   const [query, setQuery] = useState<string>("");
   const [debouncedQuery, setDebouncedQuery] = useState<string>("");
   //   const [categoryList, setCategoryList] = useState<string[]>([]);
-  const [categoryData, setCategoryData] = useState<CategoryDataType[]>([]);
+  // const [categoryData, setCategoryData] = useState<CategoryDataType[]>([]);
 
-  const { books } = useBookFetch();
+  // const { books } = useBookFetch();
 
   const handleQueryChange = useCallback((event: InputType) => {
     setQuery(event.target.value.toLowerCase());
@@ -32,14 +32,14 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
   }, []);
 
   //   Update categories on component mount - assumes data fetching is done!
-  useEffect(() => {
-    const list = Array.from(new Set(books.map((book) => book.category)));
-    const newData = ["All", ...list].map((category) => ({
-      name: category,
-      icon: categoryIcons[category],
-    }));
-    setCategoryData(newData);
-  }, [books]);
+  // useEffect(() => {
+  //   const list = Array.from(new Set(books.map((book) => book.category)));
+  //   const newData = ["All", ...list].map((category) => ({
+  //     name: category,
+  //     icon: categoryIcons[category],
+  //   }));
+  //   setCategoryData(newData);
+  // }, [books]);
 
   //   Delay updating the debounced query as query changes
   useEffect(() => {
@@ -67,7 +67,7 @@ export const SearchProvider = ({ children }: ContextProviderProps) => {
       value={{
         query,
         // categoryList,
-        categoryData,
+        // categoryData,
         OnQueryChange: handleQueryChange,
         debouncedQuery,
         onClearQuery,

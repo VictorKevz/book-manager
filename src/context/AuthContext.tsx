@@ -7,7 +7,7 @@ import {
   ReactNode,
   useCallback,
 } from "react";
-import { supabase } from "../hooks/useBookFetch";
+import { supabase } from "../hooks/useUserDataFetch";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 

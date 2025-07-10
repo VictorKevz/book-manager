@@ -1,17 +1,17 @@
 import { Outlet } from "react-router-dom";
-import { SyncLoaderWrapper } from "../components/common/Loaders";
-import { useBookProvider } from "../context/BookContext";
+// import { SyncLoaderWrapper } from "../components/common/Loaders";
+// import { useBookProvider } from "../context/BookContext";
 import { TopHeader } from "../components/TopHeader";
 import { SideBar } from "../components/common/Sidebar";
 
 export const Dashboard = () => {
-  const { uiState } = useBookProvider();
-  if (uiState.isLoading)
-    return (
-      <div className="w-full flex items-center justify-center min-h-dvh">
-        <SyncLoaderWrapper />
-      </div>
-    );
+  // const { uiState } = useBookProvider();
+  // if (uiState.isLoading)
+  //   return (
+  //     <div className="w-full flex items-center justify-center min-h-dvh">
+  //       <SyncLoaderWrapper />
+  //     </div>
+  //   );
   return (
     <>
       {/* Fixed Top Header */}
@@ -23,7 +23,7 @@ export const Dashboard = () => {
         <SideBar />
 
         {/* Page Content */}
-        <main className="flex-1 xl:ml-[6rem] px-6 pb-[6rem] mt-8 overflow-x-hidden">
+        <main className="flex-1 xl:ml-[6rem] px-6 pb-[6rem] xl:pb-8 mt-8 overflow-x-hidden">
           <Outlet />
         </main>
       </div>
