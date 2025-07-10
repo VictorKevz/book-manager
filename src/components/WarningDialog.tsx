@@ -1,13 +1,13 @@
 import { Close } from "@mui/icons-material";
 import { useBookProvider } from "../context/BookContext";
 import { AnimatePresence } from "framer-motion";
-import { BookMeta, uiStateType } from "../types/book";
+import { BookMeta, UIStateType } from "../types/book";
 import { FormLoader } from "./common/Loaders";
 type Modalprops = {
   onModalClose: () => void;
   onBookDelete: () => void;
   bookToDelete: BookMeta;
-  uiState: uiStateType;
+  uiState: UIStateType;
 };
 export const WarningDialog = ({
   onModalClose,
