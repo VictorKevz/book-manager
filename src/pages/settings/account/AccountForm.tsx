@@ -281,8 +281,9 @@ export const AccountForm = ({ data, onRefresh }: AccountFormProps) => {
         description="Easily create an account by filling all out all fields correctly"
         maxWidth="max-w-2xl"
         onSubmit={handleSubmit}
+        id="accountForm"
       >
-        <fieldset className="grid grid-cols-2 w-full gap-5 mt-5 px-4">
+        <fieldset className="grid grid-cols-1 sm:grid-cols-2 w-full gap-5 mt-5 px-4">
           {profileFormData.map((field) => (
             <InputField
               key={field.name}
@@ -295,17 +296,16 @@ export const AccountForm = ({ data, onRefresh }: AccountFormProps) => {
             />
           ))}
         </fieldset>
-        <div className="w-full flex items-center justify-between gap-6 mt-4 bg-[var(--neutral-400)] border-t p-5 border-[var(--neutral-100)] rounded-b-2xl">
+        <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-6 mt-4 bg-[var(--neutral-400)] border-t p-5 border-[var(--neutral-100)] rounded-b-2xl">
           <button
             type="button"
-            className="max-w-40 w-full h-10 justify-center rounded-xl px-4 border border-[var(--primary-color)] text-[var(--neutral-900)]"
-            // onClick={clearForm}
+            className="sm:max-w-40 w-full h-10 justify-center rounded-xl px-4 border border-[var(--primary-color)] text-[var(--neutral-900)]"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="max-w-40 w-full h-10 justify-center rounded-xl px-4 bg-[var(--primary-color)] text-[var(--neutral-900)]"
+            className="sm:max-w-40 w-full h-10 justify-center rounded-xl px-4 bg-[var(--primary-color)] text-[var(--neutral-900)]"
           >
             Update Changes
           </button>

@@ -14,10 +14,10 @@ export const FormWraper = ({
   return (
     <form
       onSubmit={(event: FormEventType) => onSubmit(event)}
-      className={`flex flex-col justify-between w-full ${maxWidth} ${
+      className={`flex flex-col justify-between w-full lg:h-fit shadow-xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6 overflow-auto rounded-2xl ${maxWidth} ${
         id === "bookEditor" &&
         "h-dvh lg:h-fit max-w-none lg:max-w-2xl rounded-none lg:rounded-2xl"
-      } lg:h-fit shadow-xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6 overflow-auto rounded-2xl`}
+      } `}
     >
       <header
         className={`w-full relative bg-[var(--neutral-400)] border-b px-5 py-6 border-[var(--neutral-100)] ${
