@@ -2,7 +2,6 @@ import { Profile, ProfileForm } from "../../../types/settings";
 import { Person } from "@mui/icons-material";
 import { useUserDataFetch } from "../../../hooks/useUserDataFetch";
 import { greetUser } from "../../../utils/time";
-import { LiveClock } from "../../../components/common/LiveClock";
 import { AccountForm } from "./AccountForm";
 import { useCallback } from "react";
 
@@ -25,7 +24,7 @@ export const AccountTab = () => {
 
   return (
     <section className="w-full flex items-start justify-center gap-10">
-      <div className="max-w-screen-lg w-full flex flex-col items-center justify-center px-4 py-5 rounded-xl">
+      <div className="max-w-screen-lg w-full flex flex-col items-center justify-center py-5 rounded-xl">
         <header className="relative w-full flex flex-col items-center">
           {typeof userinfoObj?.avatar_url === "string" &&
           userinfoObj.avatar_url.trim() !== "" ? (
@@ -43,9 +42,6 @@ export const AccountTab = () => {
             {greetUser((userinfoObj?.full_name as string) ?? "Test")}
           </h2>
           <span className="text-[var(--secondary-color)]">Welcome back</span>
-          <span className="absolute right-4 top-4">
-            <LiveClock />
-          </span>
         </header>
 
         <AccountForm data={data} onRefresh={refreshProfiles} />

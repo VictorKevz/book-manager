@@ -7,6 +7,7 @@ import { PasswordTab } from "./PasswordTab";
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../hooks/useUserDataFetch";
 import { SyncLoaderWrapper } from "../../components/common/Loaders";
+import { LiveClock } from "../../components/common/LiveClock";
 
 const tabsNavData = [
   { id: "account", text: "Account", icon: ManageAccounts },
@@ -63,11 +64,15 @@ export const SettingsPage = () => {
 
   return (
     <section className="w-full flex flex-col mx-auto">
-      <header className="w-full pb-4">
-        <h2 className="text-3xl">Settings</h2>
-        <p className="text-[var(--neutral-700)]">
-          Customize your preferences and account options
-        </p>
+      <header className="w-full flex items-start justify-between pb-4">
+        <div>
+          <h2 className="text-3xl">Settings</h2>
+          <p className="text-[var(--neutral-700)]">
+            Customize your preferences and account options
+          </p>
+        </div>
+
+        <LiveClock />
       </header>
 
       <article className="w-full flex flex-col items-start gap-5 mx-auto">
@@ -79,14 +84,14 @@ export const SettingsPage = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(tab.id as TabKey)}
-                  className={`h-10 flex justify-center gap-1 px-3 rounded-t-lg ${
+                  className={`h-10 flex justify-center gap-1 sm:px-3 rounded-t-lg ${
                     isActive
-                      ? "bg-[var(--secondary-color)] text-black"
-                      : "bg-[var(--neutral-100)] text-[var(--neutral-900)]"
+                      ? "text-[var(--secondary-color)] sm:bg-[var(--secondary-color)] sm:text-black px-3"
+                      : "sm:bg-[var(--neutral-100)] text-[var(--neutral-900)]"
                   }`}
                 >
-                  <tab.icon />
-                  <span className="hidden md:block">{tab.text}</span>
+                  <tab.icon className="scale-125 sm:scale-100" />
+                  <span className="hidden sm:block">{tab.text}</span>
                 </button>
               </li>
             );
