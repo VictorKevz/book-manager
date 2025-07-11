@@ -33,6 +33,7 @@ export type FormWraperProps = {
   title: string;
   description?: string;
   toggleForm?: () => void;
+  id?: string;
   maxWidth: "max-w-md" | "max-w-2xl";
 };
 

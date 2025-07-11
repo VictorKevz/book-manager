@@ -40,6 +40,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     dropDown,
     toggleDropDown,
   } = useBookUpsertForm(bookToEdit, bookId, refreshBooks, toggleForm);
+  const isEditing = !!bookId;
 
   const formData: formItem[] = [
     {
@@ -108,14 +109,16 @@ export const BookEditor = ({ book }: BookCardProps) => {
     },
   ];
   return (
-    <div className="w-full h-[calc(100vh)] flex items-center justify-center fixed top-0 bottom-0 bg-black/60 backdrop-blur-[5px] z-500 px-4 py-5">
+    <div className="fixed top-0 bottom-0 w-full min-h-dvh flex items-center justify-center bg-black/60 backdrop-blur-[5px] z-500 lg:px-4 py-5">
       <FormWraper
         onSubmit={handleSubmit}
-        title=" Create a new book"
-        description=" Fill out the form below to add a new book to the inventory. All
- fields are required unless stated otherwise."
+        title={`${isEditing ? "Edit Book" : "Create a New Book"}`}
+        description={`Fill out the form below to ${
+          isEditing ? "edit this book" : "add a new"
+        } book to the inventory. All fields are required unless stated otherwise.`}
         toggleForm={toggleForm}
         maxWidth="max-w-2xl"
+        id="bookEditor"
       >
         <fieldset className={`w-full grid grid-cols-3 gap-6 mt-4 px-5 z-10`}>
           {formData.map((field) => (
@@ -134,7 +137,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
             />
           ))}
         </fieldset>
-        <div className="w-full flex items-center justify-between gap-6 mt-4 bg-[var(--neutral-400)] border-t p-5 border-[var(--neutral-100)] rounded-b-2xl">
+        <div className="w-full flex items-center justify-between gap-6 mt-4 bg-[var(--neutral-400)] border-t p-5 border-[var(--neutral-100)] lg:rounded-b-2xl">
           <button
             type="button"
             className="max-w-30 w-full h-10 justify-center rounded-xl px-4 border border-[var(--primary-color)] text-[var(--neutral-900)]"
