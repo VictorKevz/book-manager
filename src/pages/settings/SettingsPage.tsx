@@ -84,14 +84,14 @@ export const SettingsPage = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(tab.id as TabKey)}
-                  className={`h-10 flex justify-center gap-1 px-3 rounded-t-lg ${
+                  className={`h-10 flex justify-center gap-1 sm:px-3 rounded-t-lg ${
                     isActive
-                      ? "bg-[var(--secondary-color)] text-black"
-                      : "bg-[var(--neutral-100)] text-[var(--neutral-900)]"
+                      ? "text-[var(--secondary-color)] sm:bg-[var(--secondary-color)] sm:text-black px-3"
+                      : "sm:bg-[var(--neutral-100)] text-[var(--neutral-900)]"
                   }`}
                 >
-                  <tab.icon />
-                  <span className="hidden md:block">{tab.text}</span>
+                  <tab.icon className="scale-125 sm:scale-100" />
+                  <span className="hidden sm:block">{tab.text}</span>
                 </button>
               </li>
             );

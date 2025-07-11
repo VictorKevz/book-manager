@@ -44,7 +44,7 @@ export const InputField = ({
   return (
     <div
       className={`w-full ${isFullWidth && "sm:col-span-2"} ${
-        id === "accountForm" && "lg:col-span-3"
+        isFullWidth && id === "bookForm" && "lg:col-span-3"
       } ${isTitle && "sm:col-span-2"}`}
     >
       {isInputTextField && (

@@ -11,16 +11,16 @@ import { useAuth } from "../../context/AuthContext";
 export const SideBar = () => {
   const { logout } = useAuth();
   return (
-    <aside className="fixed bottom-0 w-full h-[4.5rem] px-4 xl:px-0 rounded-t-[2.5rem] border-t xl:border-t-0 xl:rounded-none bg-[var(--neutral-200)] xl:left-0 xl:top-[5rem] xl:w-[6rem] xl:h-[calc(100vh-5rem)] xl:bg-[var(--neutral-400)] xl:border-r border-[var(--neutral-100)] xl:py-3  flex flex-row xl:flex-col justify-between z-40">
+    <aside className="fixed bottom-0 w-full h-[4.5rem] px-4 xl:px-0 rounded-t-[2.5rem] border-t xl:border-t-0 xl:rounded-none bg-[var(--neutral-200)] xl:left-0 xl:top-[5rem] xl:w-[6rem] xl:h-[calc(100vh-5rem)] xl:bg-[var(--neutral-400)] xl:border-r border-[var(--neutral-100)] xl:py-3  flex flex-row xl:flex-col justify-between items-center z-40">
       <nav className="flex items-center">
         <PagesList />
       </nav>
       <button
         type="button"
         onClick={logout}
-        className="flex-col text-[var(--neutral-700)] hover:text-[var(--primary-color)] xl:border-t border-[var(--neutral-100)] xl:pt-4"
+        className="xl:w-full flex-col text-[var(--neutral-700)] hover:text-[var(--primary-color)] xl:border-t border-[var(--neutral-100)] xl:pt-4 mr-4 xl:mr-0"
       >
-        <Logout /> <span>Logout</span>
+        <Logout /> <span className="hidden sm:block">Logout</span>
       </button>
     </aside>
   );
