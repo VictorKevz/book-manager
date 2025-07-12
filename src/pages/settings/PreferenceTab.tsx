@@ -1,4 +1,5 @@
 import {
+  AddCircle,
   Code,
   DarkMode,
   DevicesOther,
@@ -8,6 +9,7 @@ import {
   LockReset,
   RadioButtonChecked,
   RadioButtonUnchecked,
+  RemoveCircle,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import uk from "../../assets/uk.png";
@@ -29,7 +31,7 @@ export const PreferenceTab = () => {
 
   const [font, setFont] = useState<Font>("modern");
   const [language, setLanguage] = useState<Language>("en");
-
+  const [accordion, setAccordion] = useState(["theme"]);
   useEffect(() => {
     const saved = (localStorage.getItem("font") as Font) || "modern";
     setFont(saved);
@@ -50,7 +52,15 @@ export const PreferenceTab = () => {
       setLanguage(value as Language);
     }
   };
-
+  const updateAccordion = (preference: PreferenceKey) => {
+    setAccordion((prev) => {
+      const isExisting = prev.some((pref) => pref === preference);
+      if (isExisting) {
+        return prev.filter((pref) => pref !== preference);
+      }
+      return [...prev, preference];
+    });
+  };
   const handleReset = () => {
     onThemeUpdate("system");
     setFont("modern");
@@ -75,19 +85,19 @@ export const PreferenceTab = () => {
           value: "light",
           label: "Light Mode",
           icon: LightMode,
-          description: "Clean white layout",
+          description: "Bright layout",
         },
         {
           value: "dark",
           label: "Dark Mode",
           icon: DarkMode,
-          description: "Low-glare layout",
+          description: "Dark layout",
         },
         {
           value: "system",
           label: "System",
           icon: DevicesOther,
-          description: "Follows device theme",
+          description: "Same as device",
         },
       ],
     },
@@ -140,69 +150,103 @@ export const PreferenceTab = () => {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-10 mt-6 max-w-screen-xl">
-      {preferences.map((pref, i) => (
-        <div
-          key={pref.type}
-          className={`${
-            i !== 0 && "border-t border-[var(--neutral-100)] py-5"
-          }`}
-        >
-          <h3 className="text-xl font-semibold">{pref.title}</h3>
-          <p className="">{pref.description}</p>
-          <div className="grid grid-cols-3 gap-4 mt-6 w-full">
-            {pref.data.map((item) => {
-              const isActive = item.value === pref.selected;
-              const isFont = pref.type === "font";
-              return (
-                <button
-                  key={item.value}
-                  type="button"
-                  onClick={() => handleUpdate(pref.type, item.value)}
-                  style={{
-                    fontFamily: isFont
-                      ? fontMap[item.value as Font]
-                      : undefined,
-                  }}
-                  className={`w-full border px-4 py-6 rounded-lg flex-col justify-between hover:bg-[var(--neutral-200)] ${
-                    isActive
-                      ? "border-[var(--secondary-color)] bg-[var(--neutral-300)]"
-                      : "border-[var(--neutral-100)]"
+    <section className="w-full mx-auto my-6 max-w-screen-lg">
+      <h2 className="text-3xl text-center">Manage Preferences</h2>
+      <div className="w-full flex flex-col gap-10 border border-[var(--neutral-100)] rounded-xl py-5 mt-6">
+        {preferences.map((pref, i) => {
+          const isOpen = accordion.includes(pref.type);
+          return (
+            <div
+              key={pref.type}
+              className={`w-full flex flex-col px-4 ${
+                i !== 0 && "border-t border-[var(--neutral-100)]"
+              }`}
+            >
+              <header
+                className={`w-full flex items-start justify-between gap-6 cursor-pointer ${
+                  isOpen ? "py-5" : "py-3"
+                }`}
+                onClick={() => updateAccordion(pref.type)}
+              >
+                <div>
+                  <h3 className="text-xl font-semibold">{pref.title}</h3>
+                  <p className="">{pref.description}</p>
+                </div>
+                <span
+                  className={`scale-130 ${
+                    isOpen
+                      ? "text-[var(--secondary-color)]"
+                      : "text-[var(--neutral-900)]"
                   }`}
                 >
-                  {pref.type === "language" && typeof item.icon === "string" ? (
-                    <span
-                      style={{ backgroundImage: `url(${item.icon})` }}
-                      className="h-20 w-20 border bg-cover rounded-xl mb-4"
-                    ></span>
-                  ) : (
-                    <span className="h-20 w-20 flex items-center justify-center my-5 text-[var(--neutral-700)] border bg-[var(--neutral-400)] rounded-xl">
-                      <item.icon fontSize="large" />
-                    </span>
-                  )}
-                  <h3 className="text-lg">{item.label}</h3>
-                  <p className="text-sm mb-2">{item.description}</p>
-                  {isActive ? (
-                    <RadioButtonChecked className="text-[var(--primary-color)]" />
-                  ) : (
-                    <RadioButtonUnchecked className="text-[var(--neutral-700)]" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
+                  {isOpen ? <RemoveCircle /> : <AddCircle />}
+                </span>
+              </header>
+              {isOpen && (
+                <div className="grid md:grid-cols-3 gap-4  w-full">
+                  {pref.data.map((item) => {
+                    const isActive = item.value === pref.selected;
+                    const isFont = pref.type === "font";
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        onClick={() => handleUpdate(pref.type, item.value)}
+                        style={{
+                          fontFamily: isFont
+                            ? fontMap[item.value as Font]
+                            : undefined,
+                        }}
+                        className={`w-full justify-between border px-4 py-3 rounded-lg hover:bg-[var(--neutral-200)] ${
+                          isActive
+                            ? "border-[var(--secondary-color)] bg-[var(--neutral-300)]"
+                            : "border-[var(--neutral-100)]"
+                        }`}
+                      >
+                        <span className="flex items-center gap-1.5">
+                          {pref.type === "language" &&
+                          typeof item.icon === "string" ? (
+                            <img
+                              src={item.icon}
+                              className="h-auto w-18 rounded-xl bg-[var(--neutral-100)] px-2"
+                              alt=""
+                            />
+                          ) : (
+                            <span className="h-10 w-10 flex items-center justify-center text-[var(--neutral-700)] border bg-[var(--neutral-400)] rounded-lg">
+                              <item.icon fontSize="medium" />
+                            </span>
+                          )}
+                          <span className="flex flex-col items-start">
+                            <h3 className="text-lg">{item.label}</h3>
+                            <p className="text-sm -mt-1">{item.description}</p>
+                          </span>
+                        </span>
+                        <span>
+                          {isActive ? (
+                            <RadioButtonChecked className="text-[var(--primary-color)]" />
+                          ) : (
+                            <RadioButtonUnchecked className="text-[var(--neutral-700)]" />
+                          )}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
-      <div className="w-full flex justify-end">
-        <button
-          type="button"
-          onClick={handleReset}
-          className="h-12 w-fit px-4 border border-[var(--secondary-color)] rounded-xl flex items-center gap-1 text-[var(--neutral-900)]"
-        >
-          <LockReset /> Reset Preferences
-        </button>
+        <div className="w-full flex justify-end px-4">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="h-12 font-semibold w-fit px-4 border border-transparent bg-[var(--neutral-100)] rounded-xl flex items-center gap-1 text-[var(--neutral-900)] hover:bg-[var(--primary-color)] hover:text-black/90"
+          >
+            <LockReset /> Reset Preferences
+          </button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
