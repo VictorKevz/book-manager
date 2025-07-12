@@ -5,7 +5,7 @@ import { InputType } from "../../types/upsertBook";
 export const SearchBar = () => {
   const { OnQueryChange, query, onClearQuery } = useSearchProvider();
   return (
-    <label className="max-w-md w-full relative flex items-center">
+    <label className="w-full relative flex items-center">
       <input
         type="text"
         className="w-full h-12 bg-[var(--neutral-200)] pl-4 text-[var(--neutral-900)] border border-[var(--neutral-100)] rounded-xl"
