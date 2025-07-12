@@ -36,12 +36,12 @@ export const TopHeader = () => {
 
       <AddBookButton />
       {isSearchBarOpen && (
-        <div className="w-full flex flex-col items-center gap-4 fixed top-0 z-30 backdrop-blur-lg bg-black/10 min-h-[5rem] p-4 ">
+        <div className="w-full flex flex-col items-center gap-4 fixed top-0 z-30 backdrop-blur-[.5rem] bg-black/10 min-h-[5rem] p-4 ">
           <SearchBar />
           <button
             type="button"
             onClick={toggleSearchBar}
-            className="h-10 w-10 bg-[var(--neutral-100)] justify-center rounded-full text-[var(--neutral-900)] hover:bg-[var(--neutral-700)]"
+            className="h-10 w-10 absolute top-full mt-1 shadow-2xl bg-[var(--neutral-100)] justify-center rounded-full text-[var(--neutral-900)] hover:bg-[var(--neutral-700)]"
           >
             <Close />
           </button>
