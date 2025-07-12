@@ -41,7 +41,6 @@ body {
   scrollbar-color: var(--primary-color) transparent;
   scrollbar-width: thin;
   font-family: var(--app-font);
-  /* background-image: var(--main-bg) !important; */
 }
 h1,
 h2,
@@ -89,4 +88,13 @@ textarea:hover {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+}
+
+/* Only for specific containers */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

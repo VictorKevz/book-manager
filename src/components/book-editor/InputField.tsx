@@ -49,7 +49,9 @@ export const InputField = ({
     >
       {isInputTextField && (
         <label
-          className={`w-full flex flex-col items-start gap-1.5 text-[var(--neutral-700)]`}
+          className={`w-full flex flex-col items-start gap-1.5 text-[var(--neutral-700)] 
+            
+          `}
           htmlFor={field.name}
         >
           <span className="text-[var(--neutral-800)] font-medium relative">

@@ -14,17 +14,16 @@ export const FormWraper = ({
   return (
     <form
       onSubmit={(event: FormEventType) => onSubmit(event)}
-      className={`flex flex-col justify-between w-full lg:h-fit shadow-xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] my-6 overflow-auto rounded-2xl ${maxWidth} ${
-        id === "bookEditor" &&
-        "h-dvh lg:h-fit max-w-none lg:max-w-2xl rounded-none lg:rounded-2xl"
+      className={`flex flex-col justify-between w-full shadow-xl bg-[var(--neutral-200)] border border-[var(--neutral-100)] overflow-auto rounded-2xl ${maxWidth} ${
+        id === "bookEditor" && "min-h-dvh max-w-none lg:max-w-2xl rounded-none"
       } `}
     >
       <header
-        className={`w-full relative bg-[var(--neutral-400)] border-b px-5 py-6 border-[var(--neutral-100)] ${
-          id === "bookEditor" ? "rounded-t-0 lg:rounded-t-2xl" : "rounded-t-2xl"
+        className={`w-full relative bg-[var(--neutral-400)] border-b px-5 py-8 border-[var(--neutral-100)] ${
+          id === "bookEditor" ? "rounded-t-0" : "rounded-t-2xl"
         }`}
       >
-        <h2 className="font-bold text-xl sm:text-2xl text-[var(--neutral-900)]">
+        <h2 className="font-bold text-xl sm:text-3xl text-[var(--neutral-900)]">
           {title}
         </h2>
         <p className="text-[var(--neutral-700)] max-w-lg w-full">
@@ -34,7 +33,7 @@ export const FormWraper = ({
           <button
             type="button"
             onClick={toggleForm}
-            className="absolute right-4 top-4 h-10 w-10 justify-center bg-[var(--neutral-100)] rounded-full text-[var(--neutral-900)]"
+            className="absolute right-4 top-8 h-10 w-10 justify-center bg-[var(--neutral-100)] rounded-full text-[var(--neutral-900)] hover:bg-[var(--error)]"
           >
             <Close />
           </button>
