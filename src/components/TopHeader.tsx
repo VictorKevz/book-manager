@@ -34,7 +34,7 @@ export const TopHeader = () => {
         </span>
       </div>
 
-      <AddBookButton />
+      <AddBookButton id="topHeader" />
       {isSearchBarOpen && (
         <div className="w-full flex flex-col items-center gap-4 fixed top-0 z-30 backdrop-blur-[.5rem] bg-black/10 min-h-[5rem] p-4 ">
           <SearchBar />

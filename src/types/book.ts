@@ -67,3 +67,7 @@ export type BookMeta = Pick<BookItem, "id" | "title" | "image_url">;
 export type BookCardProps = {
   book: BookItem;
 };
+
+export type AddButtonProps = {
+  id?: string;
+};
