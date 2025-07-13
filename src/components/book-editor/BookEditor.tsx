@@ -5,10 +5,10 @@ import { BookCardProps, BookItem } from "../../types/book";
 import { useBookProvider } from "../../context/BookContext";
 import { FormLoader } from "../common/Loaders";
 import { FormWraper } from "../common/FormWraper";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 
 export const BookEditor = ({ book }: BookCardProps) => {
-  const { refreshBooks, toggleForm } = useBookProvider();
+  const { refreshBooks, toggleForm, isFormOpen } = useBookProvider();
 
   // The book passed is of type BookItem so we need to convert to BookFormItem
   // Form doesn't need fields like "id, user_id" so we remove them
@@ -43,16 +43,16 @@ export const BookEditor = ({ book }: BookCardProps) => {
   } = useBookUpsertForm(bookToEdit, bookId, refreshBooks, toggleForm);
   const isEditing = !!bookId;
 
-  // useEffect(() => {
-  //   console.log("Form Open:", isFormOpen);
+  useEffect(() => {
+    console.log("Form Open:", isFormOpen);
 
-  //   if (isFormOpen) {
-  //     document.body.style.overflow = "hidden";
-  //   }
-  //   return () => {
-  //     document.body.style.overflow = "";
-  //   };
-  // }, [isFormOpen]);
+    if (isFormOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFormOpen]);
   const formData: formItem[] = [
     {
       name: "title",
@@ -120,7 +120,7 @@ export const BookEditor = ({ book }: BookCardProps) => {
     },
   ];
   return (
-    <div className="fixed top-0 bottom-0 w-full min-h-dvh flex items-center justify-end bg-black/40 backdrop-blur-[2px] z-500 lg:pl-4 overflow-auto scrollbar-none">
+    <div className="fixed top-0 w-full h-dvh flex items-center justify-end bg-black/40 backdrop-blur-[2px] z-500 lg:pl-4">
       <FormWraper
         onSubmit={handleSubmit}
         title={`${isEditing ? "Edit Book" : "Create a New Book"}`}

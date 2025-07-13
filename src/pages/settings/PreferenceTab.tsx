@@ -236,16 +236,15 @@ export const PreferenceTab = () => {
             </div>
           );
         })}
-
-        <div className="w-full flex justify-end px-4">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="h-12 font-semibold w-fit px-4 border border-transparent bg-[var(--neutral-100)] rounded-xl flex items-center gap-1 text-[var(--neutral-900)] hover:bg-[var(--primary-color)] hover:text-black/90"
-          >
-            <LockReset /> Reset Preferences
-          </button>
-        </div>
+      </div>
+      <div className="w-full flex justify-end pl  -4 mt-6">
+        <button
+          type="button"
+          onClick={handleReset}
+          className="h-12 font-semibold w-fit px-4 border border-transparent bg-[var(--neutral-100)] rounded-xl flex items-center gap-1 text-[var(--neutral-900)] hover:bg-[var(--primary-color)] hover:text-black/90"
+        >
+          <LockReset /> Reset Preferences
+        </button>
       </div>
     </section>
   );

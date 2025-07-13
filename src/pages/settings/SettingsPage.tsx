@@ -76,7 +76,7 @@ export const SettingsPage = () => {
       </header>
 
       <article className="w-full flex flex-col items-start gap-5 mx-auto">
-        <ul className="w-full flex justify-start items-center gap-5 border-b border-[var(--neutral-100)]">
+        <ul className="w-full flex justify-between sm:justify-start items-center gap-5 border-b border-[var(--neutral-100)]">
           {tabsNavData.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -84,14 +84,14 @@ export const SettingsPage = () => {
                 <button
                   type="button"
                   onClick={() => setActiveTab(tab.id as TabKey)}
-                  className={`h-10 flex justify-center gap-1 sm:px-3 rounded-t-lg ${
+                  className={`sm:h-10 pb-1 flex justify-center gap-1 sm:px-3 rounded-t-lg ${
                     isActive
-                      ? "text-[var(--secondary-color)] sm:bg-[var(--secondary-color)] sm:text-black px-3"
+                      ? "text-[var(--secondary-color)] sm:bg-[var(--secondary-color)] sm:text-black"
                       : "sm:bg-[var(--neutral-100)] text-[var(--neutral-900)]"
                   }`}
                 >
-                  <tab.icon className="scale-125 sm:scale-100" />
-                  <span className="hidden sm:block">{tab.text}</span>
+                  <tab.icon />
+                  <span className="text-sm sm:text-lg">{tab.text}</span>
                 </button>
               </li>
             );

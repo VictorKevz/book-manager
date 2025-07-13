@@ -37,7 +37,7 @@
 }
 html,
 body {
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   scrollbar-color: var(--primary-color) transparent;
   scrollbar-width: thin;
   font-family: var(--app-font);
@@ -92,9 +92,9 @@ textarea:hover {
 
 /* Only for specific containers */
 .scrollbar-none::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 .scrollbar-none {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 }

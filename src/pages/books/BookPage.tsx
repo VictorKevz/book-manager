@@ -114,7 +114,7 @@ export const BookPage = () => {
       </div>
     );
   return (
-    <section className="max-w-screen-2xl w-full mx-auto px-5">
+    <section className="max-w-screen-2xl w-full mx-auto">
       <header className="w-full flex flex-col items-start">
         <div className="w-full flex items-center justify-between">
           <h2 className="text-[var(--neutral-900)] text-2xl">Filters</h2>
@@ -141,7 +141,7 @@ export const BookPage = () => {
             )}
           </div>
         </div>
-        <ul className="w-full flex flex-wrap items-center justify-between gap-5 mt-5">
+        <ul className="w-full grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-5 mt-5">
           {categoryData.map((category) => {
             const isSelected = category.label === selectedCategory;
             return (
@@ -149,7 +149,7 @@ export const BookPage = () => {
                 <button
                   type="button"
                   onClick={() => updateCategory(category.label)}
-                  className={`h-14 w-full max-w-[12rem]  pl-0.5 pr-4 rounded-2xl gap-2 border ${
+                  className={`h-14 w-full pl-0.5 pr-3 rounded-2xl gap-2 border ${
                     isSelected
                       ? "bg-[var(--primary-color)] text-white border-transparent"
                       : "bg-[var(--neutral-200)] text-[var(--neutral-900)] border-[var(--neutral-600)]"
