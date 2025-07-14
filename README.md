@@ -44,7 +44,6 @@ A full-stack book inventory management dashboard built with React, TypeScript, T
 
 ## Screenshots
 
-> Add images in `/public/screenshots` and reference them here with markdown.
 
 ![Login Screen](public/screenshots/login-dark.png)  
 ![Dashboard Home](/public/screenshots/desktop-overview.png)  
