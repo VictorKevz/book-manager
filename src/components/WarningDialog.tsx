@@ -20,12 +20,15 @@ export const WarningDialog = ({
       <dialog className="max-w-lg w-full flex flex-col justify-between bg-[var(--neutral-200)] py-5 rounded-xl shadow-2xl border border-[var(--neutral-100)] mx-auto">
         <header className="w-full flex justify-between items-start gap-4 px-4 pb-4">
           <h2 className="font-bold text-lg text-[var(--neutral-700)]">
-            Confirm to delete book titiled: {bookToDelete.title}!
+            Confirm to delete book titled:{" "}
+            <strong className="text-[var(--error)]">
+              {bookToDelete.title}.
+            </strong>
           </h2>
           <button
             type="button"
             onClick={onModalClose}
-            className="rounded-lg border border-[var(--neutral-100)] w-8 h-8 text-[var(--neutral-800)]"
+            className="justify-center rounded-lg border border-[var(--neutral-100)] w-8 h-8 text-[var(--neutral-800)]"
           >
             <Close />
           </button>

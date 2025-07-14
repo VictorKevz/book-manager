@@ -1,44 +1,80 @@
-# React TS Tailwind CSS Starter Project
-Absolutely! Here’s a clean and concise version of your README.md for a React + TypeScript + Tailwind CSS Starter Project:
+# 📚 BookManager
 
-# React TS Tailwind CSS Starter Project
+A full-stack book inventory management dashboard built with React, TypeScript, Tailwind CSS, and Supabase. BookManager allows authenticated users to create, manage, and edit a personalized catalog of books — all within a modern, responsive, and accessible UI.
 
-A minimalist starter template for building React applications using TypeScript and Tailwind CSS. Ideal for small to medium projects where flexibility and fast setup matter.
 
-## 🔧 Tech Stack
+## Features
 
-- ⚛️ React (with Vite)
-- 🟦 TypeScript
-- 🎨 Tailwind CSS (v4)
+- **User Authentication**  
+  Secure login & registration via Supabase Auth with protected routes.
 
-## 📁 Folder Structure
+- **Book Management**  
+  Full CRUD functionality with client-side validation and image preview support.
 
+- **Theme & Personalization**  
+  User preferences for light/dark/system theme, custom fonts, and language settings.
+
+- **Internationalization (i18n)**  
+  Language toggle between English and Finnish.
+
+- **Responsive & Accessible Design**  
+  Keyboard navigable, screen-reader friendly, and fully responsive across breakpoints.
+
+- **Smooth Animations**  
+  Framer Motion and transitions used for modals, interactions, and layout changes.
+
+- **User-Based Data Ownership**  
+  Supabase Row-Level Security (RLS) ensures users access only their own data.
+
+- **Analytics Page (coming soon)**  
+  Planned dashboard to visualize user reading stats and trends.
+
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS  
+- **State Management**: React Context API, Custom Hooks  
+- **Animations**: Framer Motion  
+- **Auth & Database**: Supabase (Auth, Realtime DB, Storage, RLS)  
+- **Routing**: React Router v6  
+- **Forms**: Controlled inputs with validation and live previews  
+- **Icons**: Material UI Icons & Custom SVG  
+- **i18n**: Simple language state + support for EN & FI
+
+
+## Screenshots
+
+> Add images in `/public/screenshots` and reference them here with markdown.
+
+![Login Screen](public/screenshots/login-dark.png)  
+![Dashboard Home](/public/screenshots/desktop-overview.png)  
+![Book Editor Modal](public/screenshots/edit-book-modal.png)
+
+
+## Folder Structure (Simplified)
 src/
-components/   # Reusable UI components
-hooks/        # Custom hooks
-context/      # Context providers (e.g. Theme)
-utils/        # Utility functions/helpers
-types/        # Global TypeScript types/interfaces
+├── components/         // Reusable UI elements (modals, inputs, icons, loaders)
+├── features/           // Feature-specific logic (books, auth, settings)
+├── context/            // Theme, Auth, Alert providers
+├── hooks/              // Custom hooks (useBookFetch, useTheme, etc.)
+├── pages/              // App routes and layout structure
+├── utils/              // Constants, formatters, validation helpers
+└── assets/             // SVGs, images, fonts
 
-## 🚀 Getting Started
+
+## Getting Started
 
 ```bash
-git clone <git@github.com:VictorKevz/react-ts-tailwind-starter.git>
-cd <project-folder>
-npm install
+# 1. Clone repo
+git clone https://github.com/VictorKevz/book-manager.git
+
+# 2. Install dependencies
+cd bookmanager && npm install
+
+# 3. Set up .env file
+# Create .env.local and add:
+VITE_SUPABASE_URL=your_url
+VITE_SUPABASE_ANON_KEY=your_anon_key
+
+# 4. Run locally
 npm run dev
-
-🧪 Testing (Optional)
-
-This starter is kept minimal, but you can easily add Vitest for testing.
-
-🌙 Dark Mode
-
-Dark mode is supported using CSS's root variables. Theme toggling is handled via context.
-
-💡 Tip
-
-Use this starter as a base and scale it up with routing, testing, state management, or backend integration as needed.
-
-
-MIT License.
