@@ -37,7 +37,6 @@
 }
 html,
 body {
-  /* overflow-x: hidden; */
   scrollbar-color: var(--primary-color) transparent;
   scrollbar-width: thin;
   font-family: var(--app-font);

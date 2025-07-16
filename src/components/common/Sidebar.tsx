@@ -1,6 +1,6 @@
 import {
+  Analytics,
   AutoStories,
-  Category,
   Home,
   Logout,
   Settings,
@@ -63,6 +63,6 @@ export const PagesList = () => {
 export const pages = [
   { route: "/dashboard", text: "Overview", icon: Home },
   { route: "/dashboard/books", text: "Books", icon: AutoStories },
-  { route: "/dashboard/categories", text: "Categories", icon: Category },
+  { route: "/dashboard/analytics", text: "Reports", icon: Analytics },
   { route: "/dashboard/settings", text: "Settings", icon: Settings },
 ];

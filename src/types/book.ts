@@ -71,3 +71,13 @@ export type BookCardProps = {
 export type AddButtonProps = {
   id?: string;
 };
+
+export type EmptyViewType = {
+  title: string;
+  description: string;
+  image: string;
+  id?: string;
+};
+export type EmptyViewProps = {
+  data: EmptyViewType;
+};

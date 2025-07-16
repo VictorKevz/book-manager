@@ -1,5 +1,5 @@
 import { Category, MenuBook, PriceCheck } from "@mui/icons-material";
-import bookUploadImg from "../../assets/book-upload.png";
+import bookUploadImg from "../../assets/book-upload.svg";
 import { AddBookButton } from "../../components/common/AddBookButton";
 import { useBookProvider } from "../../context/BookContext";
 // import { useSearchProvider } from "../../context/SearchContext";
@@ -9,6 +9,9 @@ import { BookCategoryPiechart } from "./BookCategoryPiechart";
 import { BookPriceBarChart } from "./BookPriceBarChart";
 import { SyncLoaderWrapper } from "../../components/common/Loaders";
 import { categoryData } from "../../data/searchData";
+import { EmptyView } from "../../components/common/EmptyView";
+import emptyImg from "../../assets/empty-overview.svg";
+import { EmptyViewType } from "../../types/book";
 
 export const Overview = () => {
   const { books, uiState } = useBookProvider();
@@ -63,6 +66,14 @@ export const Overview = () => {
         <SyncLoaderWrapper />
       </div>
     );
+  const overviewEmpty: Record<keyof EmptyViewType, string> = {
+    title: "No Books Available Yet",
+    description:
+      "Your dashboard is waiting. Click “Create New Book” to begin managing your collection.",
+    image: emptyImg,
+    id: "overview",
+  };
+  if (books.length === 0) return <EmptyView data={overviewEmpty} />;
   return (
     <section className="max-w-screen-xl w-full flex flex-col items-center justify-center px-5 mx-auto mt-6">
       <header className="w-full bg-[var(--neutral-200)] flex flex-col items-center justify-between gap-5 py-6 px-5 border border-[var(--neutral-100)] rounded-xl md:flex-row">
@@ -107,24 +118,26 @@ export const Overview = () => {
       <div className="w-full mt-10">
         <BookPriceBarChart />
       </div>
-      <div className="w-full mt-10">
-        <h3 className="text-2xl text-[var(--neutral-900)]">
-          Top Selling Books
-        </h3>
-        <div className="w-full grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-4">
-          {topSellingBooks.map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
+      {topSellingBooks.length > 2 && (
+        <div className="w-full mt-10">
+          <h3 className="text-2xl text-[var(--neutral-900)]">
+            Top Selling Books
+          </h3>
+          <div className="w-full grid gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-4">
+            {topSellingBooks.map((book) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+          <div className="w-full flex items-center justify-end mt-4">
+            <Link
+              to="/dashboard/books"
+              className="h-11 flex items-center justify-center rounded-xl bg-[var(--neutral-50)] text-[var(--neutral-900)] font-medium px-4 border border-[var(--secondary-color)]"
+            >
+              See All Books
+            </Link>
+          </div>
         </div>
-        <div className="w-full flex items-center justify-end mt-4">
-          <Link
-            to="/dashboard/books"
-            className="h-11 flex items-center justify-center rounded-xl bg-[var(--neutral-50)] text-[var(--neutral-900)] font-medium px-4 border border-[var(--secondary-color)]"
-          >
-            See All Books
-          </Link>
-        </div>
-      </div>
+      )}
     </section>
   );
 };
