@@ -5,6 +5,7 @@ import { WelcomePage } from "./pages/WelcomePage";
 import { BookPage } from "./pages/books/BookPage";
 import { Overview } from "./pages/overview/OverviewPage";
 import { SettingsPage } from "./pages/settings/SettingsPage";
+import { AnalyticsPage } from "./pages/analytics/AnalyticsPage";
 
 export const MainApp = () => {
   const { user } = useAuth();
@@ -21,7 +22,7 @@ export const MainApp = () => {
         >
           <Route index element={<Overview />} />
           <Route path="books" element={<BookPage />} />
-          {/* <Route path="categories" element={<CategoriesPage />} /> */}
+          <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>

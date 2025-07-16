@@ -10,6 +10,9 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { PaginateItems } from "./PaginateItems";
 import { DropDown } from "./DropDown";
 import noResultsImg from "../../assets/no-results.png";
+import emptyImg from "../../assets/empty-books.svg";
+import { EmptyViewType } from "../../types/book";
+import { EmptyView } from "../../components/common/EmptyView";
 
 export const BookPage = () => {
   const { books, uiState } = useBookProvider();
@@ -113,6 +116,15 @@ export const BookPage = () => {
         <SyncLoaderWrapper />
       </div>
     );
+  const overviewEmpty: Record<keyof EmptyViewType, string> = {
+    title: "No books available",
+    description:
+      "  Once you’ve added a book, it will appear here. Click the “Add Book” button to get started.",
+    image: emptyImg,
+    id: "overview",
+  };
+  if (books.length === 0) return <EmptyView data={overviewEmpty} />;
+
   return (
     <section className="max-w-screen-2xl w-full mx-auto">
       <header className="w-full flex flex-col items-start">
@@ -185,18 +197,15 @@ export const BookPage = () => {
       />
       {/* Renders the no-search results UI */}
       {paginatedBooks.length === 0 && (
-        <div className="w-fit mx-auto px-5 min-h-[20rem] flex flex-col items-center justify-between gap-5 py-8 border border-[var(--neutral-100)] rounded-xl">
-          <img src={noResultsImg} className="w-[15rem]" alt="" />
-          <p className="text-[var(--neutral-900)]">
-            Looks like you don't have a book that matches your search:
-            <strong className="px-1 text-[var(--secondary-color)]">
-              "{debouncedQuery}".
-            </strong>{" "}
-            Please try another search.
+        <div className="w-fit mx-auto px-4 flex flex-col items-center justify-between rounded-xl">
+          <img src={noResultsImg} className="w-[10rem]" alt="" />
+          <h3 className="text-2xl mt-4">No Book Found!</h3>
+          <p className="text-[var(--neutral-900)] text-base">
+            Looks like you don't have a book in this category. Please try
+            another search.
           </p>
         </div>
       )}
-      {/* {isFormOpen && <BookEditor book={bookToEdit} />} */}
     </section>
   );
 };
