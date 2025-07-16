@@ -49,18 +49,6 @@ A full-stack book inventory management dashboard built with React, TypeScript, T
 ![Dashboard Home](/public/screenshots/desktop-overview.png)  
 ![Book Editor Modal](public/screenshots/edit-book-modal.png)
 
-
-## Folder Structure (Simplified)
-src/
-├── components/         // Reusable UI elements (modals, inputs, icons, loaders)
-├── features/           // Feature-specific logic (books, auth, settings)
-├── context/            // Theme, Auth, Alert providers
-├── hooks/              // Custom hooks (useBookFetch, useTheme, etc.)
-├── pages/              // App routes and layout structure
-├── utils/              // Constants, formatters, validation helpers
-└── assets/             // SVGs, images, fonts
-
-
 ## Getting Started
 
 ```bash
@@ -68,7 +56,7 @@ src/
 git clone https://github.com/VictorKevz/book-manager.git
 
 # 2. Install dependencies
-cd bookmanager && npm install
+cd book-manager && npm install
 
 # 3. Set up .env file
 # Create .env.local and add:
