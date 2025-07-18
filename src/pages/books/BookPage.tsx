@@ -117,7 +117,7 @@ export const BookPage = () => {
       </div>
     );
   const overviewEmpty: Record<keyof EmptyViewType, string> = {
-    title: "No books available",
+    title: "No Books Available Yet",
     description:
       "  Once you’ve added a book, it will appear here. Click the “Add Book” button to get started.",
     image: emptyImg,
