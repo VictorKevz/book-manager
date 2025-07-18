@@ -11,8 +11,8 @@ import { useAuth } from "../../context/AuthContext";
 export const SideBar = () => {
   const { logout } = useAuth();
   return (
-    <aside className="fixed bottom-0 w-full h-[4.5rem] px-4 xl:px-0 rounded-t-[2.5rem] border-t xl:border-t-0 xl:rounded-none bg-[var(--neutral-200)] xl:left-0 xl:top-[5rem] xl:w-[6rem] xl:h-[calc(100vh-5rem)] xl:bg-[var(--neutral-400)] xl:border-r border-[var(--neutral-100)] xl:py-3  flex flex-row xl:flex-col justify-between items-center z-40">
-      <nav className="flex items-center">
+    <aside className="fixed bottom-0 w-full min-h-[5rem] px-4 xl:px-0 rounded-t-[2.5rem] border-t xl:border-t-0 xl:rounded-none bg-[var(--neutral-200)] xl:left-0 xl:top-[5rem] xl:w-[6rem] xl:h-[calc(100vh-5rem)] xl:bg-[var(--neutral-400)] xl:border-r border-[var(--neutral-100)] xl:py-3  flex flex-row xl:flex-col justify-between items-center z-40">
+      <nav className="flex items-center h-full xl:h-fit">
         <PagesList />
       </nav>
       <button
@@ -37,12 +37,12 @@ export const PagesList = () => {
   };
 
   return (
-    <ul className="w-full flex flex-row xl:flex-col items-center gap-5 divide-x divide-[var(--neutral-100)] xl:divide-x-0">
+    <ul className="w-full flex flex-row xl:flex-col items-center gap-5">
       {pages.map((page) => (
         <li key={page.text} className="text-sm w-full h-full">
           <NavLink
             to={page.route}
-            className={`flex flex-col gap-0.5 items-center justify-center h-full
+            className={`flex flex-col gap-0.5 items-center justify-center h-full hover:text-black/90 hover:bg-[var(--secondary-color)] hover:rounded-lg hover:py-2 hover:scale-90
               ${
                 isActive(page.route)
                   ? "text-[var(--secondary-color)] font-bold px-4"
