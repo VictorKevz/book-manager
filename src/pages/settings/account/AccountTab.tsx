@@ -25,7 +25,7 @@ export const AccountTab = () => {
   return (
     <section className="w-full flex items-start justify-center gap-10">
       <div className="max-w-screen-lg w-full flex flex-col items-center justify-center py-5 rounded-xl">
-        <header className="relative w-full flex flex-col items-center">
+        <header className="relative w-full flex flex-col items-center mb-8">
           {typeof userinfoObj?.avatar_url === "string" &&
           userinfoObj.avatar_url.trim() !== "" ? (
             <img
